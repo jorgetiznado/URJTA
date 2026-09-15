@@ -1,0 +1,1109 @@
+<title>Bachillerato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    --papel:      #F2EFE6;
+    --hoja:       #FAF8F1;
+    --tinta:      #1B2A33;
+    --tinta-2:    #66798A;
+    --raya:       #BFD2DE;
+    --raya-2:     #DDE6EC;
+    --margen:     #D6332B;
+    --oro:        #B08424;
+    --verde:      #2F7A5A;
+    --sombra:     0 1px 0 rgba(27,42,51,.06), 0 10px 30px -18px rgba(27,42,51,.45);
+
+    --s1: .35rem; --s2: .7rem; --s3: 1.1rem; --s4: 1.7rem; --s5: 2.6rem; --s6: 4rem;
+    --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --ui: "IBM Plex Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    --mano: "Caveat", "Segoe Script", cursive;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papel:   #151C21;
+      --hoja:    #1D262C;
+      --tinta:   #E9E5DA;
+      --tinta-2: #8DA0AC;
+      --raya:    #2C3A43;
+      --raya-2:  #232E35;
+      --margen:  #F0564B;
+      --oro:     #E0B63E;
+      --verde:   #54B98C;
+      --sombra:  0 1px 0 rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"] {
+    --papel:   #151C21;
+    --hoja:    #1D262C;
+    --tinta:   #E9E5DA;
+    --tinta-2: #8DA0AC;
+    --raya:    #2C3A43;
+    --raya-2:  #232E35;
+    --margen:  #F0564B;
+    --oro:     #E0B63E;
+    --verde:   #54B98C;
+    --sombra:  0 1px 0 rgba(0,0,0,.4), 0 14px 34px -20px rgba(0,0,0,.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: var(--ui);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .marco {
+    max-width: 860px;
+    margin-inline: auto;
+    padding-inline: 18px;
+    padding-block: var(--s4) var(--s6);
+  }
+
+  /* ---------- Encabezado ---------- */
+  .cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4); }
+  .marca { font-family: var(--display); font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 100; font-weight: 900; font-size: clamp(2rem, 7vw, 3.1rem); line-height: .95; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+  .marca em { font-style: normal; color: var(--margen); }
+  .bajada { font-size: .9rem; color: var(--tinta-2); max-width: 34ch; margin: 0; }
+
+  .eyebrow { font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta-2); }
+
+  /* ---------- La hoja ---------- */
+  .hoja {
+    position: relative;
+    background: var(--hoja);
+    background-image: repeating-linear-gradient(to bottom, transparent 0 35px, var(--raya-2) 35px 36px);
+    border: 1px solid var(--raya);
+    border-radius: 2px;
+    box-shadow: var(--sombra);
+    padding: var(--s4) var(--s3) var(--s4) clamp(38px, 9vw, 62px);
+    overflow: hidden;
+  }
+  .hoja::before {
+    content: ""; position: absolute; inset-block: 0;
+    left: clamp(26px, 6.5vw, 44px); width: 1px;
+    background: var(--margen); opacity: .5;
+  }
+
+  /* ---------- Líneas de escritura ---------- */
+  .renglones { display: grid; gap: var(--s1); margin: 0; }
+  .renglon { display: grid; grid-template-columns: 8.5rem 1fr; align-items: end; gap: var(--s2); padding-block: 6px; }
+  .renglon > label { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); padding-bottom: 8px; }
+  .renglon input {
+    font-family: var(--mano); font-size: 1.55rem; font-weight: 700; line-height: 1.1;
+    color: var(--tinta); background: transparent;
+    border: 0; border-bottom: 1.5px solid var(--raya); border-radius: 0;
+    padding: 2px 4px; width: 100%; min-width: 0;
+  }
+  .renglon input::placeholder { font-family: var(--ui); font-size: .85rem; font-weight: 400; color: var(--tinta-2); opacity: .5; }
+  .renglon input:focus { outline: none; border-bottom-color: var(--margen); border-bottom-width: 2px; background: color-mix(in srgb, var(--margen) 6%, transparent); }
+  .renglon input:disabled { color: var(--tinta-2); }
+
+  @media (max-width: 560px) {
+    .renglon { grid-template-columns: 1fr; gap: 0; align-items: stretch; }
+    .renglon > label { padding-bottom: 0; }
+  }
+
+  /* ---------- El sello de la letra ---------- */
+  .sello { position: relative; display: grid; place-items: center; width: clamp(104px, 26vw, 138px); aspect-ratio: 1; flex: none; }
+  .sello svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .sello span { position: relative; font-family: var(--display); font-variation-settings: "WONK" 1, "opsz" 144; font-weight: 900; font-size: clamp(3.4rem, 11vw, 4.6rem); line-height: 1; color: var(--margen); }
+
+  .franja-ronda { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4); }
+  .franja-datos { display: grid; gap: 2px; }
+  .reloj { font-family: var(--display); font-variation-settings: "opsz" 40; font-weight: 600; font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+
+  /* ---------- Botones ---------- */
+  .btn {
+    font-family: var(--ui); font-size: .92rem; font-weight: 600; letter-spacing: .01em;
+    color: var(--hoja); background: var(--tinta);
+    border: 1.5px solid var(--tinta); border-radius: 3px;
+    padding: .62rem 1.15rem; cursor: pointer;
+    transition: transform .12s ease, opacity .12s ease;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:active:not(:disabled) { transform: translateY(0); }
+  .btn:disabled { opacity: .38; cursor: not-allowed; }
+  .btn.fantasma { background: transparent; color: var(--tinta); border-color: var(--raya); }
+  .btn.fantasma:hover:not(:disabled) { border-color: var(--tinta-2); }
+
+  .btn-grito {
+    font-family: var(--display); font-variation-settings: "WONK" 1, "opsz" 90;
+    font-weight: 900; font-size: clamp(1.4rem, 5.2vw, 2rem); letter-spacing: .01em;
+    color: #fff; background: var(--margen); border: 0; border-radius: 4px;
+    padding: .78rem 1.6rem; width: 100%; cursor: pointer;
+    box-shadow: 0 5px 0 color-mix(in srgb, var(--margen) 55%, #000);
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .btn-grito:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 7px 0 color-mix(in srgb, var(--margen) 55%, #000); }
+  .btn-grito:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 color-mix(in srgb, var(--margen) 55%, #000); }
+  .btn-grito:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+
+  :is(.btn, .btn-grito, input, select):focus-visible { outline: 2.5px solid var(--margen); outline-offset: 3px; }
+
+  .fila-btns { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+
+  /* ---------- Entradas de texto normales ---------- */
+  .campo { display: grid; gap: var(--s1); }
+  .campo > span { font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--tinta-2); }
+  .campo input {
+    font-family: var(--ui); font-size: 1rem; color: var(--tinta); background: transparent;
+    border: 1.5px solid var(--raya); border-radius: 3px; padding: .6rem .7rem; width: 100%;
+  }
+  .campo input:focus { outline: none; border-color: var(--tinta-2); }
+  .campo input.codigo { font-family: var(--display); font-variation-settings: "opsz" 40; font-weight: 700; font-size: 1.5rem; letter-spacing: .28em; text-transform: uppercase; }
+
+  /* ---------- Marcador ---------- */
+  .marcador { display: grid; gap: 1px; background: var(--raya); border: 1px solid var(--raya); border-radius: 3px; overflow: hidden; }
+  .marcador-fila { display: grid; grid-template-columns: 1.6rem 1fr auto; align-items: center; gap: var(--s2); background: var(--hoja); padding: .55rem .8rem; }
+  .marcador-fila .pos { font-family: var(--display); font-variation-settings: "opsz" 20; font-weight: 700; color: var(--tinta-2); font-variant-numeric: tabular-nums; }
+  .marcador-fila .quien { font-weight: 500; overflow-wrap: anywhere; }
+  .marcador-fila .total { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .marcador-fila.lider .pos, .marcador-fila.lider .total { color: var(--oro); }
+  .marcador-fila.yo { background: color-mix(in srgb, var(--margen) 7%, var(--hoja)); }
+
+  .chip { display: inline-flex; align-items: center; gap: .3rem; font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: .16rem .45rem; border-radius: 2px; border: 1px solid currentColor; }
+  .chip.host { color: var(--oro); }
+  .chip.aqui { color: var(--verde); }
+
+  /* ---------- Revisión ---------- */
+  .tabla-envoltorio { overflow-x: auto; border: 1px solid var(--raya); border-radius: 3px; }
+  table.revision { border-collapse: collapse; width: 100%; min-width: 520px; background: var(--hoja); }
+  table.revision th, table.revision td { border-bottom: 1px solid var(--raya-2); padding: .5rem .65rem; text-align: left; vertical-align: middle; }
+  table.revision thead th { position: sticky; top: 0; background: var(--hoja); border-bottom: 1.5px solid var(--raya); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); white-space: nowrap; }
+  table.revision th.cat { font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-2); white-space: nowrap; }
+  table.revision tbody tr:last-child td, table.revision tbody tr:last-child th { border-bottom: 0; }
+  .celda { display: flex; align-items: baseline; gap: .45rem; }
+  .palabra { font-family: var(--mano); font-size: 1.3rem; font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+  .palabra.vacia { font-family: var(--ui); font-size: .8rem; font-weight: 400; color: var(--tinta-2); opacity: .6; }
+  .palabra.anulada { text-decoration: line-through; text-decoration-color: var(--margen); text-decoration-thickness: 2px; opacity: .5; }
+  .pts { font-size: .72rem; font-weight: 700; font-variant-numeric: tabular-nums; margin-left: auto; padding-left: .3rem; }
+  .pts.p200 { color: var(--oro); } .pts.p100 { color: var(--verde); } .pts.p50 { color: var(--tinta-2); } .pts.p0 { color: var(--margen); opacity: .65; }
+  .anulador { background: none; border: 0; padding: 0 .1rem; cursor: pointer; color: var(--tinta-2); font-size: .95rem; line-height: 1; opacity: .35; }
+  .anulador:hover { opacity: 1; color: var(--margen); }
+  td.total-col { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .leyenda { display: flex; gap: var(--s3); flex-wrap: wrap; font-size: .74rem; color: var(--tinta-2); margin-top: var(--s2); }
+  .leyenda b { font-variant-numeric: tabular-nums; }
+
+  /* ---------- Varios ---------- */
+  .aviso { font-size: .85rem; color: var(--tinta-2); }
+  .aviso.malo { color: var(--margen); }
+  .bloque { display: grid; gap: var(--s3); }
+  .apartado { margin-top: var(--s5); display: grid; gap: var(--s3); }
+  hr.regla { border: 0; border-top: 1px solid var(--raya); margin: var(--s4) 0; }
+  [hidden] { display: none !important; }
+
+  .nota-ejemplo { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--tinta-2); }
+
+  .partida-cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-bottom: var(--s3); }
+  .codigo-sala { font-family: var(--display); font-variation-settings: "opsz" 40; font-weight: 900; font-size: 2.2rem; letter-spacing: .2em; line-height: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="marco">
+
+  <header class="cabecera">
+    <div>
+      <h1 class="marca">Bachi<em>llerato</em></h1>
+      <p class="bajada">Ocho categorías, una letra, y el primero que termina grita.</p>
+    </div>
+    <div id="estado-conexion" class="eyebrow">Conectando…</div>
+  </header>
+
+  <!-- ================= INICIO ================= -->
+  <section id="pantalla-inicio">
+    <div class="hoja bloque">
+      <label class="campo" for="in-nombre">
+        <span>Tu nombre</span>
+        <input id="in-nombre" type="text" maxlength="18" autocomplete="nickname" placeholder="Jorge">
+      </label>
+
+      <div class="fila-btns">
+        <button class="btn" id="btn-crear" disabled>Crear una sala</button>
+        <span class="aviso">o únete a una que ya existe:</span>
+      </div>
+
+      <label class="campo" for="in-codigo">
+        <span>Código de sala</span>
+        <input id="in-codigo" class="codigo" type="text" maxlength="4" inputmode="latin" autocomplete="off" spellcheck="false" placeholder="ABCD">
+      </label>
+      <div class="fila-btns">
+        <button class="btn fantasma" id="btn-unirse" disabled>Entrar</button>
+      </div>
+      <p class="aviso malo" id="error-inicio" hidden></p>
+    </div>
+
+    <div class="apartado">
+      <p class="nota-ejemplo">Ejemplo de una ronda — no es una partida real</p>
+      <div class="hoja">
+        <div class="franja-ronda">
+          <div class="sello" aria-hidden="true">
+            <svg viewBox="0 0 120 120"><defs><filter id="lapiz-demo"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="4"/></filter></defs><circle cx="60" cy="60" r="50" fill="none" stroke="var(--margen)" stroke-width="2.5" opacity=".55" filter="url(#lapiz-demo)"/></svg>
+            <span>M</span>
+          </div>
+          <div class="franja-datos">
+            <span class="eyebrow">Ronda 3 · detuvo Camila</span>
+            <span class="reloj">1:14</span>
+          </div>
+        </div>
+        <div class="tabla-envoltorio">
+          <table class="revision">
+            <thead><tr><th>Categoría</th><th>Camila</th><th>Jorge</th></tr></thead>
+            <tbody id="demo-cuerpo"></tbody>
+          </table>
+        </div>
+        <div class="leyenda">
+          <span><b>200</b> nadie más respondió</span>
+          <span><b>100</b> respuesta única</span>
+          <span><b>50</b> alguien puso lo mismo</span>
+          <span><b>0</b> vacía, mal escrita o anulada</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOBBY ================= -->
+  <section id="pantalla-lobby" hidden>
+    <div class="hoja bloque">
+      <div class="partida-cabecera">
+        <div>
+          <span class="eyebrow">Código de la sala</span>
+          <div class="codigo-sala" id="lobby-codigo">————</div>
+        </div>
+        <button class="btn fantasma" id="btn-copiar">Copiar código</button>
+      </div>
+      <p class="aviso">Pásales el código. Entran desde este mismo link.</p>
+      <hr class="regla">
+      <span class="eyebrow">En la mesa</span>
+      <div class="marcador" id="lobby-jugadores"></div>
+      <div class="fila-btns">
+        <button class="btn" id="btn-empezar" disabled>Repartir la primera letra</button>
+        <button class="btn fantasma" id="btn-salir-lobby">Salir</button>
+      </div>
+      <p class="aviso" id="lobby-aviso"></p>
+    </div>
+  </section>
+
+  <!-- ================= JUEGO ================= -->
+  <section id="pantalla-juego" hidden>
+    <div class="hoja">
+      <div class="franja-ronda">
+        <div class="sello" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><defs><filter id="lapiz"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="4"/></filter></defs><circle cx="60" cy="60" r="50" fill="none" stroke="var(--margen)" stroke-width="2.5" opacity=".55" filter="url(#lapiz)"/></svg>
+          <span id="juego-letra">?</span>
+        </div>
+        <div class="franja-datos">
+          <span class="eyebrow" id="juego-ronda">Ronda 1</span>
+          <span class="reloj" id="juego-reloj">0:00</span>
+          <span class="aviso" id="juego-letra-lectura"></span>
+        </div>
+      </div>
+
+      <div class="renglones" id="juego-renglones"></div>
+
+      <div style="margin-top: var(--s4)">
+        <button class="btn-grito" id="btn-bachillerato">¡BACHILLERATO!</button>
+        <p class="aviso" style="margin-top: var(--s2)" id="juego-aviso">Cuando termines, aprieta y todos paran.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= REVISIÓN ================= -->
+  <section id="pantalla-revision" hidden>
+    <div class="hoja bloque">
+      <div class="franja-ronda" style="margin-bottom:0">
+        <div class="sello" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--margen)" stroke-width="2.5" opacity=".55" filter="url(#lapiz)"/></svg>
+          <span id="rev-letra">?</span>
+        </div>
+        <div class="franja-datos">
+          <span class="eyebrow" id="rev-ronda">Ronda 1</span>
+          <span class="reloj" id="rev-quien" style="font-size:1.15rem"></span>
+        </div>
+      </div>
+
+      <p class="aviso" id="rev-cargando">Recogiendo las hojas…</p>
+
+      <div id="rev-contenido" hidden>
+        <div class="tabla-envoltorio">
+          <table class="revision">
+            <thead id="rev-cabeza"></thead>
+            <tbody id="rev-cuerpo"></tbody>
+          </table>
+        </div>
+        <div class="leyenda">
+          <span><b>200</b> nadie más respondió</span>
+          <span><b>100</b> respuesta única</span>
+          <span><b>50</b> alguien puso lo mismo</span>
+          <span><b>0</b> vacía, mal escrita o anulada</span>
+        </div>
+        <p class="aviso" id="rev-nota-host" hidden>Toca la × junto a una palabra inventada para anularla. El puntaje se recalcula solo.</p>
+      </div>
+
+      <hr class="regla">
+      <span class="eyebrow">Acumulado</span>
+      <div class="marcador" id="rev-marcador"></div>
+
+      <div class="fila-btns">
+        <button class="btn" id="btn-siguiente" hidden>Siguiente ronda</button>
+        <button class="btn fantasma" id="btn-terminar" hidden>Terminar partida</button>
+        <span class="aviso" id="rev-espera" hidden>Esperando a que reparta la próxima letra.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FIN ================= -->
+  <section id="pantalla-fin" hidden>
+    <div class="hoja bloque">
+      <span class="eyebrow">Partida terminada</span>
+      <h2 class="marca" style="font-size:clamp(1.8rem,6vw,2.6rem)" id="fin-titulo">Final</h2>
+      <div class="marcador" id="fin-marcador"></div>
+      <div class="fila-btns">
+        <button class="btn" id="btn-revancha" hidden>Revancha</button>
+        <button class="btn fantasma" id="btn-salir-fin">Volver al inicio</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ========================================================
+     Reglas del juego
+     ======================================================== */
+
+  var CATS = [
+    { id: "nombre",   label: "Nombre",          ej: "Manuela"     },
+    { id: "apellido", label: "Apellido",        ej: "Muñoz"       },
+    { id: "animal",   label: "Animal",          ej: "Mono"        },
+    { id: "lugar",    label: "País o ciudad",   ej: "Marruecos"   },
+    { id: "cosa",     label: "Color o cosa",    ej: "Morado"      },
+    { id: "fruta",    label: "Fruta o verdura", ej: "Mandarina"   },
+    { id: "musica",   label: "Cantante o grupo",ej: "Mon Laferte" },
+    { id: "pantalla", label: "Peli o serie",    ej: "Matrix"      }
+  ];
+
+  // Sin K, Ñ, Q, W, X, Y, Z: en español dejan rondas en blanco.
+  var LETRAS = "ABCDEFGHIJLMNOPRSTUV".split("");
+
+  var PTS_SOLO  = 200; // fue el único que respondió esa categoría
+  var PTS_UNICA = 100; // respondió y nadie repitió su palabra
+  var PTS_REPE  = 50;  // alguien más puso lo mismo
+
+  function normalizar(txt) {
+    return String(txt == null ? "" : txt)
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .toLowerCase().trim().replace(/\s+/g, " ");
+  }
+
+  function esValida(txt, letra) {
+    var n = normalizar(txt);
+    if (n.length < 2) return false;
+    return n.charAt(0) === normalizar(letra).charAt(0);
+  }
+
+  /**
+   * Puntúa una ronda completa.
+   * respuestas: { pid: { catId: texto } }   anuladas: { "pid|catId": true }
+   * Devuelve { detalle: { pid: { catId: pts } }, puntos: { pid: total } }
+   */
+  function puntuar(letra, pids, respuestas, anuladas) {
+    var detalle = {}, puntos = {};
+    pids.forEach(function (pid) { detalle[pid] = {}; puntos[pid] = 0; });
+
+    CATS.forEach(function (cat) {
+      var validos = [];
+      pids.forEach(function (pid) {
+        var txt = (respuestas[pid] || {})[cat.id] || "";
+        var anulada = !!(anuladas && anuladas[pid + "|" + cat.id]);
+        if (!anulada && esValida(txt, letra)) validos.push({ pid: pid, clave: normalizar(txt) });
+      });
+
+      if (validos.length === 1) {
+        detalle[validos[0].pid][cat.id] = PTS_SOLO;
+      } else if (validos.length > 1) {
+        var cuenta = {};
+        validos.forEach(function (v) { cuenta[v.clave] = (cuenta[v.clave] || 0) + 1; });
+        validos.forEach(function (v) {
+          detalle[v.pid][cat.id] = cuenta[v.clave] > 1 ? PTS_REPE : PTS_UNICA;
+        });
+      }
+
+      pids.forEach(function (pid) {
+        if (detalle[pid][cat.id] == null) detalle[pid][cat.id] = 0;
+        puntos[pid] += detalle[pid][cat.id];
+      });
+    });
+
+    return { detalle: detalle, puntos: puntos };
+  }
+
+  /* ========================================================
+     Identidad local
+     ======================================================== */
+
+  function guardado(clave, porDefecto) {
+    try { var v = localStorage.getItem(clave); return v == null ? porDefecto : v; }
+    catch (e) { return porDefecto; }
+  }
+  function guardar(clave, valor) {
+    try { localStorage.setItem(clave, valor); } catch (e) { /* modo privado */ }
+  }
+  function idNuevo() {
+    try { if (crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 16); }
+    catch (e) { /* sigue abajo */ }
+    return String(Date.now()).slice(-8) + Math.random().toString(36).slice(2, 10);
+  }
+
+  var MI_ID = guardado("bachi.pid", "");
+  if (!MI_ID) { MI_ID = idNuevo(); guardar("bachi.pid", MI_ID); }
+
+  /* ========================================================
+     Estado
+     ======================================================== */
+
+  var S = {
+    db: null,
+    nombre: guardado("bachi.nombre", ""),
+    code: null,
+    sala: null,
+    jugadores: [],
+    resultados: [],
+    respuestasRonda: [],
+    misRespuestas: {},
+    rondaEnviada: -1,
+    rondaCalculada: -1,
+    tickReloj: null,
+    temporizadorCierre: null,
+    subs: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function limpiarSubs() { S.subs.forEach(function (u) { try { u(); } catch (e) {} }); S.subs = []; }
+  function soyHost() { return !!(S.sala && S.sala.hostId === MI_ID); }
+
+  /* ========================================================
+     Arranque
+     ======================================================== */
+
+  pintarDemo();
+  $("in-nombre").value = S.nombre;
+
+  function sinConexion() {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--margen)";
+    mostrarError("Este juego guarda las partidas en el servidor de Claude. Ábrelo desde el link publicado, con tu sesión iniciada.");
+  }
+
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function (db) {
+      if (!db) { sinConexion(); return; }
+      S.db = db;
+      $("estado-conexion").textContent = "En línea";
+      $("estado-conexion").style.color = "var(--verde)";
+      $("btn-crear").disabled = false;
+      $("btn-unirse").disabled = false;
+    }, sinConexion);
+  } else {
+    sinConexion();
+  }
+
+  /* ========================================================
+     Inicio: crear y unirse
+     ======================================================== */
+
+  function mostrarError(msg) {
+    var p = $("error-inicio");
+    p.textContent = msg;
+    p.hidden = !msg;
+  }
+
+  function nombreEscrito() {
+    return $("in-nombre").value.trim().slice(0, 18);
+  }
+
+  function codigoAlAzar() {
+    var s = "";
+    for (var i = 0; i < 4; i++) s += LETRAS[Math.floor(Math.random() * LETRAS.length)];
+    return s;
+  }
+
+  $("btn-crear").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    if (!nombre) { mostrarError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    mostrarError("");
+    S.nombre = nombre; guardar("bachi.nombre", nombre);
+    this.disabled = true; this.textContent = "Creando…";
+    crearSala(nombre).catch(function (e) { mostrarError(textoError(e)); })
+      .then(function () { $("btn-crear").disabled = false; $("btn-crear").textContent = "Crear una sala"; });
+  });
+
+  function crearSala(nombre, intento) {
+    intento = intento || 0;
+    if (intento > 6) return Promise.reject({ message: "No se pudo reservar un código. Intenta de nuevo." });
+
+    var code = codigoAlAzar();
+    var ref = S.db.doc("salas/" + code);
+
+    // Reserva cooperativa: tomo un lease corto, miro si está libre, y recién ahí escribo.
+    return ref.acquire({ holder: MI_ID, ttlMs: 6000 }).then(function (res) {
+      if (!res.acquired) return crearSala(nombre, intento + 1);
+      return ref.get().then(function (snap) {
+        var cuerpo = snap.exists ? snap.data() : null;
+        if (cuerpo && cuerpo.hostId) return crearSala(nombre, intento + 1);
+        return ref.set({
+          code: code, hostId: MI_ID, estado: "lobby",
+          ronda: 0, letra: "", letrasUsadas: [],
+          iniciadaEn: 0, detenidaPor: "", creadaEn: Date.now()
+        }).then(function () { return entrarASala(code, nombre); });
+      });
+    });
+  }
+
+  $("btn-unirse").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    var code = $("in-codigo").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    if (!nombre) { mostrarError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    if (code.length !== 4) { mostrarError("El código son 4 letras."); $("in-codigo").focus(); return; }
+    mostrarError("");
+    S.nombre = nombre; guardar("bachi.nombre", nombre);
+
+    var btn = this; btn.disabled = true; btn.textContent = "Entrando…";
+    S.db.doc("salas/" + code).get().then(function (snap) {
+      if (!snap.exists) { mostrarError("No hay ninguna sala con el código " + code + "."); return; }
+      return entrarASala(code, nombre);
+    }).catch(function (e) { mostrarError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Entrar"; });
+  });
+
+  $("in-codigo").addEventListener("input", function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z]/g, "");
+  });
+
+  function textoError(e) {
+    var c = e && e.code;
+    if (c === "quota_exceeded") return "El juego llegó a su tope de partidas guardadas. Borra salas viejas o publica una copia nueva.";
+    if (c === "resource_exhausted") return "Demasiadas acciones seguidas. Espera un par de segundos.";
+    if (c === "revoked" || c === "not_granted") return "Perdiste el acceso a los datos de la partida. Recarga la página.";
+    return (e && e.message) || "Algo falló. Intenta otra vez.";
+  }
+
+  /* ========================================================
+     Suscripciones de sala
+     ======================================================== */
+
+  function entrarASala(code, nombre) {
+    S.code = code;
+    return S.db.doc("salas/" + code + "/jugadores/" + MI_ID)
+      .set({ nombre: nombre, entroEn: Date.now() })
+      .then(function () { escuchar(code); });
+  }
+
+  function escuchar(code) {
+    limpiarSubs();
+
+    S.subs.push(S.db.doc("salas/" + code).onSnapshot(function (snap) {
+      if (!snap.exists) { volverAlInicio("La sala se cerró."); return; }
+      var previo = S.sala;
+      S.sala = snap.data();
+      if (!previo || previo.ronda !== S.sala.ronda) { S.misRespuestas = {}; S.rondaEnviada = -1; S.rondaCalculada = -1; }
+      alCambiarEstado(previo);
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("salas/" + code + "/jugadores").onSnapshot(function (snap) {
+      S.jugadores = snap.docs.map(function (d) {
+        var c = d.data() || {};
+        return { pid: d.id, nombre: c.nombre || "Sin nombre", entroEn: c.entroEn || 0 };
+      }).sort(function (a, b) { return a.entroEn - b.entroEn; });
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("salas/" + code + "/resultados").onSnapshot(function (snap) {
+      S.resultados = snap.docs.map(function (d) { return d.data() || {}; })
+        .sort(function (a, b) { return (a.ronda || 0) - (b.ronda || 0); });
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("salas/" + code + "/respuestas").onSnapshot(function (snap) {
+      S.respuestasRonda = snap.docs.map(function (d) { return d.data() || {}; });
+      quizasCalcular();
+    }, alFallar));
+  }
+
+  function alFallar(e) {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--margen)";
+    if (e && (e.code === "revoked" || e.code === "unavailable")) {
+      $("juego-aviso").textContent = "Se cortó la conexión con la partida. Recarga la página.";
+    }
+  }
+
+  function volverAlInicio(msg) {
+    limpiarSubs();
+    detenerReloj();
+    S.code = null; S.sala = null; S.jugadores = []; S.resultados = []; S.respuestasRonda = [];
+    S.misRespuestas = {}; S.rondaEnviada = -1; S.rondaCalculada = -1;
+    mostrarError(msg || "");
+    pintar();
+  }
+
+  /* ========================================================
+     Ciclo de la ronda
+     ======================================================== */
+
+  function alCambiarEstado(previo) {
+    var est = S.sala.estado;
+
+    if (est === "jugando") {
+      arrancarReloj();
+      if (!previo || previo.estado !== "jugando" || previo.ronda !== S.sala.ronda) {
+        construirRenglones();
+        var primero = document.querySelector("#juego-renglones input");
+        if (primero) setTimeout(function () { primero.focus(); }, 60);
+      }
+    } else {
+      detenerReloj();
+    }
+
+    // Alguien gritó: entrego mi hoja tal como está.
+    if (est === "revision" && S.rondaEnviada !== S.sala.ronda) {
+      entregarHoja(S.sala.ronda);
+    }
+    if (est === "revision" && soyHost()) programarCierre();
+  }
+
+  function arrancarReloj() {
+    detenerReloj();
+    S.tickReloj = setInterval(pintarReloj, 250);
+    pintarReloj();
+  }
+  function detenerReloj() {
+    if (S.tickReloj) { clearInterval(S.tickReloj); S.tickReloj = null; }
+  }
+  function pintarReloj() {
+    if (!S.sala || !S.sala.iniciadaEn) return;
+    var seg = Math.max(0, Math.floor((Date.now() - S.sala.iniciadaEn) / 1000));
+    $("juego-reloj").textContent = Math.floor(seg / 60) + ":" + String(seg % 60).padStart(2, "0");
+  }
+
+  function leerRenglones() {
+    var out = {};
+    CATS.forEach(function (cat) {
+      var el = document.getElementById("campo-" + cat.id);
+      out[cat.id] = el ? el.value.trim().slice(0, 40) : (S.misRespuestas[cat.id] || "");
+    });
+    return out;
+  }
+
+  function entregarHoja(ronda) {
+    S.rondaEnviada = ronda;
+    var r = leerRenglones();
+    S.misRespuestas = r;
+    return S.db.doc("salas/" + S.code + "/respuestas/r" + ronda + "__" + MI_ID)
+      .set({ pid: MI_ID, ronda: ronda, r: r, enviadoEn: Date.now() })
+      .catch(function (e) { console.warn("No se pudo entregar la hoja", e); });
+  }
+
+  function programarCierre() {
+    if (S.temporizadorCierre) return;
+    S.temporizadorCierre = setTimeout(function () {
+      S.temporizadorCierre = null;
+      quizasCalcular(true);
+    }, 4500);
+    quizasCalcular();
+  }
+
+  // El host junta las hojas y publica el puntaje de la ronda.
+  function quizasCalcular(forzar) {
+    if (!S.sala || S.sala.estado !== "revision" || !soyHost()) return;
+    var ronda = S.sala.ronda;
+    if (S.rondaCalculada === ronda) return;
+    if (S.resultados.some(function (x) { return x.ronda === ronda; })) { S.rondaCalculada = ronda; return; }
+
+    var deEstaRonda = S.respuestasRonda.filter(function (x) { return x.ronda === ronda; });
+    var pids = S.jugadores.map(function (j) { return j.pid; });
+    if (!forzar && deEstaRonda.length < pids.length) return;
+
+    S.rondaCalculada = ronda;
+    if (S.temporizadorCierre) { clearTimeout(S.temporizadorCierre); S.temporizadorCierre = null; }
+
+    var respuestas = {}, nombres = {};
+    S.jugadores.forEach(function (j) { nombres[j.pid] = j.nombre; respuestas[j.pid] = {}; });
+    deEstaRonda.forEach(function (x) { if (respuestas[x.pid]) respuestas[x.pid] = x.r || {}; });
+
+    var calc = puntuar(S.sala.letra, pids, respuestas, {});
+    S.db.doc("salas/" + S.code + "/resultados/r" + ronda).set({
+      ronda: ronda, letra: S.sala.letra, pids: pids, nombres: nombres,
+      respuestas: respuestas, anuladas: {},
+      detalle: calc.detalle, puntos: calc.puntos,
+      detenidaPor: S.sala.detenidaPor || "", cerradaEn: Date.now()
+    }).catch(function (e) { S.rondaCalculada = -1; console.warn("No se pudo cerrar la ronda", e); });
+  }
+
+  function letraNueva(usadas) {
+    var libres = LETRAS.filter(function (l) { return (usadas || []).indexOf(l) === -1; });
+    if (!libres.length) { libres = LETRAS.slice(); usadas = []; }
+    return libres[Math.floor(Math.random() * libres.length)];
+  }
+
+  function repartir() {
+    var usadas = (S.sala.letrasUsadas || []).slice();
+    var letra = letraNueva(usadas);
+    if (usadas.length >= LETRAS.length) usadas = [];
+    usadas.push(letra);
+    return S.db.doc("salas/" + S.code).update({
+      estado: "jugando", letra: letra, ronda: (S.sala.ronda || 0) + 1,
+      letrasUsadas: usadas, iniciadaEn: Date.now(), detenidaPor: ""
+    });
+  }
+
+  $("btn-empezar").addEventListener("click", function () {
+    this.disabled = true;
+    repartir().catch(function (e) { $("lobby-aviso").textContent = textoError(e); $("btn-empezar").disabled = false; });
+  });
+
+  $("btn-bachillerato").addEventListener("click", function () {
+    if (!S.sala || S.sala.estado !== "jugando") return;
+    this.disabled = true;
+    var ronda = S.sala.ronda;
+    entregarHoja(ronda).then(function () {
+      return S.db.doc("salas/" + S.code).update({ estado: "revision", detenidaPor: MI_ID, detenidaEn: Date.now() });
+    }).catch(function (e) {
+      $("juego-aviso").textContent = textoError(e);
+      $("btn-bachillerato").disabled = false;
+    });
+  });
+
+  $("btn-siguiente").addEventListener("click", function () {
+    this.disabled = true;
+    repartir().catch(function (e) { $("rev-espera").hidden = false; $("rev-espera").textContent = textoError(e); });
+  });
+
+  $("btn-terminar").addEventListener("click", function () {
+    S.db.doc("salas/" + S.code).update({ estado: "fin" });
+  });
+
+  $("btn-revancha").addEventListener("click", function () {
+    var borrados = S.resultados.map(function (r) {
+      return S.db.doc("salas/" + S.code + "/resultados/r" + r.ronda).delete();
+    });
+    Promise.all(borrados).then(function () {
+      return S.db.doc("salas/" + S.code).update({ estado: "lobby", ronda: 0, letra: "", letrasUsadas: [], detenidaPor: "" });
+    });
+  });
+
+  $("btn-salir-lobby").addEventListener("click", salir);
+  $("btn-salir-fin").addEventListener("click", salir);
+
+  function salir() {
+    var ref = S.code ? S.db.doc("salas/" + S.code + "/jugadores/" + MI_ID) : null;
+    volverAlInicio("");
+    if (ref) ref.delete().catch(function () {});
+  }
+
+  $("btn-copiar").addEventListener("click", function () {
+    var btn = this;
+    var texto = S.code || "";
+    var listo = function () { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar código"; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(listo, function () { btn.textContent = "Cópialo a mano: " + texto; });
+    } else {
+      btn.textContent = "Cópialo a mano: " + texto;
+    }
+  });
+
+  /* ========================================================
+     Anular una respuesta inventada (solo el host)
+     ======================================================== */
+
+  function anular(ronda, pid, catId) {
+    var res = S.resultados.filter(function (r) { return r.ronda === ronda; })[0];
+    if (!res) return;
+    var anuladas = Object.assign({}, res.anuladas || {});
+    var clave = pid + "|" + catId;
+    if (anuladas[clave]) delete anuladas[clave]; else anuladas[clave] = true;
+
+    var calc = puntuar(res.letra, res.pids || [], res.respuestas || {}, anuladas);
+    S.db.doc("salas/" + S.code + "/resultados/r" + ronda)
+      .update({ anuladas: anuladas, detalle: calc.detalle, puntos: calc.puntos })
+      .catch(function (e) { console.warn("No se pudo anular", e); });
+  }
+
+  /* ========================================================
+     Pintado
+     ======================================================== */
+
+  function totales() {
+    var t = {};
+    S.jugadores.forEach(function (j) { t[j.pid] = 0; });
+    S.resultados.forEach(function (r) {
+      Object.keys(r.puntos || {}).forEach(function (pid) { t[pid] = (t[pid] || 0) + (r.puntos[pid] || 0); });
+    });
+    return t;
+  }
+
+  function nombreDe(pid) {
+    var j = S.jugadores.filter(function (x) { return x.pid === pid; })[0];
+    if (j) return j.nombre;
+    for (var i = S.resultados.length - 1; i >= 0; i--) {
+      var n = (S.resultados[i].nombres || {})[pid];
+      if (n) return n;
+    }
+    return "Alguien";
+  }
+
+  function pintarMarcador(contenedor, conChips) {
+    var t = totales();
+    var filas = S.jugadores.slice().sort(function (a, b) {
+      return (t[b.pid] || 0) - (t[a.pid] || 0) || a.entroEn - b.entroEn;
+    });
+    contenedor.textContent = "";
+    filas.forEach(function (j, i) {
+      var fila = document.createElement("div");
+      fila.className = "marcador-fila" + (i === 0 && (t[j.pid] || 0) > 0 ? " lider" : "") + (j.pid === MI_ID ? " yo" : "");
+
+      var pos = document.createElement("span"); pos.className = "pos"; pos.textContent = (i + 1);
+      var quien = document.createElement("span"); quien.className = "quien"; quien.textContent = j.nombre;
+      if (j.pid === MI_ID) { var tu = document.createElement("span"); tu.className = "aviso"; tu.textContent = "  (tú)"; quien.appendChild(tu); }
+      if (conChips && S.sala && S.sala.hostId === j.pid) {
+        var chip = document.createElement("span"); chip.className = "chip host"; chip.textContent = "reparte";
+        quien.appendChild(document.createTextNode(" ")); quien.appendChild(chip);
+      }
+      var total = document.createElement("span"); total.className = "total"; total.textContent = (t[j.pid] || 0);
+
+      fila.appendChild(pos); fila.appendChild(quien); fila.appendChild(total);
+      contenedor.appendChild(fila);
+    });
+    if (!filas.length) {
+      var vacio = document.createElement("div");
+      vacio.className = "marcador-fila"; vacio.style.gridTemplateColumns = "1fr";
+      vacio.textContent = "Todavía no hay nadie.";
+      contenedor.appendChild(vacio);
+    }
+  }
+
+  function construirRenglones() {
+    var cont = $("juego-renglones");
+    cont.textContent = "";
+    CATS.forEach(function (cat) {
+      var fila = document.createElement("div"); fila.className = "renglon";
+      var lab = document.createElement("label"); lab.setAttribute("for", "campo-" + cat.id); lab.textContent = cat.label;
+      var inp = document.createElement("input");
+      inp.type = "text"; inp.id = "campo-" + cat.id; inp.maxLength = 40;
+      inp.autocomplete = "off"; inp.spellcheck = false;
+      inp.value = S.misRespuestas[cat.id] || "";
+      inp.placeholder = S.sala && S.sala.letra ? cat.label.split(" ")[0] + " con " + S.sala.letra : cat.label;
+      inp.addEventListener("input", function () { S.misRespuestas[cat.id] = this.value; });
+      inp.addEventListener("keydown", function (ev) {
+        if (ev.key !== "Enter") return;
+        ev.preventDefault();
+        var campos = Array.prototype.slice.call(cont.querySelectorAll("input"));
+        var i = campos.indexOf(this);
+        if (i > -1 && i < campos.length - 1) campos[i + 1].focus();
+        else $("btn-bachillerato").focus();
+      });
+      fila.appendChild(lab); fila.appendChild(inp);
+      cont.appendChild(fila);
+    });
+  }
+
+  function celdaRespuesta(res, pid, catId, editable) {
+    var td = document.createElement("td");
+    var caja = document.createElement("div"); caja.className = "celda";
+
+    var txt = ((res.respuestas || {})[pid] || {})[catId] || "";
+    var anulada = !!(res.anuladas || {})[pid + "|" + catId];
+    var pts = ((res.detalle || {})[pid] || {})[catId] || 0;
+
+    var palabra = document.createElement("span");
+    if (!txt) { palabra.className = "palabra vacia"; palabra.textContent = "en blanco"; }
+    else { palabra.className = "palabra" + (anulada ? " anulada" : ""); palabra.textContent = txt; }
+    caja.appendChild(palabra);
+
+    if (txt && editable) {
+      var x = document.createElement("button");
+      x.type = "button"; x.className = "anulador";
+      x.textContent = anulada ? "↺" : "×";
+      x.title = anulada ? "Devolverle el puntaje a “" + txt + "”" : "Anular “" + txt + "”";
+      x.setAttribute("aria-label", x.title);
+      x.addEventListener("click", function () { anular(res.ronda, pid, catId); });
+      caja.appendChild(x);
+    }
+
+    var p = document.createElement("span");
+    p.className = "pts p" + pts; p.textContent = pts;
+    caja.appendChild(p);
+
+    td.appendChild(caja);
+    return td;
+  }
+
+  function pintarRevision() {
+    var ronda = S.sala.ronda;
+    var res = S.resultados.filter(function (r) { return r.ronda === ronda; })[0];
+
+    $("rev-letra").textContent = S.sala.letra || "?";
+    $("rev-ronda").textContent = "Ronda " + ronda;
+    $("rev-quien").textContent = S.sala.detenidaPor
+      ? (S.sala.detenidaPor === MI_ID ? "Gritaste tú" : "Gritó " + nombreDe(S.sala.detenidaPor))
+      : "";
+
+    $("rev-cargando").hidden = !!res;
+    $("rev-contenido").hidden = !res;
+    $("rev-nota-host").hidden = !(res && soyHost());
+
+    if (res) {
+      var pids = (res.pids || []).filter(function (pid) { return (res.nombres || {})[pid]; });
+      var cabeza = $("rev-cabeza"); cabeza.textContent = "";
+      var trh = document.createElement("tr");
+      var th0 = document.createElement("th"); th0.textContent = "Categoría"; trh.appendChild(th0);
+      pids.forEach(function (pid) {
+        var th = document.createElement("th");
+        th.textContent = (res.nombres || {})[pid] || "Alguien";
+        trh.appendChild(th);
+      });
+      cabeza.appendChild(trh);
+
+      var cuerpo = $("rev-cuerpo"); cuerpo.textContent = "";
+      CATS.forEach(function (cat) {
+        var tr = document.createElement("tr");
+        var th = document.createElement("th"); th.className = "cat"; th.scope = "row"; th.textContent = cat.label;
+        tr.appendChild(th);
+        pids.forEach(function (pid) { tr.appendChild(celdaRespuesta(res, pid, cat.id, soyHost())); });
+        cuerpo.appendChild(tr);
+      });
+
+      var trt = document.createElement("tr");
+      var tht = document.createElement("th"); tht.className = "cat"; tht.scope = "row"; tht.textContent = "Ronda " + ronda;
+      trt.appendChild(tht);
+      pids.forEach(function (pid) {
+        var td = document.createElement("td"); td.className = "total-col";
+        td.textContent = (res.puntos || {})[pid] || 0;
+        trt.appendChild(td);
+      });
+      cuerpo.appendChild(trt);
+    }
+
+    pintarMarcador($("rev-marcador"), false);
+    $("btn-siguiente").hidden = !soyHost(); $("btn-siguiente").disabled = !res;
+    $("btn-terminar").hidden = !soyHost();
+    $("rev-espera").hidden = soyHost();
+    $("rev-espera").textContent = "Esperando a que " + nombreDe(S.sala.hostId) + " reparta la próxima letra.";
+  }
+
+  function pintar() {
+    var enSala = !!(S.code && S.sala);
+    var est = enSala ? S.sala.estado : "inicio";
+
+    $("pantalla-inicio").hidden = enSala;
+    $("pantalla-lobby").hidden = est !== "lobby";
+    $("pantalla-juego").hidden = est !== "jugando";
+    $("pantalla-revision").hidden = est !== "revision";
+    $("pantalla-fin").hidden = est !== "fin";
+
+    if (!enSala) return;
+
+    if (est === "lobby") {
+      $("lobby-codigo").textContent = S.code;
+      pintarMarcador($("lobby-jugadores"), true);
+      var solo = S.jugadores.length < 2;
+      $("btn-empezar").hidden = !soyHost();
+      $("btn-empezar").disabled = !soyHost() || solo;
+      $("lobby-aviso").textContent = soyHost()
+        ? (solo ? "Falta al menos una persona más." : "Cuando estén todos, reparte.")
+        : "Esperando a que " + nombreDe(S.sala.hostId) + " empiece.";
+    }
+
+    if (est === "jugando") {
+      $("juego-letra").textContent = S.sala.letra;
+      $("juego-ronda").textContent = "Ronda " + S.sala.ronda + " · " + S.jugadores.length + " jugando";
+      $("juego-letra-lectura").textContent = "Todo tiene que empezar con " + S.sala.letra + ".";
+      $("btn-bachillerato").disabled = false;
+      $("juego-aviso").textContent = "Cuando termines, aprieta y todos paran.";
+    }
+
+    if (est === "revision") pintarRevision();
+
+    if (est === "fin") {
+      var t = totales();
+      var orden = S.jugadores.slice().sort(function (a, b) { return (t[b.pid] || 0) - (t[a.pid] || 0); });
+      var top = orden[0];
+      $("fin-titulo").textContent = top ? "Ganó " + top.nombre : "Final";
+      pintarMarcador($("fin-marcador"), false);
+      $("btn-revancha").hidden = !soyHost();
+    }
+  }
+
+  /* ========================================================
+     Hoja de ejemplo de la portada
+     ======================================================== */
+
+  function pintarDemo() {
+    var filas = [
+      ["Nombre",           "Manuela",     100, "Matías",      100],
+      ["Apellido",         "Muñoz",        50, "Muñoz",         50],
+      ["Animal",           "Mono",        100, "Murciélago",   100],
+      ["País o ciudad",    "Marruecos",   200, "",               0],
+      ["Color o cosa",     "Morado",      100, "Martillo",     100],
+      ["Fruta o verdura",  "Mandarina",    50, "Mandarina",     50],
+      ["Cantante o grupo", "Mon Laferte", 100, "Metallica",    100],
+      ["Peli o serie",     "",              0, "Matrix",       200]
+    ];
+    var cuerpo = $("demo-cuerpo");
+    filas.forEach(function (f) {
+      var tr = document.createElement("tr");
+      var th = document.createElement("th"); th.className = "cat"; th.scope = "row"; th.textContent = f[0];
+      tr.appendChild(th);
+      [[f[1], f[2]], [f[3], f[4]]].forEach(function (par) {
+        var td = document.createElement("td");
+        var caja = document.createElement("div"); caja.className = "celda";
+        var w = document.createElement("span");
+        if (par[0]) { w.className = "palabra"; w.textContent = par[0]; }
+        else { w.className = "palabra vacia"; w.textContent = "en blanco"; }
+        var p = document.createElement("span"); p.className = "pts p" + par[1]; p.textContent = par[1];
+        caja.appendChild(w); caja.appendChild(p);
+        td.appendChild(caja); tr.appendChild(td);
+      });
+      cuerpo.appendChild(tr);
+    });
+    var tr2 = document.createElement("tr");
+    var th2 = document.createElement("th"); th2.className = "cat"; th2.scope = "row"; th2.textContent = "Ronda 3";
+    tr2.appendChild(th2);
+    [700, 700].forEach(function (n) {
+      var td = document.createElement("td"); td.className = "total-col"; td.textContent = n; tr2.appendChild(td);
+    });
+    cuerpo.appendChild(tr2);
+  }
+
+  /* ========================================================
+     Sobrevivir a una republicación
+     ======================================================== */
+
+  try {
+    if (window.claude && claude.hot && claude.hot.snapshot) {
+      claude.hot.snapshot(function () {
+        return { code: S.code, nombre: S.nombre, respuestas: S.misRespuestas };
+      });
+      var previo = claude.hot.data || {};
+      if (previo.respuestas) S.misRespuestas = previo.respuestas;
+      if (previo.nombre) { S.nombre = previo.nombre; $("in-nombre").value = previo.nombre; }
+    }
+  } catch (e) { /* sin hot reload, seguimos igual */ }
+
+})();
+</script>
