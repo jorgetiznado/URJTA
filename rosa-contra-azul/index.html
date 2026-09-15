@@ -1,0 +1,844 @@
+<title>Rosa contra Azul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Syne:wght@600;700;800&display=swap">
+
+<style>
+  :root {
+    --fondo:    #F4F2F4;
+    --carta:    #FBFAFB;
+    --trazo:    #1E1A22;
+    --trazo2:   #7A7280;
+    --apagado:  #DCD8DE;
+    --borde:    #E5E1E7;
+
+    --rosa:     #D6336C;
+    --azul:     #1C63C7;
+    --rosa-piel: #FBE7EE;
+    --azul-piel: #E4EDFB;
+
+    --sombra: 0 1px 0 rgba(30,26,34,.04), 0 14px 32px -22px rgba(30,26,34,.55);
+
+    --s1:.35rem; --s2:.7rem; --s3:1.1rem; --s4:1.7rem; --s5:2.6rem; --s6:4rem;
+    --display: "Syne", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Sora", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo:    #17151A;
+      --carta:    #201D25;
+      --trazo:    #EDE9F0;
+      --trazo2:   #9A91A3;
+      --apagado:  #342F3A;
+      --borde:    #2C2832;
+      --rosa:     #FF6FA5;
+      --azul:     #5FA8FF;
+      --rosa-piel: #351C27;
+      --azul-piel: #16273F;
+      --sombra: 0 1px 0 rgba(0,0,0,.4), 0 18px 36px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo:    #17151A;
+    --carta:    #201D25;
+    --trazo:    #EDE9F0;
+    --trazo2:   #9A91A3;
+    --apagado:  #342F3A;
+    --borde:    #2C2832;
+    --rosa:     #FF6FA5;
+    --azul:     #5FA8FF;
+    --rosa-piel: #351C27;
+    --azul-piel: #16273F;
+    --sombra: 0 1px 0 rgba(0,0,0,.4), 0 18px 36px -24px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--fondo);
+    color: var(--trazo);
+    font-family: var(--ui);
+    font-size: 16px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .marco { max-width: 640px; margin-inline: auto; padding-inline: 18px; padding-block: var(--s4) var(--s6); }
+
+  .carta { background: var(--carta); border: 1px solid var(--borde); border-radius: 6px; box-shadow: var(--sombra); padding: var(--s4) var(--s3); }
+  @media (min-width: 520px) { .carta { padding: var(--s4); } }
+
+  .bloque { display: grid; gap: var(--s3); }
+  .apartado { margin-top: var(--s5); display: grid; gap: var(--s3); }
+  .fila { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+  .entre { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; }
+
+  .rotulo { font-size: .68rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--trazo2); }
+  .nota { font-size: .87rem; color: var(--trazo2); }
+  .nota.malo { color: var(--rosa); }
+
+  h1.marca { font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 7.5vw, 2.9rem); line-height: 1; letter-spacing: -.025em; margin: 0; }
+  h1.marca .r { color: var(--rosa); }
+  h1.marca .a { color: var(--azul); }
+  h2.titulo { font-family: var(--display); font-weight: 700; font-size: clamp(1.35rem, 5vw, 1.85rem); line-height: 1.1; letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+
+  .cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4); }
+
+  .btn {
+    font-family: var(--ui); font-size: .93rem; font-weight: 600;
+    color: var(--carta); background: var(--trazo);
+    border: 1.5px solid var(--trazo); border-radius: 4px;
+    padding: .6rem 1.15rem; cursor: pointer; transition: transform .1s ease, opacity .1s ease;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn.fantasma { background: transparent; color: var(--trazo); border-color: var(--borde); }
+  .btn.fantasma:hover:not(:disabled) { border-color: var(--trazo2); }
+  :is(.btn, input, .linea):focus-visible { outline: 2.5px solid var(--trazo); outline-offset: 2px; }
+
+  .campo { display: grid; gap: var(--s1); }
+  .campo > span { font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--trazo2); }
+  .campo input {
+    font-family: var(--ui); font-size: 1rem; color: var(--trazo); background: transparent;
+    border: 1.5px solid var(--borde); border-radius: 4px; padding: .58rem .7rem; width: 100%;
+  }
+  .campo input:focus { outline: none; border-color: var(--trazo2); }
+  .campo input.codigo { font-family: var(--display); font-weight: 700; font-size: 1.45rem; letter-spacing: .28em; text-transform: uppercase; }
+
+  /* ---------- Marcador de dos lados ---------- */
+  .duelo { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: var(--s2); }
+  .lado { border: 1.5px solid var(--borde); border-radius: 5px; padding: .6rem .8rem; display: grid; gap: 1px; min-width: 0; }
+  .lado .quien { font-size: .82rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lado .cuantos { font-family: var(--display); font-weight: 800; font-size: 1.9rem; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .lado.rosa { border-color: var(--rosa); } .lado.rosa .cuantos, .lado.rosa .quien { color: var(--rosa); }
+  .lado.azul { border-color: var(--azul); } .lado.azul .cuantos, .lado.azul .quien { color: var(--azul); }
+  .lado.rosa.juega { background: var(--rosa-piel); }
+  .lado.azul.juega { background: var(--azul-piel); }
+  .lado.azul { text-align: right; }
+  .versus { align-self: center; font-family: var(--display); font-weight: 700; font-size: .78rem; color: var(--trazo2); letter-spacing: .1em; }
+
+  /* ---------- Tablero ---------- */
+  .tablero { position: relative; width: 100%; aspect-ratio: 1; touch-action: manipulation; }
+  .malla { position: absolute; inset: 7%; }
+
+  .cuadro {
+    position: absolute; border-radius: 2px;
+    display: grid; place-items: center;
+  }
+  .cuadro.tomado::before {
+    content: ""; width: 46%; height: 46%;
+    background-image:
+      linear-gradient(to top right, transparent calc(50% - 1.6px), var(--tinta-x) calc(50% - 1.6px), var(--tinta-x) calc(50% + 1.6px), transparent calc(50% + 1.6px)),
+      linear-gradient(to bottom right, transparent calc(50% - 1.6px), var(--tinta-x) calc(50% - 1.6px), var(--tinta-x) calc(50% + 1.6px), transparent calc(50% + 1.6px));
+    animation: marcar .26s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .cuadro[data-de="1"] { --tinta-x: var(--rosa); background: var(--rosa-piel); }
+  .cuadro[data-de="2"] { --tinta-x: var(--azul); background: var(--azul-piel); }
+  @keyframes marcar { from { transform: scale(.3) rotate(-25deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .punto { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--trazo2); transform: translate(-50%, -50%); pointer-events: none; }
+
+  .linea { position: absolute; background: transparent; border: 0; padding: 0; cursor: pointer; }
+  .linea::before { content: ""; position: absolute; inset: 0; margin: auto; background: var(--apagado); border-radius: 2px; }
+  .linea.h { height: 22px; transform: translateY(-50%); }
+  .linea.h::before { height: 3px; left: 3px; right: 3px; }
+  .linea.v { width: 22px; transform: translateX(-50%); }
+  .linea.v::before { width: 3px; top: 3px; bottom: 3px; }
+  .linea.libre:hover::before { background: var(--trazo2); }
+  .linea.tomada { cursor: default; }
+  .linea.tomada[data-de="1"]::before { background: var(--rosa); }
+  .linea.tomada[data-de="2"]::before { background: var(--azul); }
+  .linea.ultima::after {
+    content: ""; position: absolute; inset: -5px; border-radius: 4px;
+    border: 1.5px dashed currentColor; opacity: .45; pointer-events: none;
+  }
+  .linea.ultima[data-de="1"] { color: var(--rosa); }
+  .linea.ultima[data-de="2"] { color: var(--azul); }
+  .tablero.espera .linea.libre { cursor: default; }
+  .tablero.espera .linea.libre:hover::before { background: var(--apagado); }
+
+  /* ---------- Varios ---------- */
+  .tablero-lista { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 4px; overflow: hidden; }
+  .tablero-lista .f { display: grid; grid-template-columns: 1fr auto; gap: var(--s2); background: var(--carta); padding: .6rem .85rem; align-items: center; }
+  .tablero-lista .f .n { font-weight: 500; overflow-wrap: anywhere; }
+  .insignia { font-size: .62rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: .14rem .42rem; border: 1px solid currentColor; border-radius: 3px; color: var(--trazo2); }
+  .insignia.rosa { color: var(--rosa); } .insignia.azul { color: var(--azul); }
+
+  .pasos { display: grid; gap: var(--s2); margin: 0; padding: 0; list-style: none; counter-reset: p; }
+  .pasos li { display: grid; grid-template-columns: 1.5rem 1fr; gap: var(--s2); align-items: baseline; font-size: .9rem; }
+  .pasos li::before { counter-increment: p; content: counter(p); font-family: var(--display); font-weight: 700; font-size: .78rem; color: var(--trazo2); }
+  .pasos li.clave { font-weight: 500; color: var(--trazo); }
+  .pasos li.clave::before { color: var(--rosa); }
+
+  hr.regla { border: 0; border-top: 1px solid var(--borde); margin: var(--s4) 0; }
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) { *, .cuadro.tomado::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="marco">
+
+  <header class="cabecera">
+    <div>
+      <h1 class="marca"><span class="r">Rosa</span> contra <span class="a">Azul</span></h1>
+      <p class="nota" style="max-width:34ch">Traza una línea. Si cierras un cuadrado es tuyo — y juegas de nuevo.</p>
+    </div>
+    <div id="estado-conexion" class="rotulo">Conectando…</div>
+  </header>
+
+  <!-- ================= INICIO ================= -->
+  <section id="p-inicio">
+    <div class="carta bloque">
+      <label class="campo" for="in-nombre">
+        <span>Tu nombre</span>
+        <input id="in-nombre" type="text" maxlength="18" autocomplete="nickname" placeholder="Jorge">
+      </label>
+      <div class="fila">
+        <button class="btn" id="btn-crear" disabled>Crear una mesa</button>
+        <span class="nota">o entra a una que ya existe:</span>
+      </div>
+      <label class="campo" for="in-codigo">
+        <span>Código de mesa</span>
+        <input id="in-codigo" class="codigo" type="text" maxlength="4" autocomplete="off" spellcheck="false" placeholder="ABCD">
+      </label>
+      <div class="fila"><button class="btn fantasma" id="btn-unirse" disabled>Entrar</button></div>
+      <p class="nota malo" id="error-inicio" hidden></p>
+    </div>
+
+    <div class="apartado">
+      <span class="rotulo">Cómo se juega</span>
+      <div class="carta bloque">
+        <ol class="pasos">
+          <li>Por turnos, cada uno une dos puntos vecinos con una línea.</li>
+          <li>El que pone el cuarto lado de un cuadrado se lo queda: sale su X.</li>
+          <li class="clave">Si cierras un cuadrado, juegas otra vez. Encadena y te llevas cinco de una.</li>
+          <li>Cuando ya no quedan líneas, gana el que tenga más cuadrados.</li>
+        </ol>
+        <hr class="regla">
+        <span class="rotulo">Una partida a medias</span>
+        <div class="tablero" id="demo-tablero" style="max-width:280px;margin-inline:auto"><div class="malla" id="demo-malla"></div></div>
+        <p class="nota">Ejemplo, no es una partida real.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOBBY ================= -->
+  <section id="p-lobby" hidden>
+    <div class="carta bloque">
+      <div class="entre">
+        <div>
+          <span class="rotulo">Código de mesa</span>
+          <div id="lobby-codigo" style="font-family:var(--display);font-weight:800;font-size:2rem;letter-spacing:.22em;line-height:1.1"></div>
+        </div>
+        <button class="btn fantasma" id="btn-copiar">Copiar</button>
+      </div>
+      <p class="nota">Pásale el código. Entra desde este mismo link. Juegan dos.</p>
+      <hr class="regla">
+      <span class="rotulo">En la mesa</span>
+      <div class="tablero-lista" id="lobby-jugadores"></div>
+      <div class="fila">
+        <button class="btn" id="btn-empezar" disabled>Empezar</button>
+        <button class="btn fantasma" id="btn-salir-lobby">Salir</button>
+      </div>
+      <p class="nota" id="lobby-nota"></p>
+    </div>
+  </section>
+
+  <!-- ================= JUEGO ================= -->
+  <section id="p-juego" hidden>
+    <div class="carta bloque">
+      <div class="duelo">
+        <div class="lado rosa" id="lado-rosa">
+          <span class="quien" id="rosa-nombre">—</span>
+          <span class="cuantos" id="rosa-cuenta">0</span>
+        </div>
+        <span class="versus">VS</span>
+        <div class="lado azul" id="lado-azul">
+          <span class="quien" id="azul-nombre">—</span>
+          <span class="cuantos" id="azul-cuenta">0</span>
+        </div>
+      </div>
+      <p class="nota" id="juego-aviso" style="text-align:center">—</p>
+      <div class="tablero" id="tablero"><div class="malla" id="malla"></div></div>
+      <p class="nota" id="juego-quedan" style="text-align:center"></p>
+    </div>
+  </section>
+
+  <!-- ================= FIN ================= -->
+  <section id="p-fin" hidden>
+    <div class="carta bloque">
+      <span class="rotulo">Se acabaron las líneas</span>
+      <h2 class="titulo" id="fin-titulo">Final</h2>
+      <div class="duelo">
+        <div class="lado rosa">
+          <span class="quien" id="fin-rosa-nombre">—</span>
+          <span class="cuantos" id="fin-rosa-cuenta">0</span>
+        </div>
+        <span class="versus">VS</span>
+        <div class="lado azul">
+          <span class="quien" id="fin-azul-nombre">—</span>
+          <span class="cuantos" id="fin-azul-cuenta">0</span>
+        </div>
+      </div>
+      <div class="tablero" id="fin-tablero" style="max-width:320px;margin-inline:auto"><div class="malla" id="fin-malla"></div></div>
+      <div class="fila">
+        <button class="btn" id="btn-revancha" hidden>Revancha</button>
+        <button class="btn fantasma" id="btn-salir-fin">Volver al inicio</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ========================================================
+     Reglas
+     ======================================================== */
+
+  var N = 6;                       // cuadrados por lado; 7 x 7 puntos
+  var TOTAL_H = (N + 1) * N;       // líneas horizontales
+  var TOTAL_V = N * (N + 1);       // líneas verticales
+  var TOTAL_CUADROS = N * N;
+  var TOTAL_LINEAS = TOTAL_H + TOTAL_V;
+
+  function iH(r, c) { return r * N + c; }          // r en [0,N], c en [0,N-1]
+  function iV(r, c) { return r * (N + 1) + c; }    // r en [0,N-1], c en [0,N]
+  function iQ(r, c) { return r * N + c; }
+
+  function ceros(n) { var a = []; for (var i = 0; i < n; i++) a.push(0); return a; }
+
+  function cuadroCerrado(h, v, r, c) {
+    return !!(h[iH(r, c)] && h[iH(r + 1, c)] && v[iV(r, c)] && v[iV(r, c + 1)]);
+  }
+
+  /** Los cuadrados que toca una línea. */
+  function vecinos(tipo, idx) {
+    var out = [];
+    if (tipo === "h") {
+      var r = Math.floor(idx / N), c = idx % N;
+      if (r - 1 >= 0) out.push([r - 1, c]);
+      if (r < N) out.push([r, c]);
+    } else {
+      var rv = Math.floor(idx / (N + 1)), cv = idx % (N + 1);
+      if (cv - 1 >= 0) out.push([rv, cv - 1]);
+      if (cv < N) out.push([rv, cv]);
+    }
+    return out;
+  }
+
+  /**
+   * Aplica una jugada sobre copias de los arrays.
+   * Devuelve null si la línea ya estaba tomada.
+   */
+  function jugar(h, v, cuadros, tipo, idx, quien) {
+    var lineas = tipo === "h" ? h : v;
+    if (lineas[idx]) return null;
+
+    var nh = h.slice(), nv = v.slice(), nq = cuadros.slice();
+    (tipo === "h" ? nh : nv)[idx] = quien;
+
+    var cerrados = 0;
+    vecinos(tipo, idx).forEach(function (rc) {
+      if (!nq[iQ(rc[0], rc[1])] && cuadroCerrado(nh, nv, rc[0], rc[1])) {
+        nq[iQ(rc[0], rc[1])] = quien;
+        cerrados++;
+      }
+    });
+
+    return { h: nh, v: nv, cuadros: nq, cerrados: cerrados };
+  }
+
+  /* ========================================================
+     Identidad local
+     ======================================================== */
+
+  function leer(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }
+  function escribir(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function idNuevo() {
+    try { if (crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 16); } catch (e) {}
+    return String(Date.now()).slice(-8) + Math.random().toString(36).slice(2, 10);
+  }
+
+  var MI_ID = leer("rca.pid", "");
+  if (!MI_ID) { MI_ID = idNuevo(); escribir("rca.pid", MI_ID); }
+
+  /* ========================================================
+     Estado
+     ======================================================== */
+
+  var S = {
+    db: null,
+    nombre: leer("rca.nombre", ""),
+    code: null,
+    mesa: null,
+    jugadores: [],
+    enviando: false,
+    subs: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function limpiarSubs() { S.subs.forEach(function (u) { try { u(); } catch (e) {} }); S.subs = []; }
+  function soyHost() { return !!S.mesa && S.mesa.hostId === MI_ID; }
+  function miNumero() {
+    if (!S.mesa || !S.mesa.orden) return 0;
+    var i = S.mesa.orden.indexOf(MI_ID);
+    return i < 0 ? 0 : i + 1;
+  }
+  function esMiTurno() { return !!S.mesa && S.mesa.turnoDe === MI_ID; }
+  function nombreDe(pid) {
+    var j = S.jugadores.filter(function (x) { return x.pid === pid; })[0];
+    return j ? j.nombre : "El otro";
+  }
+  function pidDe(numero) { return (S.mesa && S.mesa.orden && S.mesa.orden[numero - 1]) || ""; }
+
+  /* ========================================================
+     Arranque
+     ======================================================== */
+
+  construirMalla($("malla"), true);
+  construirMalla($("fin-malla"), false);
+  pintarDemo();
+  $("in-nombre").value = S.nombre;
+
+  function sinConexion() {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--rosa)";
+    verError("Este juego guarda la partida en el servidor de Claude. Ábrelo desde el link publicado, con tu sesión iniciada.");
+  }
+
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function (db) {
+      if (!db) { sinConexion(); return; }
+      S.db = db;
+      $("estado-conexion").textContent = "En línea";
+      $("estado-conexion").style.color = "var(--azul)";
+      $("btn-crear").disabled = false;
+      $("btn-unirse").disabled = false;
+    }, sinConexion);
+  } else {
+    sinConexion();
+  }
+
+  /* ========================================================
+     Inicio
+     ======================================================== */
+
+  function verError(msg) { var p = $("error-inicio"); p.textContent = msg; p.hidden = !msg; }
+  function nombreEscrito() { return $("in-nombre").value.trim().slice(0, 18); }
+
+  var LETRAS = "ABCDEFGHJKLMNPRSTUVXY";
+  function codigoAlAzar() {
+    var s = "";
+    for (var i = 0; i < 4; i++) s += LETRAS[Math.floor(Math.random() * LETRAS.length)];
+    return s;
+  }
+
+  function textoError(e) {
+    var c = e && e.code;
+    if (c === "quota_exceeded") return "El juego llegó a su tope de partidas guardadas. Borra mesas viejas.";
+    if (c === "resource_exhausted") return "Demasiadas acciones seguidas. Espera un par de segundos.";
+    if (c === "revoked" || c === "not_granted") return "Perdiste el acceso a la partida. Recarga la página.";
+    return (e && e.message) || "Algo falló. Intenta otra vez.";
+  }
+
+  $("btn-crear").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    verError("");
+    S.nombre = nombre; escribir("rca.nombre", nombre);
+    var btn = this; btn.disabled = true; btn.textContent = "Creando…";
+    crearMesa(nombre).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Crear una mesa"; });
+  });
+
+  function crearMesa(nombre, intento) {
+    intento = intento || 0;
+    if (intento > 6) return Promise.reject({ message: "No se pudo reservar un código. Intenta de nuevo." });
+    var code = codigoAlAzar();
+    var ref = S.db.doc("duelos/" + code);
+
+    return ref.acquire({ holder: MI_ID, ttlMs: 6000 }).then(function (res) {
+      if (!res.acquired) return crearMesa(nombre, intento + 1);
+      return ref.get().then(function (snap) {
+        var cuerpo = snap.exists ? snap.data() : null;
+        if (cuerpo && cuerpo.hostId) return crearMesa(nombre, intento + 1);
+        return ref.set({
+          code: code, hostId: MI_ID, estado: "lobby",
+          orden: [], turnoDe: "", n: N,
+          h: ceros(TOTAL_H), v: ceros(TOTAL_V), cuadros: ceros(TOTAL_CUADROS),
+          ultimaT: "", ultimaI: -1, creadaEn: Date.now()
+        }).then(function () { return entrarAMesa(code, nombre); });
+      });
+    });
+  }
+
+  $("btn-unirse").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    var code = $("in-codigo").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    if (code.length !== 4) { verError("El código son 4 letras."); $("in-codigo").focus(); return; }
+    verError("");
+    S.nombre = nombre; escribir("rca.nombre", nombre);
+
+    var btn = this; btn.disabled = true; btn.textContent = "Entrando…";
+    S.db.doc("duelos/" + code).get().then(function (snap) {
+      if (!snap.exists) { verError("No hay ninguna mesa con el código " + code + "."); return; }
+      return S.db.collection("duelos/" + code + "/jugadores").get().then(function (q) {
+        var otros = q.docs.filter(function (d) { return d.id !== MI_ID; });
+        if (otros.length >= 2) { verError("Esa mesa ya tiene dos jugadores."); return; }
+        return entrarAMesa(code, nombre);
+      });
+    }).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Entrar"; });
+  });
+
+  $("in-codigo").addEventListener("input", function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z]/g, "");
+  });
+
+  /* ========================================================
+     Suscripciones
+     ======================================================== */
+
+  function entrarAMesa(code, nombre) {
+    S.code = code;
+    return S.db.doc("duelos/" + code + "/jugadores/" + MI_ID)
+      .set({ nombre: nombre, entroEn: Date.now() })
+      .then(function () { escuchar(code); });
+  }
+
+  function escuchar(code) {
+    limpiarSubs();
+
+    S.subs.push(S.db.doc("duelos/" + code).onSnapshot(function (snap) {
+      if (!snap.exists) { alInicio("La mesa se cerró."); return; }
+      S.mesa = snap.data();
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("duelos/" + code + "/jugadores").onSnapshot(function (snap) {
+      S.jugadores = snap.docs.map(function (d) {
+        var c = d.data() || {};
+        return { pid: d.id, nombre: c.nombre || "Sin nombre", entroEn: c.entroEn || 0 };
+      }).sort(function (a, b) { return a.entroEn - b.entroEn; });
+      pintar();
+    }, alFallar));
+  }
+
+  function alFallar(e) {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--rosa)";
+    if (e && (e.code === "revoked" || e.code === "unavailable")) {
+      $("juego-aviso").textContent = "Se cortó la conexión con la partida. Recarga la página.";
+    }
+  }
+
+  function alInicio(msg) {
+    limpiarSubs();
+    S.code = null; S.mesa = null; S.jugadores = []; S.enviando = false;
+    verError(msg || "");
+    pintar();
+  }
+
+  /* ========================================================
+     Jugadas
+     ======================================================== */
+
+  $("btn-empezar").addEventListener("click", function () {
+    this.disabled = true;
+    var orden = S.jugadores.map(function (j) { return j.pid; });
+    S.db.doc("duelos/" + S.code).update({
+      estado: "jugando", orden: orden, turnoDe: orden[0],
+      h: ceros(TOTAL_H), v: ceros(TOTAL_V), cuadros: ceros(TOTAL_CUADROS),
+      ultimaT: "", ultimaI: -1
+    }).catch(function (e) { $("lobby-nota").textContent = textoError(e); $("btn-empezar").disabled = false; });
+  });
+
+  function alTocarLinea() {
+    var tipo = this.dataset.t, idx = Number(this.dataset.i);
+    if (S.enviando) return;
+    if (!S.mesa || S.mesa.estado !== "jugando" || !esMiTurno()) return;
+
+    var yo = miNumero();
+    if (!yo) return;
+
+    var res = jugar(S.mesa.h, S.mesa.v, S.mesa.cuadros, tipo, idx, yo);
+    if (!res) return; // ya estaba tomada
+
+    var tomadas = res.h.filter(Boolean).length + res.v.filter(Boolean).length;
+    var seAcabo = tomadas >= TOTAL_LINEAS;
+    // Cerrar un cuadrado te devuelve el turno.
+    var siguiente = res.cerrados > 0 ? MI_ID : (pidDe(yo === 1 ? 2 : 1) || MI_ID);
+
+    S.enviando = true;
+    pintarTablero($("malla"), res.h, res.v, res.cuadros, tipo, idx); // respuesta inmediata
+
+    S.db.doc("duelos/" + S.code).update({
+      h: res.h, v: res.v, cuadros: res.cuadros,
+      turnoDe: seAcabo ? "" : siguiente,
+      estado: seAcabo ? "fin" : "jugando",
+      ultimaT: tipo, ultimaI: idx
+    }).catch(function (e) {
+      console.warn(textoError(e));
+      pintar(); // vuelve a lo que diga el servidor
+    }).then(function () { S.enviando = false; });
+  }
+
+  $("btn-revancha").addEventListener("click", function () {
+    var orden = S.jugadores.map(function (j) { return j.pid; });
+    // Parte el que perdió la anterior; con empate, parte el otro.
+    var cuenta = contar();
+    var primero = (cuenta[2] > cuenta[1]) ? orden[0] : (orden[1] || orden[0]);
+    S.db.doc("duelos/" + S.code).update({
+      estado: "jugando", orden: orden, turnoDe: primero,
+      h: ceros(TOTAL_H), v: ceros(TOTAL_V), cuadros: ceros(TOTAL_CUADROS),
+      ultimaT: "", ultimaI: -1
+    });
+  });
+
+  $("btn-salir-lobby").addEventListener("click", salir);
+  $("btn-salir-fin").addEventListener("click", salir);
+  function salir() {
+    var ref = S.code ? S.db.doc("duelos/" + S.code + "/jugadores/" + MI_ID) : null;
+    alInicio("");
+    if (ref) ref.delete().catch(function () {});
+  }
+
+  $("btn-copiar").addEventListener("click", function () {
+    var btn = this, texto = S.code || "";
+    var listo = function () { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(listo, function () { btn.textContent = texto; });
+    } else { btn.textContent = texto; }
+  });
+
+  /* ========================================================
+     Construcción del tablero
+     ======================================================== */
+
+  function pct(k) { return (k * 100 / N) + "%"; }
+
+  function construirMalla(malla, interactiva) {
+    malla.textContent = "";
+    var r, c, el;
+
+    for (r = 0; r < N; r++) {
+      for (c = 0; c < N; c++) {
+        el = document.createElement("div");
+        el.className = "cuadro";
+        el.dataset.q = iQ(r, c);
+        el.style.left = pct(c); el.style.top = pct(r);
+        el.style.width = pct(1); el.style.height = pct(1);
+        malla.appendChild(el);
+      }
+    }
+
+    for (r = 0; r <= N; r++) {
+      for (c = 0; c < N; c++) {
+        el = document.createElement(interactiva ? "button" : "div");
+        el.className = "linea h libre";
+        el.dataset.t = "h"; el.dataset.i = iH(r, c);
+        // Acortada 12px para no pisar las verticales en las intersecciones.
+        el.style.left = "calc(" + pct(c) + " + 6px)";
+        el.style.top = pct(r);
+        el.style.width = "calc(" + pct(1) + " - 12px)";
+        if (interactiva) {
+          el.type = "button";
+          el.setAttribute("aria-label", "Línea horizontal fila " + (r + 1) + ", columna " + (c + 1));
+          el.addEventListener("click", alTocarLinea);
+        }
+        malla.appendChild(el);
+      }
+    }
+
+    for (r = 0; r < N; r++) {
+      for (c = 0; c <= N; c++) {
+        el = document.createElement(interactiva ? "button" : "div");
+        el.className = "linea v libre";
+        el.dataset.t = "v"; el.dataset.i = iV(r, c);
+        el.style.left = pct(c);
+        el.style.top = "calc(" + pct(r) + " + 6px)";
+        el.style.height = "calc(" + pct(1) + " - 12px)";
+        if (interactiva) {
+          el.type = "button";
+          el.setAttribute("aria-label", "Línea vertical fila " + (r + 1) + ", columna " + (c + 1));
+          el.addEventListener("click", alTocarLinea);
+        }
+        malla.appendChild(el);
+      }
+    }
+
+    for (r = 0; r <= N; r++) {
+      for (c = 0; c <= N; c++) {
+        el = document.createElement("div");
+        el.className = "punto";
+        el.style.left = pct(c); el.style.top = pct(r);
+        malla.appendChild(el);
+      }
+    }
+  }
+
+  function pintarTablero(malla, h, v, cuadros, ultimaT, ultimaI) {
+    Array.prototype.forEach.call(malla.querySelectorAll(".cuadro"), function (el) {
+      var de = cuadros[Number(el.dataset.q)] || 0;
+      if (de) {
+        if (el.dataset.de !== String(de)) { el.dataset.de = String(de); el.classList.add("tomado"); }
+      } else {
+        delete el.dataset.de; el.classList.remove("tomado");
+      }
+    });
+
+    Array.prototype.forEach.call(malla.querySelectorAll(".linea"), function (el) {
+      var lineas = el.dataset.t === "h" ? h : v;
+      var de = lineas[Number(el.dataset.i)] || 0;
+      if (de) {
+        el.dataset.de = String(de);
+        el.classList.add("tomada"); el.classList.remove("libre");
+        if (el.disabled !== undefined) el.disabled = true;
+      } else {
+        delete el.dataset.de;
+        el.classList.remove("tomada"); el.classList.add("libre");
+        if (el.disabled !== undefined) el.disabled = false;
+      }
+      var esUltima = el.dataset.t === ultimaT && Number(el.dataset.i) === ultimaI;
+      el.classList.toggle("ultima", !!esUltima && !!de);
+    });
+  }
+
+  /* ========================================================
+     Pintado
+     ======================================================== */
+
+  function contar() {
+    var c = { 1: 0, 2: 0 };
+    ((S.mesa && S.mesa.cuadros) || []).forEach(function (x) { if (x) c[x]++; });
+    return c;
+  }
+
+  function pintarLobby() {
+    var cont = $("lobby-jugadores");
+    cont.textContent = "";
+    S.jugadores.forEach(function (j, i) {
+      var f = document.createElement("div"); f.className = "f";
+      var n = document.createElement("span"); n.className = "n"; n.textContent = j.nombre;
+      if (j.pid === MI_ID) { var t = document.createElement("span"); t.className = "nota"; t.textContent = "  (tú)"; n.appendChild(t); }
+      var ins = document.createElement("span");
+      ins.className = "insignia " + (i === 0 ? "rosa" : "azul");
+      ins.textContent = i === 0 ? "rosa" : "azul";
+      f.appendChild(n); f.appendChild(ins);
+      cont.appendChild(f);
+    });
+    if (!S.jugadores.length) {
+      var v = document.createElement("div"); v.className = "f";
+      v.style.gridTemplateColumns = "1fr"; v.textContent = "Todavía no hay nadie.";
+      cont.appendChild(v);
+    }
+  }
+
+  function pintar() {
+    var enMesa = !!(S.code && S.mesa);
+    var est = enMesa ? S.mesa.estado : "inicio";
+
+    $("p-inicio").hidden = enMesa;
+    $("p-lobby").hidden = est !== "lobby";
+    $("p-juego").hidden = est !== "jugando";
+    $("p-fin").hidden = est !== "fin";
+
+    if (!enMesa) return;
+
+    if (est === "lobby") {
+      $("lobby-codigo").textContent = S.code;
+      pintarLobby();
+      var faltan = S.jugadores.length < 2;
+      $("btn-empezar").hidden = !soyHost();
+      $("btn-empezar").disabled = !soyHost() || faltan;
+      $("lobby-nota").textContent = soyHost()
+        ? (faltan ? "Falta el otro jugador." : "Listos. Rosa parte.")
+        : "Esperando a que " + nombreDe(S.mesa.hostId) + " empiece.";
+      return;
+    }
+
+    var cuenta = contar();
+    var pRosa = pidDe(1), pAzul = pidDe(2);
+
+    if (est === "jugando") {
+      $("rosa-nombre").textContent = nombreDe(pRosa) + (pRosa === MI_ID ? " (tú)" : "");
+      $("azul-nombre").textContent = nombreDe(pAzul) + (pAzul === MI_ID ? " (tú)" : "");
+      $("rosa-cuenta").textContent = cuenta[1];
+      $("azul-cuenta").textContent = cuenta[2];
+      $("lado-rosa").classList.toggle("juega", S.mesa.turnoDe === pRosa);
+      $("lado-azul").classList.toggle("juega", S.mesa.turnoDe === pAzul);
+
+      var mio = esMiTurno();
+      $("tablero").classList.toggle("espera", !mio);
+      $("juego-aviso").textContent = mio ? "Te toca. Traza una línea." : "Juega " + nombreDe(S.mesa.turnoDe) + ".";
+
+      pintarTablero($("malla"), S.mesa.h, S.mesa.v, S.mesa.cuadros, S.mesa.ultimaT, S.mesa.ultimaI);
+
+      if (!mio) {
+        Array.prototype.forEach.call($("malla").querySelectorAll(".linea.libre"), function (el) { el.disabled = true; });
+      }
+
+      var tomadas = S.mesa.h.filter(Boolean).length + S.mesa.v.filter(Boolean).length;
+      $("juego-quedan").textContent = (TOTAL_LINEAS - tomadas) + " líneas por trazar · " +
+        (TOTAL_CUADROS - cuenta[1] - cuenta[2]) + " cuadrados libres";
+    }
+
+    if (est === "fin") {
+      $("fin-rosa-nombre").textContent = nombreDe(pRosa) + (pRosa === MI_ID ? " (tú)" : "");
+      $("fin-azul-nombre").textContent = nombreDe(pAzul) + (pAzul === MI_ID ? " (tú)" : "");
+      $("fin-rosa-cuenta").textContent = cuenta[1];
+      $("fin-azul-cuenta").textContent = cuenta[2];
+      if (cuenta[1] === cuenta[2]) {
+        $("fin-titulo").textContent = "Empate a " + cuenta[1] + " cuadrados.";
+      } else {
+        var ganador = cuenta[1] > cuenta[2] ? pRosa : pAzul;
+        $("fin-titulo").textContent = "Ganó " + nombreDe(ganador) + " " +
+          Math.max(cuenta[1], cuenta[2]) + " a " + Math.min(cuenta[1], cuenta[2]) + ".";
+      }
+      pintarTablero($("fin-malla"), S.mesa.h, S.mesa.v, S.mesa.cuadros, "", -1);
+      $("btn-revancha").hidden = !soyHost();
+    }
+  }
+
+  /* ========================================================
+     Tablero de ejemplo de la portada
+     ======================================================== */
+
+  function pintarDemo() {
+    construirMalla($("demo-malla"), false);
+    var h = ceros(TOTAL_H), v = ceros(TOTAL_V), q = ceros(TOTAL_CUADROS);
+
+    // Una apertura verosímil: rosa encadenó arriba a la izquierda, azul respondió abajo.
+    [[0,0],[1,0],[0,1],[1,1],[0,2],[1,2],[2,0],[2,1]].forEach(function (rc) { h[iH(rc[0], rc[1])] = 1; });
+    [[0,0],[0,1],[0,2],[0,3],[1,0],[1,1]].forEach(function (rc) { v[iV(rc[0], rc[1])] = 1; });
+    [[5,3],[5,4],[6,3],[6,4]].forEach(function (rc) { h[iH(rc[0], rc[1])] = 2; });
+    [[5,3],[5,4],[5,5]].forEach(function (rc) { v[iV(rc[0], rc[1])] = 2; });
+    [[3,2],[4,2],[2,4]].forEach(function (rc) { h[iH(rc[0], rc[1])] = 2; });
+    [[3,4],[3,5],[2,2]].forEach(function (rc) { v[iV(rc[0], rc[1])] = 1; });
+
+    var r, c;
+    for (r = 0; r < N; r++) for (c = 0; c < N; c++) {
+      if (cuadroCerrado(h, v, r, c)) q[iQ(r, c)] = (r <= 1 ? 1 : 2);
+    }
+    pintarTablero($("demo-malla"), h, v, q, "", -1);
+  }
+
+  /* ========================================================
+     Sobrevivir a una republicación
+     ======================================================== */
+
+  try {
+    if (window.claude && claude.hot && claude.hot.snapshot) {
+      claude.hot.snapshot(function () { return { nombre: S.nombre }; });
+      var previo = claude.hot.data || {};
+      if (previo.nombre) { S.nombre = previo.nombre; $("in-nombre").value = previo.nombre; }
+    }
+  } catch (e) {}
+
+})();
+</script>
