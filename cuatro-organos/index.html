@@ -1,0 +1,1265 @@
+<title>Cuatro Órganos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@600;700&display=swap">
+
+<style>
+  :root {
+    --sala:    #DDE8E3;
+    --mesa:    #EDF3F0;
+    --carta:   #FFFFFF;
+    --tinta:   #17211D;
+    --tinta2:  #647A71;
+    --borde:   #C8D7D0;
+    --borde2:  #DFE9E4;
+
+    --rojo:     #D62839;
+    --verde:    #2E9E5B;
+    --azul:     #2B6CB0;
+    --amarillo: #C98A00;
+    --multi:    #7B4BC9;
+    --alerta:   #D62839;
+
+    --sombra:  0 1px 0 rgba(23,33,29,.04), 0 12px 28px -20px rgba(23,33,29,.5);
+    --sombra-carta: 0 1px 2px rgba(23,33,29,.09), 0 6px 14px -10px rgba(23,33,29,.4);
+
+    --s1:.35rem; --s2:.7rem; --s3:1.1rem; --s4:1.7rem; --s5:2.6rem; --s6:4rem;
+    --display: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --sala:   #131A17;
+      --mesa:   #1A2320;
+      --carta:  #232E2A;
+      --tinta:  #E7EFEB;
+      --tinta2: #8FA69C;
+      --borde:  #33423C;
+      --borde2: #2A3733;
+      --rojo:     #FF6B7A;
+      --verde:    #4ECB84;
+      --azul:     #6BA8F0;
+      --amarillo: #E8B93D;
+      --multi:    #B18BF0;
+      --alerta:   #FF6B7A;
+      --sombra: 0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
+      --sombra-carta: 0 1px 2px rgba(0,0,0,.5), 0 8px 16px -12px rgba(0,0,0,.9);
+    }
+  }
+  :root[data-theme="dark"] {
+    --sala:   #131A17;
+    --mesa:   #1A2320;
+    --carta:  #232E2A;
+    --tinta:  #E7EFEB;
+    --tinta2: #8FA69C;
+    --borde:  #33423C;
+    --borde2: #2A3733;
+    --rojo:     #FF6B7A;
+    --verde:    #4ECB84;
+    --azul:     #6BA8F0;
+    --amarillo: #E8B93D;
+    --multi:    #B18BF0;
+    --alerta:   #FF6B7A;
+    --sombra: 0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
+    --sombra-carta: 0 1px 2px rgba(0,0,0,.5), 0 8px 16px -12px rgba(0,0,0,.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--sala);
+    color: var(--tinta);
+    font-family: var(--ui);
+    font-size: 16px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .marco { max-width: 760px; margin-inline: auto; padding-inline: 16px; padding-block: var(--s4) var(--s6); }
+
+  .panel { background: var(--mesa); border: 1px solid var(--borde); border-radius: 8px; box-shadow: var(--sombra); padding: var(--s3); }
+  @media (min-width: 560px) { .panel { padding: var(--s4); } }
+
+  .bloque { display: grid; gap: var(--s3); }
+  .apartado { margin-top: var(--s4); display: grid; gap: var(--s2); }
+  .fila { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+  .entre { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; }
+
+  .rotulo { font-size: .66rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--tinta2); }
+  .nota { font-size: .85rem; color: var(--tinta2); }
+  .nota.malo { color: var(--alerta); }
+
+  h1.marca { font-family: var(--display); font-weight: 700; font-size: clamp(1.7rem, 6.5vw, 2.5rem); line-height: 1.05; letter-spacing: -.03em; margin: 0; }
+  h2.titulo { font-family: var(--display); font-weight: 600; font-size: clamp(1.2rem, 4.5vw, 1.6rem); line-height: 1.15; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+  .cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s3); }
+
+  .btn {
+    font-family: var(--ui); font-size: .9rem; font-weight: 700;
+    color: var(--mesa); background: var(--tinta);
+    border: 1.5px solid var(--tinta); border-radius: 5px;
+    padding: .55rem 1rem; cursor: pointer; transition: transform .1s ease, opacity .1s ease;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn.fantasma { background: transparent; color: var(--tinta); border-color: var(--borde); }
+  .btn.chico { font-size: .8rem; padding: .4rem .75rem; }
+  :is(.btn, input, .carta, .organo, .hueco, .rival):focus-visible { outline: 2.5px solid var(--tinta); outline-offset: 2px; }
+
+  .campo { display: grid; gap: var(--s1); }
+  .campo > span { font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta2); }
+  .campo input {
+    font-family: var(--ui); font-size: 1rem; color: var(--tinta); background: transparent;
+    border: 1.5px solid var(--borde); border-radius: 5px; padding: .55rem .7rem; width: 100%;
+  }
+  .campo input:focus { outline: none; border-color: var(--tinta2); }
+  .campo input.codigo { font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: .25em; text-transform: uppercase; }
+
+  /* ---------- Colores por tipo ---------- */
+  [data-color="rojo"]     { --tono: var(--rojo); }
+  [data-color="verde"]    { --tono: var(--verde); }
+  [data-color="azul"]     { --tono: var(--azul); }
+  [data-color="amarillo"] { --tono: var(--amarillo); }
+  [data-color="multi"]    { --tono: var(--multi); }
+
+  /* ---------- Cartas de la mano ---------- */
+  .mano { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2); }
+  .carta {
+    position: relative; display: grid; grid-template-rows: auto 1fr auto; gap: 4px;
+    background: var(--carta); border: 2px solid var(--borde2); border-top: 5px solid var(--tono, var(--tinta2));
+    border-radius: 7px; padding: .5rem .45rem; cursor: pointer; text-align: center;
+    box-shadow: var(--sombra-carta); transition: transform .12s ease, border-color .12s ease;
+    min-width: 0;
+    /* La pulsación larga bota la carta: que no salte el menú del sistema. */
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .carta:hover:not(:disabled) { transform: translateY(-3px); }
+  .carta.elegida { border-color: var(--tinta); transform: translateY(-6px); }
+  .carta.marcada { outline: 2px dashed var(--tinta2); outline-offset: 2px; }
+  .carta:disabled { cursor: default; opacity: .5; }
+  .carta .tipo { font-size: .56rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tono, var(--tinta2)); }
+  .carta .dibujo { display: grid; place-items: center; min-height: 34px; }
+  .carta .dibujo svg { width: 34px; height: 34px; display: block; }
+  .carta .nombre { font-family: var(--display); font-weight: 600; font-size: .58rem; line-height: 1.2; letter-spacing: -.01em; overflow-wrap: anywhere; }
+
+  /* ---------- Cuerpos ---------- */
+  .cuerpo { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .organo, .hueco {
+    position: relative; width: 62px; border-radius: 6px; padding: .35rem .25rem;
+    display: grid; gap: 2px; place-items: center; text-align: center; flex: none;
+  }
+  .organo {
+    background: var(--carta); border: 2px solid var(--tono); cursor: default;
+    box-shadow: var(--sombra-carta);
+  }
+  .organo svg { width: 26px; height: 26px; display: block; }
+  .organo .est { font-size: .52rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .organo.infectado { border-style: dashed; }
+  .organo.infectado .est { color: var(--alerta); }
+  .organo.protegido .est { color: var(--verde); }
+  .organo.inmune { border-width: 3px; box-shadow: 0 0 0 2px var(--tono) inset, var(--sombra-carta); }
+  .organo.inmune .est { color: var(--tono); }
+  .organo.jugable { cursor: pointer; outline: 2px dashed var(--tinta); outline-offset: 3px; }
+  .organo.jugable:hover { transform: translateY(-2px); }
+  .organo.elegido { outline: 3px solid var(--tinta); outline-offset: 3px; }
+  .hueco { border: 2px dashed var(--borde); min-height: 62px; color: var(--tinta2); font-size: .62rem; align-content: center; }
+  .hueco.jugable { cursor: pointer; border-color: var(--tinta); border-style: solid; }
+
+  .marcas { display: flex; gap: 2px; justify-content: center; min-height: 6px; }
+  .marcas i { width: 5px; height: 5px; border-radius: 50%; display: block; }
+  .marcas i.v { background: var(--alerta); }
+  .marcas i.m { background: var(--verde); }
+
+  .rival {
+    background: var(--mesa); border: 1.5px solid var(--borde); border-radius: 7px;
+    padding: var(--s2); display: grid; gap: var(--s2); text-align: left; width: 100%;
+  }
+  .rival.turno { border-color: var(--tinta); }
+  .rival.apuntable { border-color: var(--tinta); border-style: dashed; cursor: pointer; }
+  .rival-cab { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+  .rival-nom { font-weight: 700; font-size: .9rem; overflow-wrap: anywhere; }
+  .conteo { font-size: .7rem; color: var(--tinta2); white-space: nowrap; }
+
+  .yo-panel { border: 2px solid var(--tinta); border-radius: 8px; padding: var(--s3); display: grid; gap: var(--s2); background: var(--mesa); }
+
+  .aviso-turno {
+    display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap;
+    padding: .6rem .85rem; border-radius: 6px; font-size: .9rem; font-weight: 600;
+    background: var(--carta); border: 1.5px solid var(--borde);
+  }
+  .aviso-turno.mio { border-color: var(--tinta); }
+  .aviso-turno.paso { border-color: var(--multi); color: var(--multi); }
+
+  .bitacora { display: grid; gap: 3px; max-height: 108px; overflow-y: auto; font-size: .78rem; color: var(--tinta2); }
+  .bitacora b { color: var(--tinta); font-weight: 600; }
+
+  .lista { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 6px; overflow: hidden; }
+  .lista .f { display: grid; grid-template-columns: 1fr auto; gap: var(--s2); background: var(--mesa); padding: .55rem .8rem; align-items: center; }
+
+  .reglas { display: grid; gap: var(--s2); margin: 0; padding: 0; list-style: none; counter-reset: p; }
+  .reglas li { display: grid; grid-template-columns: 1.4rem 1fr; gap: var(--s2); align-items: baseline; font-size: .88rem; }
+  .reglas li::before { counter-increment: p; content: counter(p); font-family: var(--display); font-weight: 600; font-size: .72rem; color: var(--tinta2); }
+
+  table.tabla { border-collapse: collapse; width: 100%; font-size: .84rem; }
+  table.tabla th, table.tabla td { text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--borde2); vertical-align: top; }
+  table.tabla thead th { font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta2); }
+  table.tabla tbody tr:last-child td { border-bottom: 0; }
+  table.tabla td:first-child { font-weight: 600; white-space: nowrap; }
+
+  hr.regla { border: 0; border-top: 1px solid var(--borde); margin: var(--s3) 0; }
+  [hidden] { display: none !important; }
+  .pila { display: flex; gap: var(--s3); font-size: .74rem; color: var(--tinta2); }
+  .pila b { color: var(--tinta); font-variant-numeric: tabular-nums; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="marco">
+
+  <header class="cabecera">
+    <div>
+      <h1 class="marca">Cuatro Órganos</h1>
+      <p class="nota" style="max-width:36ch">Arma un cuerpo sano antes que el resto. Ellos van a intentar que no.</p>
+    </div>
+    <div id="estado-conexion" class="rotulo">Conectando…</div>
+  </header>
+
+  <!-- ================= INICIO ================= -->
+  <section id="p-inicio">
+    <div class="panel bloque">
+      <label class="campo" for="in-nombre">
+        <span>Tu nombre</span>
+        <input id="in-nombre" type="text" maxlength="18" autocomplete="nickname" placeholder="Jorge">
+      </label>
+      <div class="fila">
+        <button class="btn" id="btn-crear" disabled>Crear una partida</button>
+        <span class="nota">o entra a una que ya existe:</span>
+      </div>
+      <label class="campo" for="in-codigo">
+        <span>Código de partida</span>
+        <input id="in-codigo" class="codigo" type="text" maxlength="4" autocomplete="off" spellcheck="false" placeholder="ABCD">
+      </label>
+      <div class="fila"><button class="btn fantasma" id="btn-unirse" disabled>Entrar</button></div>
+      <p class="nota malo" id="error-inicio" hidden></p>
+    </div>
+
+    <div class="apartado">
+      <span class="rotulo">Las cartas</span>
+      <div class="panel bloque">
+        <div class="mano" id="demo-cartas" style="grid-template-columns:repeat(auto-fill,minmax(88px,1fr))"></div>
+        <hr class="regla">
+        <span class="rotulo">Cómo se juega</span>
+        <ol class="reglas">
+          <li>Tienes 3 cartas. En tu turno juegas una, o descartas hasta 3. Después rellenas a 3.</li>
+          <li>Ganas al tener <b>cuatro órganos sanos de colores distintos</b>. Protegido e inmunizado cuentan como sanos.</li>
+          <li>Un virus sobre un órgano limpio lo infecta. Un segundo virus lo destruye.</li>
+          <li>Una medicina sobre un órgano infectado lo limpia. Dos medicinas lo inmunizan para siempre.</li>
+          <li>Virus y medicina sólo entran en un órgano de su color. El morado sirve para cualquiera.</li>
+        </ol>
+        <hr class="regla">
+        <span class="rotulo">Los cinco tratamientos</span>
+        <table class="tabla">
+          <thead><tr><th>Carta</th><th>Qué hace</th></tr></thead>
+          <tbody id="demo-trat"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOBBY ================= -->
+  <section id="p-lobby" hidden>
+    <div class="panel bloque">
+      <div class="entre">
+        <div>
+          <span class="rotulo">Código de partida</span>
+          <div id="lobby-codigo" style="font-family:var(--display);font-weight:700;font-size:1.9rem;letter-spacing:.2em;line-height:1.1"></div>
+        </div>
+        <button class="btn fantasma" id="btn-copiar">Copiar</button>
+      </div>
+      <p class="nota">Pásales el código. De dos a seis jugadores.</p>
+      <hr class="regla">
+      <span class="rotulo">En la mesa</span>
+      <div class="lista" id="lobby-jugadores"></div>
+      <div class="fila">
+        <button class="btn" id="btn-empezar" disabled>Repartir</button>
+        <button class="btn fantasma" id="btn-salir-lobby">Salir</button>
+      </div>
+      <p class="nota" id="lobby-nota"></p>
+    </div>
+  </section>
+
+  <!-- ================= JUEGO ================= -->
+  <section id="p-juego" hidden>
+    <div class="bloque">
+      <div class="aviso-turno" id="aviso"><span id="aviso-txt">—</span>
+        <button class="btn chico fantasma" id="btn-cancelar" hidden>Cancelar</button>
+      </div>
+
+      <div class="bloque" id="rivales"></div>
+
+      <div class="yo-panel">
+        <div class="entre">
+          <span class="rotulo">Tu cuerpo</span>
+          <span class="conteo" id="yo-conteo"></span>
+        </div>
+        <div class="cuerpo" id="yo-cuerpo"></div>
+        <hr class="regla" style="margin:var(--s1) 0">
+        <div class="entre">
+          <span class="rotulo">Tu mano</span>
+          <div class="pila"><span>Mazo <b id="pila-mazo">0</b></span><span>Descarte <b id="pila-descarte">0</b></span></div>
+        </div>
+        <div class="mano" id="yo-mano"></div>
+        <div class="fila">
+          <button class="btn" id="btn-descartar" disabled>Descartar las marcadas</button>
+          <span class="nota" id="nota-descarte">Toca una carta para jugarla. Para descartar, mantenla pulsada.</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="rotulo">Qué ha pasado</span>
+        <div class="bitacora" id="bitacora"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FIN ================= -->
+  <section id="p-fin" hidden>
+    <div class="panel bloque">
+      <span class="rotulo">Partida terminada</span>
+      <h2 class="titulo" id="fin-titulo">Final</h2>
+      <div class="cuerpo" id="fin-cuerpo"></div>
+      <div class="fila">
+        <button class="btn" id="btn-revancha" hidden>Otra partida</button>
+        <button class="btn fantasma" id="btn-salir-fin">Volver al inicio</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ========================================================
+     Cartas
+     ======================================================== */
+
+  var COLORES = ["rojo", "verde", "azul", "amarillo"];
+
+  var ORGANO_NOMBRE = { rojo: "Corazón", verde: "Estómago", azul: "Cerebro", amarillo: "Hueso", multi: "Comodín" };
+
+  var TRATAMIENTOS = {
+    trasplante: { nombre: "Trasplante",       que: "Intercambia un órgano tuyo por uno de un rival. Ninguno de los dos puede estar inmunizado, y nadie puede terminar con dos órganos del mismo color." },
+    robo:       { nombre: "Robo de órgano",   que: "Te llevas un órgano de un rival, con lo que tenga encima. No puede estar inmunizado ni repetirte un color." },
+    contagio:   { nombre: "Contagio",         que: "Cada virus de tus órganos salta a un órgano limpio de un rival del color que corresponda." },
+    manos:      { nombre: "Manos limpias",    que: "Todos los rivales botan su mano. Roban de nuevo al empezar su turno." },
+    pabellon:   { nombre: "Error de pabellón", que: "Intercambias tu cuerpo entero con el de un rival." }
+  };
+
+  /** El mazo es determinista: mismo orden siempre, así en la base sólo viajan índices. */
+  function catalogo() {
+    var c = [], i, col;
+    for (col = 0; col < COLORES.length; col++) for (i = 0; i < 5; i++) c.push({ t: "organo", c: COLORES[col] });
+    c.push({ t: "organo", c: "multi" });                                            // 21
+    for (col = 0; col < COLORES.length; col++) for (i = 0; i < 4; i++) c.push({ t: "virus", c: COLORES[col] });
+    c.push({ t: "virus", c: "multi" });                                             // 17
+    for (col = 0; col < COLORES.length; col++) for (i = 0; i < 4; i++) c.push({ t: "medicina", c: COLORES[col] });
+    for (i = 0; i < 4; i++) c.push({ t: "medicina", c: "multi" });                   // 20
+    for (i = 0; i < 3; i++) c.push({ t: "trat", k: "trasplante" });
+    for (i = 0; i < 3; i++) c.push({ t: "trat", k: "robo" });
+    for (i = 0; i < 2; i++) c.push({ t: "trat", k: "contagio" });
+    c.push({ t: "trat", k: "manos" });
+    c.push({ t: "trat", k: "pabellon" });                                            // 10
+    c.forEach(function (x, n) { x.id = n; });
+    return c;
+  }
+  var CARTAS = catalogo();           // 68
+  function carta(id) { return CARTAS[id]; }
+
+  function nombreCarta(x) {
+    if (x.t === "organo") return ORGANO_NOMBRE[x.c];
+    if (x.t === "virus") return x.c === "multi" ? "Virus libre" : "Virus";
+    if (x.t === "medicina") return x.c === "multi" ? "Cura total" : "Medicina";
+    return TRATAMIENTOS[x.k].nombre;
+  }
+  function etiquetaTipo(x) {
+    return x.t === "organo" ? "Órgano" : x.t === "virus" ? "Virus" : x.t === "medicina" ? "Medicina" : "Tratamiento";
+  }
+
+  function barajar(a) {
+    var b = a.slice();
+    for (var i = b.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = b[i]; b[i] = b[j]; b[j] = t;
+    }
+    return b;
+  }
+
+  /* ========================================================
+     Reglas
+     ======================================================== */
+
+  function pega(colorCarta, colorOrgano) {
+    return colorCarta === "multi" || colorOrgano === "multi" || colorCarta === colorOrgano;
+  }
+  // Un órgano recuerda qué cartas lo componen, para que al destruirse
+  // vuelvan todas al descarte y el mazo no se vaya vaciando.
+  function estadoOrgano(o) {
+    if (o.m.length >= 2) return "inmune";
+    if (o.m.length === 1) return "protegido";
+    if (o.v.length >= 1) return "infectado";
+    return "sano";
+  }
+  function sano(o) { return o.v.length === 0; }
+  function cartasDe(o) { return [o.id].concat(o.v, o.m); }
+  function tieneColor(cuerpo, color) {
+    return cuerpo.some(function (o) { return o.c === color; });
+  }
+
+  /** Cuatro órganos sin virus y de colores distintos (el comodín vale por cualquiera). */
+  function ganaCon(cuerpo) {
+    var limpios = cuerpo.filter(sano);
+    if (limpios.length < 4) return false;
+    var vistos = {}, comodines = 0, distintos = 0;
+    limpios.forEach(function (o) {
+      if (o.c === "multi") { comodines++; return; }
+      if (!vistos[o.c]) { vistos[o.c] = true; distintos++; }
+    });
+    return distintos + comodines >= 4;
+  }
+
+  function nuevoCuerpo() { return []; }
+  function nuevoOrgano(color, id) { return { c: color, id: id, v: [], m: [] }; }
+
+  /* ========================================================
+     Identidad local
+     ======================================================== */
+
+  function leer(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }
+  function escribir(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function idNuevo() {
+    try { if (crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 16); } catch (e) {}
+    return String(Date.now()).slice(-8) + Math.random().toString(36).slice(2, 10);
+  }
+  var MI_ID = leer("co.pid", "");
+  if (!MI_ID) { MI_ID = idNuevo(); escribir("co.pid", MI_ID); }
+
+  /* ========================================================
+     Estado
+     ======================================================== */
+
+  var S = {
+    db: null,
+    nombre: leer("co.nombre", ""),
+    code: null,
+    par: null,           // documento de la partida
+    jugadores: [],
+    enviando: false,
+    sel: null,           // { id, x, paso, org }
+    marcadas: {},        // ids marcados para descartar
+    subs: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function limpiarSubs() { S.subs.forEach(function (u) { try { u(); } catch (e) {} }); S.subs = []; }
+  function soyHost() { return !!S.par && S.par.hostId === MI_ID; }
+  function esMiTurno() { return !!S.par && S.par.turnoDe === MI_ID; }
+  function nombreDe(pid) {
+    var j = S.jugadores.filter(function (x) { return x.pid === pid; })[0];
+    return j ? j.nombre : "Alguien";
+  }
+  function miMano() { return (S.par && S.par.manos && S.par.manos[MI_ID]) || []; }
+  function cuerpoDe(pid) { return (S.par && S.par.cuerpos && S.par.cuerpos[pid]) || []; }
+  function rivales() { return (S.par ? S.par.orden : []).filter(function (p) { return p !== MI_ID; }); }
+
+  /* ========================================================
+     Dibujos
+     ======================================================== */
+
+  function svgOrgano(color) {
+    var d = {
+      rojo:     '<path d="M16 27C9 21.5 4 17.4 4 12.2 4 8.2 7.1 5 11 5c2.3 0 4.2 1.1 5 2.8C16.8 6.1 18.7 5 21 5c3.9 0 7 3.2 7 7.2 0 5.2-5 9.3-12 14.8z"/>',
+      verde:    '<path d="M11 4h9a8 8 0 0 1 8 8v4a12 12 0 0 1-12 12h-1a7 7 0 0 1-7-7c0-3 2-5 4.5-5.5C15 15 16 13.5 16 12c0-2-1.5-3-3.5-3H11a2.5 2.5 0 0 1 0-5z"/>',
+      azul:     '<path d="M16 4c5 0 9 2.7 9 6.6 0 1.3-.4 2.4-1.2 3.4 1.4 1 2.2 2.4 2.2 4 0 3.4-3.3 6-7.5 6H16zM16 4C11 4 7 6.7 7 10.6c0 1.3.4 2.4 1.2 3.4C6.8 15 6 16.4 6 18c0 3.4 3.3 6 7.5 6H16z"/><path d="M16 4v20" stroke-width="1.4" stroke="currentColor" fill="none"/>',
+      amarillo: '<path d="M9 6a4 4 0 0 1 3.6 5.7l7.8 7.8A4 4 0 1 1 19 24a4 4 0 0 1-3.6-5.7l-7.8-7.8A4 4 0 1 1 9 6z"/><circle cx="7" cy="11" r="3.2"/><circle cx="24" cy="20" r="3.2"/>',
+      multi:    '<path d="M16 3l3.6 7.6 8.4 1.1-6.1 5.8 1.6 8.3L16 21.9 8.5 25.8l1.6-8.3L4 11.7l8.4-1.1z"/>'
+    };
+    return '<svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="color:var(--tono)">' + (d[color] || d.multi) + '</svg>';
+  }
+  function svgVirus() {
+    return '<svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="color:var(--tono)">' +
+      '<circle cx="16" cy="16" r="7"/>' +
+      '<g stroke="currentColor" stroke-width="2.2" stroke-linecap="round">' +
+      '<path d="M16 9V3M16 23v6M9 16H3M23 16h6M11 11L6.8 6.8M21 21l4.2 4.2M21 11l4.2-4.2M11 21l-4.2 4.2"/></g>' +
+      '<circle cx="3" cy="16" r="2"/><circle cx="29" cy="16" r="2"/><circle cx="16" cy="3" r="2"/><circle cx="16" cy="29" r="2"/></svg>';
+  }
+  function svgMedicina() {
+    return '<svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="color:var(--tono)">' +
+      '<rect x="13" y="4" width="6" height="24" rx="2.4"/><rect x="4" y="13" width="24" height="6" rx="2.4"/></svg>';
+  }
+  function svgTrat(k) {
+    var d = {
+      trasplante: '<path d="M6 11h14l-4-4 2-2 7.5 7.5L18 20l-2-2 4-4H6z"/><path d="M26 21H12l4 4-2 2-7.5-7.5L14 12l2 2-4 4h14z"/>',
+      robo:       '<path d="M16 27C9 21.5 4 17.4 4 12.2 4 8.2 7.1 5 11 5c2.3 0 4.2 1.1 5 2.8C16.8 6.1 18.7 5 21 5c3.9 0 7 3.2 7 7.2 0 5.2-5 9.3-12 14.8z" opacity=".35"/><path d="M22 6l6 6-3 1 2 5-4-3-3 4-1-6-5 1z"/>',
+      contagio:   '<circle cx="9" cy="9" r="4.5"/><circle cx="23" cy="23" r="4.5"/><path d="M13 11l8 8" stroke="currentColor" stroke-width="2.4" fill="none" stroke-dasharray="3 3"/><path d="M21 15l2 4 4 2" stroke="currentColor" stroke-width="2" fill="none"/>',
+      manos:      '<path d="M8 14V7a2 2 0 1 1 4 0v6V5a2 2 0 1 1 4 0v8V6a2 2 0 1 1 4 0v7V9a2 2 0 1 1 4 0v10a9 9 0 0 1-9 9h-1a9 9 0 0 1-9-9v-3a2 2 0 0 1 3-1.7z"/>',
+      pabellon:   '<rect x="3" y="5" width="11" height="22" rx="2.5"/><rect x="18" y="5" width="11" height="22" rx="2.5" opacity=".4"/><path d="M14 16h4" stroke="currentColor" stroke-width="2.4"/>'
+    };
+    return '<svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" style="color:var(--multi)">' + (d[k] || d.trasplante) + '</svg>';
+  }
+  function dibujoDe(x) {
+    if (x.t === "organo") return svgOrgano(x.c);
+    if (x.t === "virus") return svgVirus();
+    if (x.t === "medicina") return svgMedicina();
+    return svgTrat(x.k);
+  }
+
+  /* ========================================================
+     Arranque
+     ======================================================== */
+
+  pintarDemo();
+  $("in-nombre").value = S.nombre;
+
+  function sinConexion() {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--alerta)";
+    verError("Este juego guarda la partida en el servidor de Claude. Ábrelo desde el link publicado, con tu sesión iniciada.");
+  }
+
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function (db) {
+      if (!db) { sinConexion(); return; }
+      S.db = db;
+      $("estado-conexion").textContent = "En línea";
+      $("estado-conexion").style.color = "var(--verde)";
+      $("btn-crear").disabled = false;
+      $("btn-unirse").disabled = false;
+    }, sinConexion);
+  } else { sinConexion(); }
+
+  /* ========================================================
+     Inicio
+     ======================================================== */
+
+  function verError(m) { var p = $("error-inicio"); p.textContent = m; p.hidden = !m; }
+  function nombreEscrito() { return $("in-nombre").value.trim().slice(0, 18); }
+
+  var LETRAS = "ABCDEFGHJKLMNPRSTUVXY";
+  function codigoAlAzar() {
+    var s = ""; for (var i = 0; i < 4; i++) s += LETRAS[Math.floor(Math.random() * LETRAS.length)];
+    return s;
+  }
+  function textoError(e) {
+    var c = e && e.code;
+    if (c === "quota_exceeded") return "El juego llegó a su tope de partidas guardadas. Borra partidas viejas.";
+    if (c === "resource_exhausted") return "Demasiadas acciones seguidas. Espera un par de segundos.";
+    if (c === "revoked" || c === "not_granted") return "Perdiste el acceso a la partida. Recarga la página.";
+    return (e && e.message) || "Algo falló. Intenta otra vez.";
+  }
+
+  $("btn-crear").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    verError(""); S.nombre = nombre; escribir("co.nombre", nombre);
+    var btn = this; btn.disabled = true; btn.textContent = "Creando…";
+    crearPartida(nombre).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Crear una partida"; });
+  });
+
+  function crearPartida(nombre, intento) {
+    intento = intento || 0;
+    if (intento > 6) return Promise.reject({ message: "No se pudo reservar un código. Intenta de nuevo." });
+    var code = codigoAlAzar(), ref = S.db.doc("clinicas/" + code);
+    return ref.acquire({ holder: MI_ID, ttlMs: 6000 }).then(function (res) {
+      if (!res.acquired) return crearPartida(nombre, intento + 1);
+      return ref.get().then(function (snap) {
+        var cuerpo = snap.exists ? snap.data() : null;
+        if (cuerpo && cuerpo.hostId) return crearPartida(nombre, intento + 1);
+        return ref.set({
+          code: code, hostId: MI_ID, estado: "lobby",
+          orden: [], turnoDe: "", mazo: [], descarte: [],
+          manos: {}, cuerpos: {}, bitacora: [], ganador: "", creadaEn: Date.now()
+        }).then(function () { return entrar(code, nombre); });
+      });
+    });
+  }
+
+  $("btn-unirse").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    var code = $("in-codigo").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    if (code.length !== 4) { verError("El código son 4 letras."); $("in-codigo").focus(); return; }
+    verError(""); S.nombre = nombre; escribir("co.nombre", nombre);
+    var btn = this; btn.disabled = true; btn.textContent = "Entrando…";
+    S.db.doc("clinicas/" + code).get().then(function (snap) {
+      if (!snap.exists) { verError("No hay ninguna partida con el código " + code + "."); return; }
+      var d = snap.data();
+      if (d.estado !== "lobby" && (d.orden || []).indexOf(MI_ID) < 0) {
+        verError("Esa partida ya empezó."); return;
+      }
+      return S.db.collection("clinicas/" + code + "/jugadores").get().then(function (q) {
+        var otros = q.docs.filter(function (x) { return x.id !== MI_ID; });
+        if (otros.length >= 6) { verError("Esa partida ya tiene seis jugadores."); return; }
+        return entrar(code, nombre);
+      });
+    }).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Entrar"; });
+  });
+
+  $("in-codigo").addEventListener("input", function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z]/g, "");
+  });
+
+  /* ========================================================
+     Suscripciones
+     ======================================================== */
+
+  function entrar(code, nombre) {
+    S.code = code;
+    return S.db.doc("clinicas/" + code + "/jugadores/" + MI_ID)
+      .set({ nombre: nombre, entroEn: Date.now() })
+      .then(function () { escuchar(code); });
+  }
+
+  function escuchar(code) {
+    limpiarSubs();
+    S.subs.push(S.db.doc("clinicas/" + code).onSnapshot(function (snap) {
+      if (!snap.exists) { alInicio("La partida se cerró."); return; }
+      var previo = S.par;
+      S.par = snap.data();
+      if (!previo || previo.turnoDe !== S.par.turnoDe) { S.sel = null; S.marcadas = {}; }
+      pintar();
+    }, alFallar));
+    S.subs.push(S.db.collection("clinicas/" + code + "/jugadores").onSnapshot(function (snap) {
+      S.jugadores = snap.docs.map(function (d) {
+        var c = d.data() || {};
+        return { pid: d.id, nombre: c.nombre || "Sin nombre", entroEn: c.entroEn || 0 };
+      }).sort(function (a, b) { return a.entroEn - b.entroEn; });
+      pintar();
+    }, alFallar));
+  }
+
+  function alFallar(e) {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--alerta)";
+    if (e && (e.code === "revoked" || e.code === "unavailable")) {
+      $("aviso-txt").textContent = "Se cortó la conexión con la partida. Recarga la página.";
+    }
+  }
+
+  function alInicio(m) {
+    limpiarSubs();
+    S.code = null; S.par = null; S.jugadores = []; S.sel = null; S.marcadas = {}; S.enviando = false;
+    verError(m || ""); pintar();
+  }
+
+  /* ========================================================
+     Repartir
+     ======================================================== */
+
+  $("btn-empezar").addEventListener("click", function () {
+    this.disabled = true;
+    var orden = S.jugadores.map(function (j) { return j.pid; });
+    var mazo = barajar(CARTAS.map(function (c) { return c.id; }));
+    var manos = {}, cuerpos = {};
+    orden.forEach(function (pid) {
+      manos[pid] = mazo.splice(0, 3);
+      cuerpos[pid] = nuevoCuerpo();
+    });
+    S.db.doc("clinicas/" + S.code).update({
+      estado: "jugando", orden: orden, turnoDe: orden[0],
+      mazo: mazo, descarte: [], manos: manos, cuerpos: cuerpos,
+      ganador: "", bitacora: ["Se repartieron las cartas. Parte " + nombreDe(orden[0]) + "."]
+    }).catch(function (e) { $("lobby-nota").textContent = textoError(e); $("btn-empezar").disabled = false; });
+  });
+
+  $("btn-revancha").addEventListener("click", function () {
+    var orden = S.par.orden.slice();
+    orden.push(orden.shift());                       // parte el siguiente
+    var mazo = barajar(CARTAS.map(function (c) { return c.id; }));
+    var manos = {}, cuerpos = {};
+    orden.forEach(function (pid) { manos[pid] = mazo.splice(0, 3); cuerpos[pid] = nuevoCuerpo(); });
+    S.db.doc("clinicas/" + S.code).update({
+      estado: "jugando", orden: orden, turnoDe: orden[0],
+      mazo: mazo, descarte: [], manos: manos, cuerpos: cuerpos,
+      ganador: "", bitacora: ["Nueva partida. Parte " + nombreDe(orden[0]) + "."]
+    });
+  });
+
+  $("btn-salir-lobby").addEventListener("click", salir);
+  $("btn-salir-fin").addEventListener("click", salir);
+  function salir() {
+    var ref = S.code ? S.db.doc("clinicas/" + S.code + "/jugadores/" + MI_ID) : null;
+    alInicio(""); if (ref) ref.delete().catch(function () {});
+  }
+
+  $("btn-copiar").addEventListener("click", function () {
+    var btn = this, texto = S.code || "";
+    var listo = function () { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(listo, function () { btn.textContent = texto; });
+    } else { btn.textContent = texto; }
+  });
+
+  /* ========================================================
+     Motor de turno
+     ======================================================== */
+
+  /** Copia trabajable del estado compartido. */
+  function instantanea() {
+    var p = S.par;
+    return {
+      mazo: p.mazo.slice(),
+      descarte: p.descarte.slice(),
+      manos: JSON.parse(JSON.stringify(p.manos)),
+      cuerpos: JSON.parse(JSON.stringify(p.cuerpos)),
+      bitacora: p.bitacora.slice()
+    };
+  }
+
+  function robar(E, pid, cuantas) {
+    for (var i = 0; i < cuantas; i++) {
+      if (!E.mazo.length) {
+        if (!E.descarte.length) return;
+        E.mazo = barajar(E.descarte);
+        E.descarte = [];
+        E.bitacora.push("Se acabó el mazo: se barajó el descarte.");
+      }
+      E.manos[pid].push(E.mazo.shift());
+    }
+  }
+
+  function quitarDeMano(E, pid, id) {
+    var i = E.manos[pid].indexOf(id);
+    if (i >= 0) E.manos[pid].splice(i, 1);
+  }
+
+  function siguientePid() {
+    var o = S.par.orden, i = o.indexOf(S.par.turnoDe);
+    return o[(i + 1) % o.length];
+  }
+
+  /** Cierra el turno: rellena la mano, revisa victoria y pasa. */
+  function cerrarTurno(E, linea) {
+    if (linea) E.bitacora.push(linea);
+    robar(E, MI_ID, Math.max(0, 3 - E.manos[MI_ID].length));
+
+    var ganador = "";
+    S.par.orden.forEach(function (pid) { if (!ganador && ganaCon(E.cuerpos[pid])) ganador = pid; });
+
+    var sig = siguientePid();
+    if (E.manos[sig] && E.manos[sig].length < 3) robar(E, sig, 3 - E.manos[sig].length);
+
+    var cambios = {
+      mazo: E.mazo, descarte: E.descarte, manos: E.manos, cuerpos: E.cuerpos,
+      bitacora: E.bitacora.slice(-40)
+    };
+    if (ganador) {
+      cambios.estado = "fin"; cambios.ganador = ganador; cambios.turnoDe = "";
+      cambios.bitacora = cambios.bitacora.concat([nombreDe(ganador) + " completó un cuerpo sano."]).slice(-40);
+    } else {
+      cambios.turnoDe = sig;
+    }
+
+    S.enviando = true;
+    S.sel = null; S.marcadas = {};
+    return S.db.doc("clinicas/" + S.code).update(cambios)
+      .catch(function (e) { console.warn(textoError(e)); pintar(); })
+      .then(function () { S.enviando = false; });
+  }
+
+  /* ========================================================
+     Jugadas
+     ======================================================== */
+
+  function puedeElegirse(x) {
+    var mi = cuerpoDe(MI_ID);
+    if (x.t === "organo") return !tieneColor(mi, x.c);
+    if (x.t === "medicina") return mi.some(function (o) { return pega(x.c, o.c) && estadoOrgano(o) !== "inmune"; });
+    if (x.t === "virus") {
+      return rivales().some(function (p) {
+        return cuerpoDe(p).some(function (o) { return pega(x.c, o.c) && estadoOrgano(o) !== "inmune"; });
+      });
+    }
+    // Tratamientos
+    if (x.k === "manos") return rivales().some(function (p) { return (S.par.manos[p] || []).length > 0; });
+    if (x.k === "contagio") return mi.some(function (o) { return o.v > 0; });
+    if (x.k === "pabellon") return rivales().length > 0;
+    if (x.k === "robo") {
+      return rivales().some(function (p) {
+        return cuerpoDe(p).some(function (o) { return estadoOrgano(o) !== "inmune" && !tieneColor(mi, o.c); });
+      });
+    }
+    if (x.k === "trasplante") {
+      return mi.some(function (a) { return estadoOrgano(a) !== "inmune"; }) &&
+        rivales().some(function (p) { return cuerpoDe(p).some(function (b) { return estadoOrgano(b) !== "inmune"; }); });
+    }
+    return false;
+  }
+
+  function jugarCarta(id) {
+    var x = carta(id);
+    if (x.t === "organo") {
+      var E = instantanea();
+      quitarDeMano(E, MI_ID, id);
+      E.cuerpos[MI_ID].push(nuevoOrgano(x.c, id));
+      cerrarTurno(E, S.nombre + " puso un " + ORGANO_NOMBRE[x.c].toLowerCase() + ".");
+      return;
+    }
+    if (x.t === "trat" && (x.k === "contagio" || x.k === "manos")) {
+      aplicarTratamientoSimple(id, x.k);
+      return;
+    }
+    // El resto necesita elegir objetivo.
+    S.sel = { id: id, x: x, paso: 0, org: null };
+    pintar();
+  }
+
+  function aplicarVirus(id, pidObj, idxOrg) {
+    var x = carta(id), E = instantanea();
+    var o = E.cuerpos[pidObj][idxOrg], est = estadoOrgano(o), linea;
+    quitarDeMano(E, MI_ID, id);
+
+    if (est === "protegido") {
+      // Virus y medicina se anulan: las dos cartas al descarte.
+      E.descarte.push(id, o.m.pop());
+      linea = S.nombre + " le quemó la medicina a " + nombreDe(pidObj) + ".";
+    } else if (est === "infectado") {
+      // Segundo virus: el órgano se pierde con todo lo que tenía encima.
+      E.cuerpos[pidObj].splice(idxOrg, 1);
+      E.descarte = E.descarte.concat([id], cartasDe(o));
+      linea = S.nombre + " destruyó un órgano de " + nombreDe(pidObj) + ".";
+    } else {
+      o.v.push(id);
+      linea = S.nombre + " infectó un órgano de " + nombreDe(pidObj) + ".";
+    }
+    cerrarTurno(E, linea);
+  }
+
+  function aplicarMedicina(id, idxOrg) {
+    var E = instantanea(), o = E.cuerpos[MI_ID][idxOrg], est = estadoOrgano(o), linea;
+    quitarDeMano(E, MI_ID, id);
+
+    if (est === "infectado") {
+      E.descarte.push(id, o.v.pop());
+      linea = S.nombre + " curó un órgano infectado.";
+    } else if (est === "protegido") {
+      o.m.push(id);
+      linea = S.nombre + " inmunizó un órgano. Ya no se lo pueden tocar.";
+    } else {
+      o.m.push(id);
+      linea = S.nombre + " protegió un órgano.";
+    }
+    cerrarTurno(E, linea);
+  }
+
+  function aplicarTratamientoSimple(id, k) {
+    var E = instantanea();
+    quitarDeMano(E, MI_ID, id);
+    E.descarte.push(id);
+
+    if (k === "manos") {
+      var botadas = 0;
+      rivales().forEach(function (p) {
+        botadas += (E.manos[p] || []).length;
+        E.descarte = E.descarte.concat(E.manos[p] || []);
+        E.manos[p] = [];
+      });
+      cerrarTurno(E, S.nombre + " hizo botar " + botadas + " cartas a la mesa.");
+      return;
+    }
+
+    // Contagio: cada virus propio salta a un órgano limpio de un rival.
+    var saltos = 0;
+    E.cuerpos[MI_ID].forEach(function (o) {
+      if (!o.v.length) return;
+      var destino = null;
+      rivales().some(function (p) {
+        return (E.cuerpos[p] || []).some(function (d) {
+          if (estadoOrgano(d) === "sano" && pega(o.c, d.c)) { destino = d; return true; }
+          return false;
+        });
+      });
+      if (destino) { destino.v.push(o.v.pop()); saltos++; }
+    });
+    cerrarTurno(E, saltos
+      ? S.nombre + " repartió " + saltos + (saltos === 1 ? " virus." : " virus.")
+      : S.nombre + " intentó contagiar, pero no había dónde.");
+  }
+
+  function aplicarRobo(id, pidObj, idxOrg) {
+    var E = instantanea();
+    quitarDeMano(E, MI_ID, id); E.descarte.push(id);
+    var o = E.cuerpos[pidObj].splice(idxOrg, 1)[0];
+    E.cuerpos[MI_ID].push(o);
+    cerrarTurno(E, S.nombre + " le robó un órgano a " + nombreDe(pidObj) + ".");
+  }
+
+  function aplicarTrasplante(id, idxMio, pidObj, idxSuyo) {
+    var E = instantanea();
+    quitarDeMano(E, MI_ID, id); E.descarte.push(id);
+    var mio = E.cuerpos[MI_ID][idxMio], suyo = E.cuerpos[pidObj][idxSuyo];
+    E.cuerpos[MI_ID][idxMio] = suyo;
+    E.cuerpos[pidObj][idxSuyo] = mio;
+    cerrarTurno(E, S.nombre + " intercambió un órgano con " + nombreDe(pidObj) + ".");
+  }
+
+  function aplicarPabellon(id, pidObj) {
+    var E = instantanea();
+    quitarDeMano(E, MI_ID, id); E.descarte.push(id);
+    var mio = E.cuerpos[MI_ID];
+    E.cuerpos[MI_ID] = E.cuerpos[pidObj];
+    E.cuerpos[pidObj] = mio;
+    cerrarTurno(E, S.nombre + " se cambió el cuerpo entero con " + nombreDe(pidObj) + ".");
+  }
+
+  /* ========================================================
+     Descartar
+     ======================================================== */
+
+  $("btn-descartar").addEventListener("click", function () {
+    var ids = Object.keys(S.marcadas).map(Number).filter(function (id) { return S.marcadas[id]; });
+    if (!ids.length || !esMiTurno() || S.enviando) return;
+    var E = instantanea();
+    ids.forEach(function (id) { quitarDeMano(E, MI_ID, id); E.descarte.push(id); });
+    cerrarTurno(E, S.nombre + " botó " + ids.length + (ids.length === 1 ? " carta." : " cartas."));
+  });
+
+  $("btn-cancelar").addEventListener("click", function () { S.sel = null; pintar(); });
+
+  /* ========================================================
+     Selección de objetivos
+     ======================================================== */
+
+  function alTocarOrganoPropio(pid, idx) {
+    if (!S.sel || !esMiTurno() || S.enviando) return;
+    var x = S.sel.x;
+    if (x.t === "medicina") { aplicarMedicina(S.sel.id, idx); return; }
+    if (x.t === "trat" && x.k === "trasplante" && S.sel.paso === 0) {
+      S.sel.org = idx; S.sel.paso = 1; pintar(); return;
+    }
+  }
+
+  function alTocarOrganoRival(pid, idx) {
+    if (!S.sel || !esMiTurno() || S.enviando) return;
+    var x = S.sel.x;
+    if (x.t === "virus") { aplicarVirus(S.sel.id, pid, idx); return; }
+    if (x.t === "trat" && x.k === "robo") { aplicarRobo(S.sel.id, pid, idx); return; }
+    if (x.t === "trat" && x.k === "trasplante" && S.sel.paso === 1) {
+      aplicarTrasplante(S.sel.id, S.sel.org, pid, idx); return;
+    }
+  }
+
+  function alTocarRival(pid) {
+    if (!S.sel || !esMiTurno() || S.enviando) return;
+    if (S.sel.x.t === "trat" && S.sel.x.k === "pabellon") aplicarPabellon(S.sel.id, pid);
+  }
+
+  /** ¿Se puede soltar la carta elegida sobre este órgano? */
+  function esObjetivo(pid, o, idx) {
+    if (!S.sel) return false;
+    var x = S.sel.x, mio = pid === MI_ID, est = estadoOrgano(o);
+
+    if (x.t === "medicina") return mio && pega(x.c, o.c) && est !== "inmune";
+    if (x.t === "virus") return !mio && pega(x.c, o.c) && est !== "inmune";
+    if (x.t !== "trat") return false;
+
+    if (x.k === "robo") return !mio && est !== "inmune" && !tieneColor(cuerpoDe(MI_ID), o.c);
+    if (x.k === "trasplante") {
+      if (S.sel.paso === 0) return mio && est !== "inmune";
+      if (S.sel.paso === 1) {
+        if (mio || est === "inmune") return false;
+        var miOrg = cuerpoDe(MI_ID)[S.sel.org];
+        if (!miOrg) return false;
+        // Nadie puede terminar con dos del mismo color.
+        var misOtros = cuerpoDe(MI_ID).filter(function (_, i) { return i !== S.sel.org; });
+        var susOtros = cuerpoDe(pid).filter(function (_, i) { return i !== idx; });
+        return !tieneColor(misOtros, o.c) && !tieneColor(susOtros, miOrg.c);
+      }
+    }
+    return false;
+  }
+
+  /* ========================================================
+     Pintado
+     ======================================================== */
+
+  function pintarOrgano(o, pid, idx, interactivo) {
+    var el = document.createElement(interactivo ? "button" : "div");
+    el.className = "organo " + estadoOrgano(o);
+    el.dataset.color = o.c;
+    if (interactivo) el.type = "button";
+
+    var dib = document.createElement("div");
+    dib.innerHTML = svgOrgano(o.c);
+    el.appendChild(dib);
+
+    var marcas = document.createElement("div");
+    marcas.className = "marcas";
+    var n;
+    for (n = 0; n < o.v.length; n++) { var iv = document.createElement("i"); iv.className = "v"; marcas.appendChild(iv); }
+    for (n = 0; n < o.m.length; n++) { var im = document.createElement("i"); im.className = "m"; marcas.appendChild(im); }
+    el.appendChild(marcas);
+
+    var est = document.createElement("span");
+    est.className = "est";
+    est.textContent = { sano: "Sano", infectado: "Virus", protegido: "Curado", inmune: "Inmune" }[estadoOrgano(o)];
+    el.appendChild(est);
+
+    var objetivo = esObjetivo(pid, o, idx);
+    if (objetivo) {
+      el.classList.add("jugable");
+      el.addEventListener("click", function () {
+        if (pid === MI_ID) alTocarOrganoPropio(pid, idx); else alTocarOrganoRival(pid, idx);
+      });
+    } else if (interactivo) {
+      el.disabled = true;
+      el.style.cursor = "default";
+    }
+    if (S.sel && S.sel.paso === 1 && pid === MI_ID && S.sel.org === idx) el.classList.add("elegido");
+
+    el.setAttribute("aria-label", ORGANO_NOMBRE[o.c] + ", " + est.textContent);
+    return el;
+  }
+
+  function pintarCuerpo(cont, pid, interactivo) {
+    cont.textContent = "";
+    var cuerpo = cuerpoDe(pid);
+    cuerpo.forEach(function (o, i) { cont.appendChild(pintarOrgano(o, pid, i, interactivo)); });
+    if (!cuerpo.length) {
+      var h = document.createElement("div");
+      h.className = "hueco"; h.textContent = "sin órganos";
+      cont.appendChild(h);
+    }
+  }
+
+  function pintarRivales() {
+    var cont = $("rivales");
+    cont.textContent = "";
+    rivales().forEach(function (pid) {
+      var apuntable = !!(S.sel && S.sel.x.t === "trat" && S.sel.x.k === "pabellon");
+      // La caja nunca es un botón: contiene los botones de cada órgano, y
+      // anidarlos rompe el clic. Para apuntarla va un botón propio al lado.
+      var caja = document.createElement("div");
+      caja.className = "rival" + (S.par.turnoDe === pid ? " turno" : "") + (apuntable ? " apuntable" : "");
+
+      var cab = document.createElement("div"); cab.className = "rival-cab";
+      var nom = document.createElement("span"); nom.className = "rival-nom"; nom.textContent = nombreDe(pid);
+      cab.appendChild(nom);
+
+      if (apuntable) {
+        var elegir = document.createElement("button");
+        elegir.type = "button"; elegir.className = "btn chico";
+        elegir.textContent = "Cambiar con " + nombreDe(pid);
+        elegir.addEventListener("click", function () { alTocarRival(pid); });
+        cab.appendChild(elegir);
+      } else {
+        var cnt = document.createElement("span"); cnt.className = "conteo";
+        var limpios = cuerpoDe(pid).filter(sano).length;
+        cnt.textContent = (S.par.manos[pid] || []).length + " en mano · " + limpios + "/4 sanos" +
+          (S.par.turnoDe === pid ? " · juega" : "");
+        cab.appendChild(cnt);
+      }
+      caja.appendChild(cab);
+
+      var cuerpo = document.createElement("div"); cuerpo.className = "cuerpo";
+      cuerpoDe(pid).forEach(function (o, i) { cuerpo.appendChild(pintarOrgano(o, pid, i, true)); });
+      if (!cuerpoDe(pid).length) {
+        var h = document.createElement("div"); h.className = "hueco"; h.textContent = "sin órganos";
+        cuerpo.appendChild(h);
+      }
+      caja.appendChild(cuerpo);
+      cont.appendChild(caja);
+    });
+  }
+
+  function pintarMano() {
+    var cont = $("yo-mano");
+    cont.textContent = "";
+    var mano = miMano(), mio = esMiTurno();
+
+    mano.forEach(function (id) {
+      var x = carta(id);
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "carta";
+      if (x.t === "trat") b.dataset.color = "multi"; else b.dataset.color = x.c;
+      if (S.sel && S.sel.id === id) b.classList.add("elegida");
+      if (S.marcadas[id]) b.classList.add("marcada");
+
+      var tp = document.createElement("span"); tp.className = "tipo"; tp.textContent = etiquetaTipo(x);
+      var dj = document.createElement("span"); dj.className = "dibujo"; dj.innerHTML = dibujoDe(x);
+      var nm = document.createElement("span"); nm.className = "nombre"; nm.textContent = nombreCarta(x);
+      b.appendChild(tp); b.appendChild(dj); b.appendChild(nm);
+
+      var jugable = mio && puedeElegirse(x);
+      if (!mio) b.disabled = true;
+
+      var pulsado = null;
+      b.addEventListener("pointerdown", function () {
+        if (!mio) return;
+        pulsado = setTimeout(function () {
+          pulsado = null;
+          S.marcadas[id] = !S.marcadas[id];
+          S.sel = null;
+          pintar();
+        }, 420);
+      });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+        b.addEventListener(ev, function () { if (pulsado) { clearTimeout(pulsado); pulsado = null; } });
+      });
+      b.addEventListener("click", function () {
+        if (!mio || S.enviando) return;
+        if (S.marcadas[id]) { S.marcadas[id] = false; pintar(); return; }
+        if (S.sel && S.sel.id === id) { S.sel = null; pintar(); return; }
+        if (!jugable) {
+          $("nota-descarte").textContent = "Esa carta no tiene dónde entrar ahora. Puedes botarla.";
+          return;
+        }
+        jugarCarta(id);
+      });
+
+      cont.appendChild(b);
+    });
+
+    for (var i = mano.length; i < 3; i++) {
+      var v = document.createElement("div");
+      v.className = "hueco"; v.style.width = "auto"; v.style.minHeight = "96px";
+      v.textContent = "vacío";
+      cont.appendChild(v);
+    }
+
+    var marcadas = Object.keys(S.marcadas).filter(function (k) { return S.marcadas[k]; }).length;
+    $("btn-descartar").disabled = !mio || !marcadas || S.enviando;
+    $("btn-descartar").textContent = marcadas ? "Botar " + marcadas + (marcadas === 1 ? " carta" : " cartas") : "Descartar las marcadas";
+  }
+
+  function pintarBitacora() {
+    var cont = $("bitacora");
+    cont.textContent = "";
+    (S.par.bitacora || []).slice(-12).reverse().forEach(function (l) {
+      var p = document.createElement("div"); p.textContent = l; cont.appendChild(p);
+    });
+  }
+
+  function textoAviso() {
+    if (!esMiTurno()) return "Juega " + nombreDe(S.par.turnoDe) + ".";
+    if (!S.sel) return "Te toca. Juega una carta o bota las que no te sirvan.";
+    var x = S.sel.x;
+    if (x.t === "medicina") return "¿A cuál de tus órganos?";
+    if (x.t === "virus") return "¿A qué órgano rival?";
+    if (x.k === "robo") return "¿Qué órgano le robas?";
+    if (x.k === "pabellon") return "¿Con quién cambias el cuerpo entero?";
+    if (x.k === "trasplante") return S.sel.paso === 0 ? "Elige tu órgano para el cambio." : "Ahora el órgano del rival.";
+    return "Elige el objetivo.";
+  }
+
+  function pintar() {
+    var enPartida = !!(S.code && S.par);
+    var est = enPartida ? S.par.estado : "inicio";
+
+    $("p-inicio").hidden = enPartida;
+    $("p-lobby").hidden = est !== "lobby";
+    $("p-juego").hidden = est !== "jugando";
+    $("p-fin").hidden = est !== "fin";
+    if (!enPartida) return;
+
+    if (est === "lobby") {
+      $("lobby-codigo").textContent = S.code;
+      var cont = $("lobby-jugadores");
+      cont.textContent = "";
+      S.jugadores.forEach(function (j) {
+        var f = document.createElement("div"); f.className = "f";
+        var n = document.createElement("span"); n.textContent = j.nombre;
+        if (j.pid === MI_ID) { var t = document.createElement("span"); t.className = "nota"; t.textContent = "  (tú)"; n.appendChild(t); }
+        var r = document.createElement("span"); r.className = "conteo";
+        r.textContent = S.par.hostId === j.pid ? "reparte" : "";
+        f.appendChild(n); f.appendChild(r);
+        cont.appendChild(f);
+      });
+      var pocos = S.jugadores.length < 2;
+      $("btn-empezar").hidden = !soyHost();
+      $("btn-empezar").disabled = !soyHost() || pocos;
+      $("lobby-nota").textContent = soyHost()
+        ? (pocos ? "Falta al menos una persona más." : "Listos. Reparte cuando quieran.")
+        : "Esperando a que " + nombreDe(S.par.hostId) + " reparta.";
+      return;
+    }
+
+    if (est === "jugando") {
+      $("aviso-txt").textContent = textoAviso();
+      $("aviso").className = "aviso-turno" + (esMiTurno() ? (S.sel ? " paso" : " mio") : "");
+      $("btn-cancelar").hidden = !S.sel;
+
+      pintarRivales();
+      pintarCuerpo($("yo-cuerpo"), MI_ID, true);
+      pintarMano();
+      pintarBitacora();
+
+      var limpios = cuerpoDe(MI_ID).filter(sano).length;
+      $("yo-conteo").textContent = limpios + " de 4 sanos";
+      $("pila-mazo").textContent = S.par.mazo.length;
+      $("pila-descarte").textContent = S.par.descarte.length;
+      if (esMiTurno() && !S.sel) {
+        $("nota-descarte").textContent = "Toca una carta para jugarla. Para botarla, mantenla pulsada.";
+      }
+      return;
+    }
+
+    if (est === "fin") {
+      $("fin-titulo").textContent = S.par.ganador === MI_ID
+        ? "Ganaste."
+        : "Ganó " + nombreDe(S.par.ganador) + ".";
+      pintarCuerpo($("fin-cuerpo"), S.par.ganador, false);
+      $("btn-revancha").hidden = !soyHost();
+    }
+  }
+
+  /* ========================================================
+     Portada
+     ======================================================== */
+
+  function pintarDemo() {
+    var muestra = [
+      { t: "organo", c: "rojo" }, { t: "organo", c: "azul" },
+      { t: "virus", c: "verde" }, { t: "medicina", c: "amarillo" },
+      { t: "medicina", c: "multi" }, { t: "trat", k: "trasplante" }
+    ];
+    var cont = $("demo-cartas");
+    muestra.forEach(function (x) {
+      var d = document.createElement("div");
+      d.className = "carta"; d.style.cursor = "default";
+      d.dataset.color = x.t === "trat" ? "multi" : x.c;
+      var tp = document.createElement("span"); tp.className = "tipo"; tp.textContent = etiquetaTipo(x);
+      var dj = document.createElement("span"); dj.className = "dibujo"; dj.innerHTML = dibujoDe(x);
+      var nm = document.createElement("span"); nm.className = "nombre"; nm.textContent = nombreCarta(x);
+      d.appendChild(tp); d.appendChild(dj); d.appendChild(nm);
+      cont.appendChild(d);
+    });
+
+    var tb = $("demo-trat");
+    Object.keys(TRATAMIENTOS).forEach(function (k) {
+      var tr = document.createElement("tr");
+      var a = document.createElement("td"); a.textContent = TRATAMIENTOS[k].nombre;
+      var b = document.createElement("td"); b.textContent = TRATAMIENTOS[k].que;
+      tr.appendChild(a); tr.appendChild(b);
+      tb.appendChild(tr);
+    });
+  }
+
+  /* ========================================================
+     Sobrevivir a una republicación
+     ======================================================== */
+
+  try {
+    if (window.claude && claude.hot && claude.hot.snapshot) {
+      claude.hot.snapshot(function () { return { nombre: S.nombre }; });
+      var previo = claude.hot.data || {};
+      if (previo.nombre) { S.nombre = previo.nombre; $("in-nombre").value = previo.nombre; }
+    }
+  } catch (e) {}
+
+})();
+</script>
