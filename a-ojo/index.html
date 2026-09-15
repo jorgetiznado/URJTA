@@ -1,0 +1,940 @@
+<title>A Ojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Martian+Mono:wght@400;600&family=Public+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --fondo:   #E8EBEF;
+    --lienzo:  #FDFDFE;
+    --panel:   #F4F6F8;
+    --tinta:   #16202E;
+    --tinta2:  #6B7787;
+    --borde:   #CBD3DC;
+    --borde2:  #E1E6EB;
+    --cota:    #E04A2F;
+    --bien:    #0E8A5F;
+
+    --j1: #0F6FBF; --j2: #E04A2F; --j3: #0E8A5F;
+    --j4: #8B4FC9; --j5: #C9820E; --j6: #C43A78;
+
+    --sombra: 0 1px 0 rgba(22,32,46,.04), 0 14px 30px -22px rgba(22,32,46,.55);
+
+    --s1:.35rem; --s2:.7rem; --s3:1.1rem; --s4:1.7rem; --s5:2.6rem; --s6:4rem;
+    --display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+    --ui: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+    --mono: "Martian Mono", ui-monospace, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo:  #0F1520;
+      --lienzo: #161E2B;
+      --panel:  #1A2331;
+      --tinta:  #E6EAF0;
+      --tinta2: #8B99AC;
+      --borde:  #2E3A4B;
+      --borde2: #242E3C;
+      --cota:   #FF7A5E;
+      --bien:   #3DBF8E;
+      --j1: #5AABF5; --j2: #FF7A5E; --j3: #3DBF8E;
+      --j4: #B98BF0; --j5: #E8B13D; --j6: #F072A8;
+      --sombra: 0 1px 0 rgba(0,0,0,.4), 0 18px 36px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo:  #0F1520;
+    --lienzo: #161E2B;
+    --panel:  #1A2331;
+    --tinta:  #E6EAF0;
+    --tinta2: #8B99AC;
+    --borde:  #2E3A4B;
+    --borde2: #242E3C;
+    --cota:   #FF7A5E;
+    --bien:   #3DBF8E;
+    --j1: #5AABF5; --j2: #FF7A5E; --j3: #3DBF8E;
+    --j4: #B98BF0; --j5: #E8B13D; --j6: #F072A8;
+    --sombra: 0 1px 0 rgba(0,0,0,.4), 0 18px 36px -24px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--fondo);
+    color: var(--tinta);
+    font-family: var(--ui);
+    font-size: 16px; line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .marco { max-width: 660px; margin-inline: auto; padding-inline: 18px; padding-block: var(--s4) var(--s6); }
+
+  .panel { background: var(--panel); border: 1px solid var(--borde); border-radius: 6px; box-shadow: var(--sombra); padding: var(--s3); }
+  @media (min-width: 520px) { .panel { padding: var(--s4); } }
+
+  .bloque { display: grid; gap: var(--s3); }
+  .apartado { margin-top: var(--s5); display: grid; gap: var(--s2); }
+  .fila { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+  .entre { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; }
+
+  .rotulo { font-family: var(--mono); font-size: .62rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta2); }
+  .nota { font-size: .86rem; color: var(--tinta2); }
+  .nota.malo { color: var(--cota); }
+
+  h1.marca { font-family: var(--display); font-weight: 800; font-size: clamp(2.1rem, 8vw, 3rem); line-height: .95; letter-spacing: -.035em; margin: 0; }
+  h2.titulo { font-family: var(--display); font-weight: 700; font-size: clamp(1.3rem, 5vw, 1.8rem); line-height: 1.1; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+  .cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4); }
+
+  .btn {
+    font-family: var(--ui); font-size: .92rem; font-weight: 600;
+    color: var(--panel); background: var(--tinta);
+    border: 1.5px solid var(--tinta); border-radius: 4px;
+    padding: .6rem 1.1rem; cursor: pointer; transition: transform .1s ease, opacity .1s ease;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn.fantasma { background: transparent; color: var(--tinta); border-color: var(--borde); }
+  .btn.grande { font-family: var(--display); font-weight: 700; font-size: 1.05rem; padding: .75rem 1.4rem; width: 100%; }
+  :is(.btn, input):focus-visible { outline: 2.5px solid var(--tinta); outline-offset: 2px; }
+
+  .campo { display: grid; gap: var(--s1); }
+  .campo > span { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta2); }
+  .campo input {
+    font-family: var(--ui); font-size: 1rem; color: var(--tinta); background: transparent;
+    border: 1.5px solid var(--borde); border-radius: 4px; padding: .58rem .7rem; width: 100%;
+  }
+  .campo input:focus { outline: none; border-color: var(--tinta2); }
+  .campo input.codigo { font-family: var(--display); font-weight: 700; font-size: 1.45rem; letter-spacing: .26em; text-transform: uppercase; }
+
+  /* ---------- El número ---------- */
+  .objetivo { display: grid; gap: 2px; justify-items: center; text-align: center; }
+  .objetivo .cifra {
+    font-family: var(--display); font-weight: 800; font-size: clamp(3.4rem, 17vw, 5.4rem);
+    line-height: .9; letter-spacing: -.05em; font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Lienzo ---------- */
+  .lienzo-caja {
+    position: relative; width: 100%; aspect-ratio: 1;
+    background: var(--lienzo); border: 1.5px solid var(--borde); border-radius: 5px;
+    overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  }
+  .lienzo-caja.activo { border-color: var(--tinta); cursor: crosshair; }
+  .lienzo-caja svg { display: block; width: 100%; height: 100%; }
+  /* En unidades del viewBox de 1000: 48 son unos 14px reales en un teléfono. */
+  .medida { font-family: var(--mono); font-size: 48px; font-weight: 600; }
+
+  .sello-espera {
+    position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+    background: color-mix(in srgb, var(--lienzo) 88%, transparent);
+    font-family: var(--display); font-weight: 700; font-size: 1rem; padding: var(--s3);
+  }
+
+  /* ---------- Resultados ---------- */
+  .resultados { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 5px; overflow: hidden; }
+  .res-fila { display: grid; grid-template-columns: 10px 1fr auto auto; align-items: center; gap: var(--s2); background: var(--panel); padding: .55rem .8rem; }
+  .res-fila .tira { width: 10px; height: 26px; border-radius: 2px; background: var(--tono); }
+  .res-fila .quien { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .res-fila .dio { font-family: var(--mono); font-size: .78rem; color: var(--tinta2); font-variant-numeric: tabular-nums; }
+  .res-fila .err { font-family: var(--mono); font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .res-fila.mejor { background: color-mix(in srgb, var(--bien) 11%, var(--panel)); }
+  .res-fila.mejor .err { color: var(--bien); }
+  .res-fila.yo .quien { text-decoration: underline; text-underline-offset: 3px; }
+
+  .marcador { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 5px; overflow: hidden; }
+  .mar-fila { display: grid; grid-template-columns: 10px 1.5rem 1fr auto; align-items: center; gap: var(--s2); background: var(--panel); padding: .55rem .8rem; }
+  .mar-fila .tira { width: 10px; height: 22px; border-radius: 2px; background: var(--tono); }
+  .mar-fila .pos { font-family: var(--mono); font-size: .75rem; color: var(--tinta2); }
+  .mar-fila .quien { font-weight: 500; overflow-wrap: anywhere; }
+  .mar-fila .tot { font-family: var(--mono); font-size: .85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .mar-fila.lider .tot { color: var(--bien); }
+
+  .rondas-barra { display: flex; gap: 4px; }
+  .rondas-barra i { width: 17px; height: 5px; border-radius: 1px; background: var(--borde); display: block; }
+  .rondas-barra i.hecha { background: var(--tinta2); }
+  .rondas-barra i.ahora { background: var(--cota); }
+
+  .lista { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 5px; overflow: hidden; }
+  .lista .f { display: grid; grid-template-columns: 10px 1fr auto; gap: var(--s2); background: var(--panel); padding: .55rem .8rem; align-items: center; }
+  .lista .f .tira { width: 10px; height: 22px; border-radius: 2px; background: var(--tono); }
+
+  .pasos { display: grid; gap: var(--s2); margin: 0; padding: 0; list-style: none; counter-reset: p; }
+  .pasos li { display: grid; grid-template-columns: 1.4rem 1fr; gap: var(--s2); align-items: baseline; font-size: .89rem; }
+  .pasos li::before { counter-increment: p; content: counter(p); font-family: var(--mono); font-size: .68rem; color: var(--tinta2); }
+
+  hr.regla { border: 0; border-top: 1px solid var(--borde); margin: var(--s3) 0; }
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="marco">
+
+  <header class="cabecera">
+    <div>
+      <h1 class="marca">A Ojo</h1>
+      <p class="nota" style="max-width:33ch">Sale un número. Dibujas una línea de ese largo. Sin regla, sin segunda oportunidad.</p>
+    </div>
+    <div id="estado-conexion" class="rotulo">Conectando…</div>
+  </header>
+
+  <!-- ================= INICIO ================= -->
+  <section id="p-inicio">
+    <div class="panel bloque">
+      <label class="campo" for="in-nombre">
+        <span>Tu nombre</span>
+        <input id="in-nombre" type="text" maxlength="18" autocomplete="nickname" placeholder="Jorge">
+      </label>
+      <div class="fila">
+        <button class="btn" id="btn-crear" disabled>Crear una mesa</button>
+        <span class="nota">o entra a una que ya existe:</span>
+      </div>
+      <label class="campo" for="in-codigo">
+        <span>Código de mesa</span>
+        <input id="in-codigo" class="codigo" type="text" maxlength="4" autocomplete="off" spellcheck="false" placeholder="ABCD">
+      </label>
+      <div class="fila"><button class="btn fantasma" id="btn-unirse" disabled>Entrar</button></div>
+      <p class="nota malo" id="error-inicio" hidden></p>
+    </div>
+
+    <div class="apartado">
+      <span class="rotulo">Cómo se juega</span>
+      <div class="panel bloque">
+        <ol class="pasos">
+          <li>Antes de empezar ves una barra de referencia: esa barra vale <b>5</b>. Mírala bien, porque no vuelve a aparecer.</li>
+          <li>Cada ronda sale un número del 1 al 20. Arrastras una línea recta del largo que creas.</li>
+          <li>Puedes redibujar todas las veces que quieras, pero una vez que entregas ya está.</li>
+          <li>Cuando todos entregaron se miden las líneas y se ven superpuestas.</li>
+          <li>Cinco rondas. Gana quien acumule <b>menos error</b> en total.</li>
+        </ol>
+        <hr class="regla">
+        <span class="rotulo">Una ronda medida</span>
+        <div class="lienzo-caja" id="demo-caja" style="max-width:300px;margin-inline:auto"></div>
+        <p class="nota">Ejemplo con el número 12: la línea azul midió 12,4 y la naranja 9,1.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOBBY ================= -->
+  <section id="p-lobby" hidden>
+    <div class="panel bloque">
+      <div class="entre">
+        <div>
+          <span class="rotulo">Código de mesa</span>
+          <div id="lobby-codigo" style="font-family:var(--display);font-weight:800;font-size:2rem;letter-spacing:.2em;line-height:1.1"></div>
+        </div>
+        <button class="btn fantasma" id="btn-copiar">Copiar</button>
+      </div>
+      <p class="nota">Pásales el código. De dos a seis jugadores.</p>
+      <hr class="regla">
+      <span class="rotulo">En la mesa</span>
+      <div class="lista" id="lobby-jugadores"></div>
+      <div class="fila">
+        <button class="btn" id="btn-empezar" disabled>Mostrar la referencia</button>
+        <button class="btn fantasma" id="btn-salir-lobby">Salir</button>
+      </div>
+      <p class="nota" id="lobby-nota"></p>
+    </div>
+  </section>
+
+  <!-- ================= CALIBRAR ================= -->
+  <section id="p-calibrar" hidden>
+    <div class="panel bloque">
+      <h2 class="titulo">Esta barra vale 5.</h2>
+      <p class="nota">Mírala bien. No vuelve a aparecer en toda la partida: de aquí en adelante todo es de memoria.</p>
+      <div class="lienzo-caja" id="cal-caja"></div>
+      <button class="btn grande" id="btn-arrancar" hidden>Ya la vi, primera ronda</button>
+      <p class="nota" id="cal-nota"></p>
+    </div>
+  </section>
+
+  <!-- ================= RONDA ================= -->
+  <section id="p-ronda" hidden>
+    <div class="bloque">
+      <div class="panel bloque">
+        <div class="entre">
+          <span class="rotulo" id="ronda-num">Ronda 1 de 5</span>
+          <div class="rondas-barra" id="ronda-barra"></div>
+        </div>
+        <div class="objetivo">
+          <span class="rotulo">Dibuja una línea de</span>
+          <span class="cifra" id="ronda-objetivo">—</span>
+        </div>
+        <div class="lienzo-caja" id="caja">
+          <div class="sello-espera" hidden></div>
+        </div>
+        <div class="fila">
+          <button class="btn grande" id="btn-entregar" disabled>Entregar</button>
+        </div>
+        <p class="nota" id="ronda-nota">Arrastra sobre el recuadro para trazar.</p>
+      </div>
+
+      <div class="panel bloque" id="caja-resultados" hidden>
+        <span class="rotulo">La medición</span>
+        <div class="resultados" id="resultados"></div>
+        <hr class="regla">
+        <span class="rotulo">Error acumulado — gana el más bajo</span>
+        <div class="marcador" id="marcador"></div>
+        <div class="fila">
+          <button class="btn" id="btn-siguiente" hidden>Siguiente ronda</button>
+          <span class="nota" id="espera-host" hidden></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FIN ================= -->
+  <section id="p-fin" hidden>
+    <div class="panel bloque">
+      <span class="rotulo">Cinco rondas</span>
+      <h2 class="titulo" id="fin-titulo">Final</h2>
+      <div class="marcador" id="fin-marcador"></div>
+      <div class="fila">
+        <button class="btn" id="btn-revancha" hidden>Otra partida</button>
+        <button class="btn fantasma" id="btn-salir-fin">Volver al inicio</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ========================================================
+     Reglas y escala
+     ======================================================== */
+
+  var RONDAS = 5;
+  var MAX_NUM = 20;
+  var VB = 1000;            // el lienzo es siempre 1000 x 1000, sea cual sea la pantalla
+  var UNIDAD = 40;          // 1 unidad de juego = 40 del viewBox; 20 unidades = 800, cabe
+  var REFERENCIA = 5;       // lo que vale la barra de calibración
+
+  var COLORES = ["--j1", "--j2", "--j3", "--j4", "--j5", "--j6"];
+
+  function largoEnUnidades(t) {
+    return Math.sqrt((t.x2 - t.x1) * (t.x2 - t.x1) + (t.y2 - t.y1) * (t.y2 - t.y1)) / UNIDAD;
+  }
+  function unaCifra(n) { return (Math.round(n * 10) / 10).toFixed(1).replace(".", ","); }
+
+  function numerosDePartida() {
+    var pozo = [], i;
+    for (i = 1; i <= MAX_NUM; i++) pozo.push(i);
+    for (i = pozo.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pozo[i]; pozo[i] = pozo[j]; pozo[j] = t;
+    }
+    return pozo.slice(0, RONDAS);
+  }
+
+  /* ========================================================
+     Identidad local
+     ======================================================== */
+
+  function leer(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }
+  function escribir(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function idNuevo() {
+    try { if (crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, "").slice(0, 16); } catch (e) {}
+    return String(Date.now()).slice(-8) + Math.random().toString(36).slice(2, 10);
+  }
+  var MI_ID = leer("ojo.pid", "");
+  if (!MI_ID) { MI_ID = idNuevo(); escribir("ojo.pid", MI_ID); }
+
+  /* ========================================================
+     Estado
+     ======================================================== */
+
+  var S = {
+    db: null,
+    nombre: leer("ojo.nombre", ""),
+    code: null,
+    mesa: null,
+    jugadores: [],
+    trazos: [],          // todos los trazos de la partida
+    borrador: null,      // mi línea sin entregar
+    entregada: -1,       // ronda ya entregada
+    subs: []
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function limpiarSubs() { S.subs.forEach(function (u) { try { u(); } catch (e) {} }); S.subs = []; }
+  function soyHost() { return !!S.mesa && S.mesa.hostId === MI_ID; }
+  function orden() { return (S.mesa && S.mesa.orden) || []; }
+  function nombreDe(pid) {
+    var j = S.jugadores.filter(function (x) { return x.pid === pid; })[0];
+    return j ? j.nombre : "Alguien";
+  }
+  function colorDe(pid) {
+    var i = orden().indexOf(pid);
+    return "var(" + COLORES[(i < 0 ? 0 : i) % COLORES.length] + ")";
+  }
+  function trazosDe(ronda) {
+    return S.trazos.filter(function (t) { return t.ronda === ronda; });
+  }
+  function todosEntregaron(ronda) {
+    var n = orden().length;
+    return n > 0 && trazosDe(ronda).length >= n;
+  }
+  function objetivoDe(ronda) {
+    return ((S.mesa && S.mesa.numeros) || [])[ronda - 1] || 0;
+  }
+
+  /* ========================================================
+     Arranque
+     ======================================================== */
+
+  pintarDemo();
+  $("in-nombre").value = S.nombre;
+
+  function sinConexion() {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--cota)";
+    verError("Este juego guarda la partida en el servidor de Claude. Ábrelo desde el link publicado, con tu sesión iniciada.");
+  }
+
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("db").then(function (db) {
+      if (!db) { sinConexion(); return; }
+      S.db = db;
+      $("estado-conexion").textContent = "En línea";
+      $("estado-conexion").style.color = "var(--bien)";
+      $("btn-crear").disabled = false;
+      $("btn-unirse").disabled = false;
+    }, sinConexion);
+  } else { sinConexion(); }
+
+  /* ========================================================
+     Inicio
+     ======================================================== */
+
+  function verError(m) { var p = $("error-inicio"); p.textContent = m; p.hidden = !m; }
+  function nombreEscrito() { return $("in-nombre").value.trim().slice(0, 18); }
+
+  var LETRAS = "ABCDEFGHJKLMNPRSTUVXY";
+  function codigoAlAzar() {
+    var s = ""; for (var i = 0; i < 4; i++) s += LETRAS[Math.floor(Math.random() * LETRAS.length)];
+    return s;
+  }
+  function textoError(e) {
+    var c = e && e.code;
+    if (c === "quota_exceeded") return "El juego llegó a su tope de partidas guardadas. Borra mesas viejas.";
+    if (c === "resource_exhausted") return "Demasiadas acciones seguidas. Espera un par de segundos.";
+    if (c === "revoked" || c === "not_granted") return "Perdiste el acceso a la partida. Recarga la página.";
+    return (e && e.message) || "Algo falló. Intenta otra vez.";
+  }
+
+  $("btn-crear").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    verError(""); S.nombre = nombre; escribir("ojo.nombre", nombre);
+    var btn = this; btn.disabled = true; btn.textContent = "Creando…";
+    crearMesa(nombre).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Crear una mesa"; });
+  });
+
+  function crearMesa(nombre, intento) {
+    intento = intento || 0;
+    if (intento > 6) return Promise.reject({ message: "No se pudo reservar un código. Intenta de nuevo." });
+    var code = codigoAlAzar(), ref = S.db.doc("reglas/" + code);
+    return ref.acquire({ holder: MI_ID, ttlMs: 6000 }).then(function (res) {
+      if (!res.acquired) return crearMesa(nombre, intento + 1);
+      return ref.get().then(function (snap) {
+        var d = snap.exists ? snap.data() : null;
+        if (d && d.hostId) return crearMesa(nombre, intento + 1);
+        return ref.set({
+          code: code, hostId: MI_ID, estado: "lobby",
+          orden: [], ronda: 0, numeros: [], creadaEn: Date.now()
+        }).then(function () { return entrar(code, nombre); });
+      });
+    });
+  }
+
+  $("btn-unirse").addEventListener("click", function () {
+    var nombre = nombreEscrito();
+    var code = $("in-codigo").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    if (!nombre) { verError("Escribe tu nombre primero."); $("in-nombre").focus(); return; }
+    if (code.length !== 4) { verError("El código son 4 letras."); $("in-codigo").focus(); return; }
+    verError(""); S.nombre = nombre; escribir("ojo.nombre", nombre);
+    var btn = this; btn.disabled = true; btn.textContent = "Entrando…";
+    S.db.doc("reglas/" + code).get().then(function (snap) {
+      if (!snap.exists) { verError("No hay ninguna mesa con el código " + code + "."); return; }
+      var d = snap.data();
+      if (d.estado !== "lobby" && (d.orden || []).indexOf(MI_ID) < 0) {
+        verError("Esa partida ya empezó."); return;
+      }
+      return S.db.collection("reglas/" + code + "/jugadores").get().then(function (q) {
+        var otros = q.docs.filter(function (x) { return x.id !== MI_ID; });
+        if (otros.length >= 6) { verError("Esa mesa ya tiene seis jugadores."); return; }
+        return entrar(code, nombre);
+      });
+    }).catch(function (e) { verError(textoError(e)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Entrar"; });
+  });
+
+  $("in-codigo").addEventListener("input", function () {
+    this.value = this.value.toUpperCase().replace(/[^A-Z]/g, "");
+  });
+
+  /* ========================================================
+     Suscripciones
+     ======================================================== */
+
+  function entrar(code, nombre) {
+    S.code = code;
+    return S.db.doc("reglas/" + code + "/jugadores/" + MI_ID)
+      .set({ nombre: nombre, entroEn: Date.now() })
+      .then(function () { escuchar(code); });
+  }
+
+  function escuchar(code) {
+    limpiarSubs();
+
+    S.subs.push(S.db.doc("reglas/" + code).onSnapshot(function (snap) {
+      if (!snap.exists) { alInicio("La mesa se cerró."); return; }
+      var previo = S.mesa;
+      S.mesa = snap.data();
+      if (!previo || previo.ronda !== S.mesa.ronda) {
+        S.borrador = null; S.entregada = -1;
+      }
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("reglas/" + code + "/jugadores").onSnapshot(function (snap) {
+      S.jugadores = snap.docs.map(function (d) {
+        var c = d.data() || {};
+        return { pid: d.id, nombre: c.nombre || "Sin nombre", entroEn: c.entroEn || 0 };
+      }).sort(function (a, b) { return a.entroEn - b.entroEn; });
+      pintar();
+    }, alFallar));
+
+    S.subs.push(S.db.collection("reglas/" + code + "/trazos").onSnapshot(function (snap) {
+      S.trazos = snap.docs.map(function (d) { return d.data() || {}; });
+      pintar();
+    }, alFallar));
+  }
+
+  function alFallar(e) {
+    $("estado-conexion").textContent = "Sin conexión";
+    $("estado-conexion").style.color = "var(--cota)";
+    if (e && (e.code === "revoked" || e.code === "unavailable")) {
+      $("ronda-nota").textContent = "Se cortó la conexión con la partida. Recarga la página.";
+    }
+  }
+
+  function alInicio(m) {
+    limpiarSubs();
+    S.code = null; S.mesa = null; S.jugadores = []; S.trazos = [];
+    S.borrador = null; S.entregada = -1;
+    verError(m || ""); pintar();
+  }
+
+  /* ========================================================
+     Control de la partida
+     ======================================================== */
+
+  $("btn-empezar").addEventListener("click", function () {
+    this.disabled = true;
+    S.db.doc("reglas/" + S.code).update({
+      estado: "calibrar",
+      orden: S.jugadores.map(function (j) { return j.pid; }),
+      numeros: numerosDePartida(),
+      ronda: 0
+    }).catch(function (e) { $("lobby-nota").textContent = textoError(e); $("btn-empezar").disabled = false; });
+  });
+
+  $("btn-arrancar").addEventListener("click", function () {
+    this.disabled = true;
+    S.db.doc("reglas/" + S.code).update({ estado: "jugando", ronda: 1 })
+      .catch(function (e) { $("cal-nota").textContent = textoError(e); $("btn-arrancar").disabled = false; });
+  });
+
+  $("btn-siguiente").addEventListener("click", function () {
+    this.disabled = true;
+    var sig = S.mesa.ronda + 1;
+    var p = sig > RONDAS
+      ? S.db.doc("reglas/" + S.code).update({ estado: "fin" })
+      : S.db.doc("reglas/" + S.code).update({ ronda: sig });
+    p.catch(function (e) { $("espera-host").hidden = false; $("espera-host").textContent = textoError(e); });
+  });
+
+  $("btn-revancha").addEventListener("click", function () {
+    var borrar = S.trazos.map(function (t) {
+      return S.db.doc("reglas/" + S.code + "/trazos/r" + t.ronda + "__" + t.pid).delete();
+    });
+    Promise.all(borrar).then(function () {
+      return S.db.doc("reglas/" + S.code).update({
+        estado: "calibrar", ronda: 0, numeros: numerosDePartida(),
+        orden: S.jugadores.map(function (j) { return j.pid; })
+      });
+    });
+  });
+
+  $("btn-salir-lobby").addEventListener("click", salir);
+  $("btn-salir-fin").addEventListener("click", salir);
+  function salir() {
+    var ref = S.code ? S.db.doc("reglas/" + S.code + "/jugadores/" + MI_ID) : null;
+    alInicio(""); if (ref) ref.delete().catch(function () {});
+  }
+
+  $("btn-copiar").addEventListener("click", function () {
+    var btn = this, texto = S.code || "";
+    var listo = function () { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar"; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(listo, function () { btn.textContent = texto; });
+    } else { btn.textContent = texto; }
+  });
+
+  /* ========================================================
+     Dibujar
+     ======================================================== */
+
+  var caja = $("caja");
+
+  // Del punto del puntero a coordenadas del viewBox, que son iguales en toda pantalla.
+  function aViewBox(ev) {
+    var r = caja.getBoundingClientRect();
+    if (!r.width || !r.height) return null;
+    return {
+      x: Math.max(0, Math.min(VB, (ev.clientX - r.left) / r.width * VB)),
+      y: Math.max(0, Math.min(VB, (ev.clientY - r.top) / r.height * VB))
+    };
+  }
+
+  function puedoDibujar() {
+    return !!S.mesa && S.mesa.estado === "jugando" &&
+      S.entregada !== S.mesa.ronda && !todosEntregaron(S.mesa.ronda) &&
+      orden().indexOf(MI_ID) >= 0;
+  }
+
+  var trazando = false;
+
+  caja.addEventListener("pointerdown", function (ev) {
+    if (!puedoDibujar()) return;
+    var p = aViewBox(ev);
+    if (!p) return;
+    ev.preventDefault();
+    trazando = true;
+    try { caja.setPointerCapture(ev.pointerId); } catch (e) {}
+    S.borrador = { x1: p.x, y1: p.y, x2: p.x, y2: p.y };
+    pintarLienzo();
+  });
+
+  caja.addEventListener("pointermove", function (ev) {
+    if (!trazando || !S.borrador) return;
+    var p = aViewBox(ev);
+    if (!p) return;
+    S.borrador.x2 = p.x; S.borrador.y2 = p.y;
+    if (!moverBorrador()) pintarLienzo();
+    actualizarEntregar();
+  });
+
+  ["pointerup", "pointercancel"].forEach(function (nombre) {
+    caja.addEventListener(nombre, function (ev) {
+      if (!trazando) return;
+      trazando = false;
+      try { caja.releasePointerCapture(ev.pointerId); } catch (e) {}
+      actualizarEntregar();
+    });
+  });
+
+  function actualizarEntregar() {
+    var hay = !!S.borrador && largoEnUnidades(S.borrador) > 0.15;
+    $("btn-entregar").disabled = !hay || !puedoDibujar();
+    if (hay && puedoDibujar()) $("ronda-nota").textContent = "Redibuja las veces que quieras. Entregar es definitivo.";
+  }
+
+  $("btn-entregar").addEventListener("click", function () {
+    if (!S.borrador || !puedoDibujar()) return;
+    var ronda = S.mesa.ronda, t = S.borrador;
+    this.disabled = true;
+    S.entregada = ronda;
+    S.db.doc("reglas/" + S.code + "/trazos/r" + ronda + "__" + MI_ID).set({
+      ronda: ronda, pid: MI_ID,
+      x1: Math.round(t.x1), y1: Math.round(t.y1),
+      x2: Math.round(t.x2), y2: Math.round(t.y2),
+      entregadoEn: Date.now()
+    }).catch(function (e) {
+      S.entregada = -1;
+      $("ronda-nota").textContent = textoError(e);
+      actualizarEntregar();
+    }).then(function () { pintar(); });
+  });
+
+  /* ========================================================
+     Pintado del lienzo
+     ======================================================== */
+
+  function svgLinea(t, color, ancho, punta) {
+    return '<line x1="' + t.x1 + '" y1="' + t.y1 + '" x2="' + t.x2 + '" y2="' + t.y2 +
+      '" stroke="' + color + '" stroke-width="' + ancho + '" stroke-linecap="round"' +
+      (punta ? ' stroke-dasharray="14 12"' : "") + "/>";
+  }
+
+  function envolver(interior) {
+    return '<svg viewBox="0 0 ' + VB + " " + VB + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + interior + "</svg>";
+  }
+
+  /** Durante el arrastre sólo se mueven los extremos de una línea que ya existe:
+   *  rehacer el SVG entero en cada pointermove va a tirones en el teléfono. */
+  function moverBorrador() {
+    var l = caja.querySelector("line[data-borrador]");
+    if (!l || !S.borrador) return false;
+    l.setAttribute("x1", S.borrador.x1); l.setAttribute("y1", S.borrador.y1);
+    l.setAttribute("x2", S.borrador.x2); l.setAttribute("y2", S.borrador.y2);
+    return true;
+  }
+
+  function pintarLienzo() {
+    var ronda = S.mesa ? S.mesa.ronda : 0;
+    var revelar = todosEntregaron(ronda);
+    var piezas = "";
+
+    if (revelar) {
+      trazosDe(ronda).sort(function (a, b) {
+        return orden().indexOf(a.pid) - orden().indexOf(b.pid);
+      }).forEach(function (t, i) {
+        piezas += svgLinea(t, colorDe(t.pid), t.pid === MI_ID ? 9 : 6, false);
+        var mx = (t.x1 + t.x2) / 2, my = (t.y1 + t.y2) / 2;
+        // Escalonadas: dos líneas parecidas dejarían las cifras una encima de otra.
+        var y = Math.max(46, my - 20 - i * 46);
+        piezas += '<text class="medida" x="' + mx + '" y="' + y +
+          '" fill="' + colorDe(t.pid) + '" text-anchor="middle">' + unaCifra(largoEnUnidades(t)) + "</text>";
+      });
+    } else if (S.borrador) {
+      piezas += svgLinea(S.borrador, colorDe(MI_ID), 9, false).replace("<line ", "<line data-borrador ");
+    }
+
+    caja.innerHTML = envolver(piezas) + '<div class="sello-espera" hidden></div>';
+    var sello = caja.querySelector(".sello-espera");
+
+    if (!revelar && S.entregada === ronda) {
+      var faltan = orden().length - trazosDe(ronda).length;
+      sello.hidden = false;
+      sello.textContent = faltan > 0
+        ? "Entregada. Faltan " + faltan + (faltan === 1 ? " persona." : " personas.")
+        : "Entregada.";
+    } else {
+      sello.hidden = true;
+    }
+
+    caja.classList.toggle("activo", puedoDibujar());
+  }
+
+  function pintarCalibracion() {
+    var y = VB / 2, x1 = VB / 2 - (REFERENCIA * UNIDAD) / 2, x2 = x1 + REFERENCIA * UNIDAD;
+    var s = "";
+    s += '<line x1="' + x1 + '" y1="' + y + '" x2="' + x2 + '" y2="' + y +
+      '" stroke="var(--tinta)" stroke-width="10" stroke-linecap="round"/>';
+    s += '<line x1="' + x1 + '" y1="' + (y - 26) + '" x2="' + x1 + '" y2="' + (y + 26) + '" stroke="var(--cota)" stroke-width="5"/>';
+    s += '<line x1="' + x2 + '" y1="' + (y - 26) + '" x2="' + x2 + '" y2="' + (y + 26) + '" stroke="var(--cota)" stroke-width="5"/>';
+    s += '<text class="medida" x="' + VB / 2 + '" y="' + (y - 48) + '" fill="var(--cota)" text-anchor="middle">5</text>';
+    $("cal-caja").innerHTML = envolver(s);
+  }
+
+  /* ========================================================
+     Resultados
+     ======================================================== */
+
+  function erroresDe(ronda) {
+    var obj = objetivoDe(ronda);
+    return trazosDe(ronda).map(function (t) {
+      var largo = largoEnUnidades(t);
+      return { pid: t.pid, largo: largo, error: Math.abs(largo - obj) };
+    }).sort(function (a, b) { return a.error - b.error; });
+  }
+
+  function acumulado() {
+    var tot = {};
+    orden().forEach(function (p) { tot[p] = 0; });
+    for (var r = 1; r <= RONDAS; r++) {
+      if (!todosEntregaron(r)) continue;
+      erroresDe(r).forEach(function (e) { tot[e.pid] = (tot[e.pid] || 0) + e.error; });
+    }
+    return tot;
+  }
+  function rondasContadas() {
+    var n = 0;
+    for (var r = 1; r <= RONDAS; r++) if (todosEntregaron(r)) n++;
+    return n;
+  }
+
+  function pintarResultados() {
+    var ronda = S.mesa.ronda;
+    var cont = $("resultados");
+    cont.textContent = "";
+    var lista = erroresDe(ronda), mejor = lista.length ? lista[0].error : 0;
+
+    lista.forEach(function (e) {
+      var f = document.createElement("div");
+      f.className = "res-fila" + (e.error === mejor ? " mejor" : "") + (e.pid === MI_ID ? " yo" : "");
+      f.style.setProperty("--tono", colorDe(e.pid));
+
+      var tira = document.createElement("span"); tira.className = "tira";
+      var q = document.createElement("span"); q.className = "quien"; q.textContent = nombreDe(e.pid);
+      var d = document.createElement("span"); d.className = "dio"; d.textContent = unaCifra(e.largo);
+      var er = document.createElement("span"); er.className = "err";
+      er.textContent = (e.error < 0.05 ? "exacto" : "±" + unaCifra(e.error));
+
+      f.appendChild(tira); f.appendChild(q); f.appendChild(d); f.appendChild(er);
+      cont.appendChild(f);
+    });
+  }
+
+  function pintarMarcador(cont) {
+    var tot = acumulado();
+    var fila = orden().slice().sort(function (a, b) { return (tot[a] || 0) - (tot[b] || 0); });
+    var jugadas = rondasContadas();
+    cont.textContent = "";
+    fila.forEach(function (pid, i) {
+      var f = document.createElement("div");
+      f.className = "mar-fila" + (i === 0 && jugadas > 0 ? " lider" : "");
+      f.style.setProperty("--tono", colorDe(pid));
+      var tira = document.createElement("span"); tira.className = "tira";
+      var pos = document.createElement("span"); pos.className = "pos"; pos.textContent = (i + 1);
+      var q = document.createElement("span"); q.className = "quien";
+      q.textContent = nombreDe(pid) + (pid === MI_ID ? " (tú)" : "");
+      var t = document.createElement("span"); t.className = "tot";
+      t.textContent = jugadas ? "±" + unaCifra(tot[pid] || 0) : "—";
+      f.appendChild(tira); f.appendChild(pos); f.appendChild(q); f.appendChild(t);
+      cont.appendChild(f);
+    });
+  }
+
+  function pintarBarra(cont, actual) {
+    cont.textContent = "";
+    for (var i = 1; i <= RONDAS; i++) {
+      var s = document.createElement("i");
+      if (i < actual) s.className = "hecha";
+      else if (i === actual) s.className = "ahora";
+      cont.appendChild(s);
+    }
+  }
+
+  /* ========================================================
+     Pintado general
+     ======================================================== */
+
+  function pintar() {
+    var enMesa = !!(S.code && S.mesa);
+    var est = enMesa ? S.mesa.estado : "inicio";
+
+    $("p-inicio").hidden = enMesa;
+    $("p-lobby").hidden = est !== "lobby";
+    $("p-calibrar").hidden = est !== "calibrar";
+    $("p-ronda").hidden = est !== "jugando";
+    $("p-fin").hidden = est !== "fin";
+    if (!enMesa) return;
+
+    if (est === "lobby") {
+      $("lobby-codigo").textContent = S.code;
+      var cont = $("lobby-jugadores");
+      cont.textContent = "";
+      S.jugadores.forEach(function (j, i) {
+        var f = document.createElement("div"); f.className = "f";
+        f.style.setProperty("--tono", "var(" + COLORES[i % COLORES.length] + ")");
+        var tira = document.createElement("span"); tira.className = "tira";
+        var n = document.createElement("span"); n.textContent = j.nombre + (j.pid === MI_ID ? " (tú)" : "");
+        var r = document.createElement("span"); r.className = "nota";
+        r.textContent = S.mesa.hostId === j.pid ? "reparte" : "";
+        f.appendChild(tira); f.appendChild(n); f.appendChild(r);
+        cont.appendChild(f);
+      });
+      var pocos = S.jugadores.length < 2;
+      $("btn-empezar").hidden = !soyHost();
+      $("btn-empezar").disabled = !soyHost() || pocos;
+      $("lobby-nota").textContent = soyHost()
+        ? (pocos ? "Falta al menos una persona más." : "Cuando estén todos, muestra la referencia.")
+        : "Esperando a que " + nombreDe(S.mesa.hostId) + " empiece.";
+      return;
+    }
+
+    if (est === "calibrar") {
+      pintarCalibracion();
+      $("btn-arrancar").hidden = !soyHost();
+      $("btn-arrancar").disabled = false;
+      $("cal-nota").textContent = soyHost()
+        ? "Cuando todos la hayan mirado, parte la primera ronda."
+        : "Esperando a que " + nombreDe(S.mesa.hostId) + " parta la primera ronda.";
+      return;
+    }
+
+    if (est === "jugando") {
+      var ronda = S.mesa.ronda, revelar = todosEntregaron(ronda);
+      $("ronda-num").textContent = "Ronda " + ronda + " de " + RONDAS;
+      pintarBarra($("ronda-barra"), ronda);
+      $("ronda-objetivo").textContent = objetivoDe(ronda);
+
+      pintarLienzo();
+      actualizarEntregar();
+
+      $("btn-entregar").hidden = revelar;
+      $("caja-resultados").hidden = !revelar;
+
+      if (revelar) {
+        pintarResultados();
+        pintarMarcador($("marcador"));
+        var ultima = ronda >= RONDAS;
+        $("btn-siguiente").hidden = !soyHost();
+        $("btn-siguiente").disabled = false;
+        $("btn-siguiente").textContent = ultima ? "Ver el resultado" : "Siguiente ronda";
+        $("espera-host").hidden = soyHost();
+        $("espera-host").textContent = "Esperando a que " + nombreDe(S.mesa.hostId) + " siga.";
+        $("ronda-nota").textContent = "El número era " + objetivoDe(ronda) + ".";
+      } else if (S.entregada === ronda) {
+        $("ronda-nota").textContent = "Ya entregaste. Falta el resto.";
+      } else {
+        $("ronda-nota").textContent = S.borrador
+          ? "Redibuja las veces que quieras. Entregar es definitivo."
+          : "Arrastra sobre el recuadro para trazar.";
+      }
+      return;
+    }
+
+    if (est === "fin") {
+      var tot = acumulado();
+      var fila = orden().slice().sort(function (a, b) { return (tot[a] || 0) - (tot[b] || 0); });
+      if (fila.length > 1 && Math.abs((tot[fila[0]] || 0) - (tot[fila[1]] || 0)) < 0.05) {
+        $("fin-titulo").textContent = "Empate en el ojo.";
+      } else if (fila.length) {
+        $("fin-titulo").textContent = "Ganó " + nombreDe(fila[0]) + " con ±" + unaCifra(tot[fila[0]] || 0) + " de error.";
+      }
+      pintarMarcador($("fin-marcador"));
+      $("btn-revancha").hidden = !soyHost();
+    }
+  }
+
+  /* ========================================================
+     Portada
+     ======================================================== */
+
+  function pintarDemo() {
+    var a = { x1: 150, y1: 300, x2: 150 + 12.4 * UNIDAD, y2: 300 };
+    var b = { x1: 150, y1: 640, x2: 150 + 9.1 * UNIDAD, y2: 640 };
+    var s = "";
+    s += '<line x1="150" y1="180" x2="150" y2="760" stroke="var(--borde)" stroke-width="3" stroke-dasharray="10 10"/>';
+    s += '<line x1="' + (150 + 12 * UNIDAD) + '" y1="180" x2="' + (150 + 12 * UNIDAD) +
+      '" y2="760" stroke="var(--cota)" stroke-width="3" stroke-dasharray="10 10"/>';
+    s += '<text class="medida" x="' + (150 + 12 * UNIDAD) + '" y="150" fill="var(--cota)" text-anchor="middle">12</text>';
+    s += '<line x1="' + a.x1 + '" y1="' + a.y1 + '" x2="' + a.x2 + '" y2="' + a.y2 + '" stroke="var(--j1)" stroke-width="9" stroke-linecap="round"/>';
+    s += '<text class="medida" x="' + ((a.x1 + a.x2) / 2) + '" y="' + (a.y1 - 20) + '" fill="var(--j1)" text-anchor="middle">12,4</text>';
+    s += '<line x1="' + b.x1 + '" y1="' + b.y1 + '" x2="' + b.x2 + '" y2="' + b.y2 + '" stroke="var(--j2)" stroke-width="9" stroke-linecap="round"/>';
+    s += '<text class="medida" x="' + ((b.x1 + b.x2) / 2) + '" y="' + (b.y1 - 20) + '" fill="var(--j2)" text-anchor="middle">9,1</text>';
+    $("demo-caja").innerHTML = envolver(s);
+  }
+
+  /* ========================================================
+     Sobrevivir a una republicación
+     ======================================================== */
+
+  try {
+    if (window.claude && claude.hot && claude.hot.snapshot) {
+      claude.hot.snapshot(function () { return { nombre: S.nombre }; });
+      var previo = claude.hot.data || {};
+      if (previo.nombre) { S.nombre = previo.nombre; $("in-nombre").value = previo.nombre; }
+    }
+  } catch (e) {}
+
+})();
+</script>
