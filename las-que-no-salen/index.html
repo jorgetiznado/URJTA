@@ -1,0 +1,1034 @@
+<title>Las que no salen en el libro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Young+Serif&display=swap">
+
+<style>
+  :root {
+    --fondo:    #EEF0F3;
+    --hoja:     #FFFFFF;
+    --hoja2:    #F7F8FA;
+    --tinta:    #1B2838;
+    --tinta2:   #5E6B7A;
+    --borde:    #D5DAE1;
+    --borde2:   #E6E9EE;
+    --acento:   #C2185B;
+    --acento-piel: #FCE4EE;
+    --logro:    #D99A0B;
+    --logro-piel: #FFF3D6;
+    --bien:     #1E8E5A;
+    --bien-piel: #DDF3E8;
+    --mal:      #C43D3D;
+    --mal-piel: #FBE3E3;
+    --sombra:   0 1px 0 rgba(27,40,56,.04), 0 12px 28px -20px rgba(27,40,56,.45);
+
+    --s1:.35rem; --s2:.7rem; --s3:1.1rem; --s4:1.7rem; --s5:2.6rem; --s6:4rem;
+    --display: "Young Serif", "Iowan Old Style", Georgia, serif;
+    --ui: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo:   #14181E;
+      --hoja:    #1E242C;
+      --hoja2:   #242B34;
+      --tinta:   #EAEEF3;
+      --tinta2:  #98A4B3;
+      --borde:   #333C48;
+      --borde2:  #2A323C;
+      --acento:  #F06292;
+      --acento-piel: #3A1F2C;
+      --logro:   #F2B63A;
+      --logro-piel: #3B2F14;
+      --bien:    #4CC48A;
+      --bien-piel: #17352A;
+      --mal:     #F07070;
+      --mal-piel: #3C1F1F;
+      --sombra:  0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo:   #14181E;
+    --hoja:    #1E242C;
+    --hoja2:   #242B34;
+    --tinta:   #EAEEF3;
+    --tinta2:  #98A4B3;
+    --borde:   #333C48;
+    --borde2:  #2A323C;
+    --acento:  #F06292;
+    --acento-piel: #3A1F2C;
+    --logro:   #F2B63A;
+    --logro-piel: #3B2F14;
+    --bien:    #4CC48A;
+    --bien-piel: #17352A;
+    --mal:     #F07070;
+    --mal-piel: #3C1F1F;
+    --sombra:  0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--fondo);
+    color: var(--tinta);
+    font-family: var(--ui);
+    font-size: 17px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .marco { max-width: 640px; margin-inline: auto; padding-inline: 18px; padding-block: var(--s3) var(--s6); }
+
+  .hoja { background: var(--hoja); border: 1px solid var(--borde); border-radius: 10px; box-shadow: var(--sombra); padding: var(--s4) var(--s3); }
+  @media (min-width: 520px) { .hoja { padding: var(--s4); } }
+
+  .bloque { display: grid; gap: var(--s3); }
+  .fila { display: flex; gap: var(--s2); flex-wrap: wrap; align-items: center; }
+  .entre { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; }
+
+  .rotulo { font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--tinta2); }
+  .nota { font-size: .9rem; color: var(--tinta2); }
+
+  h1.marca { font-family: var(--display); font-weight: 400; font-size: clamp(1.9rem, 7vw, 2.7rem); line-height: 1.05; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+  h1.marca em { font-style: normal; color: var(--acento); }
+  h2.titulo { font-family: var(--display); font-weight: 400; font-size: clamp(1.35rem, 5vw, 1.75rem); line-height: 1.15; margin: 0; text-wrap: balance; }
+  h3.sub { font-family: var(--display); font-weight: 400; font-size: 1.15rem; line-height: 1.2; margin: 0; }
+
+  .cabecera { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); margin-bottom: var(--s3); }
+  .cabecera .volver { font-size: .88rem; font-weight: 700; color: var(--tinta2); background: none; border: 0; cursor: pointer; padding: .3rem .1rem; font-family: var(--ui); }
+  .cabecera .volver:hover { color: var(--tinta); }
+
+  .btn {
+    font-family: var(--ui); font-size: 1rem; font-weight: 800;
+    color: #fff; background: var(--acento);
+    border: 0; border-radius: 999px;
+    padding: .72rem 1.4rem; cursor: pointer;
+    transition: transform .1s ease, opacity .1s ease, box-shadow .1s ease;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--acento) 60%, #000);
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--acento) 60%, #000); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+  .btn.fantasma { background: transparent; color: var(--tinta); border: 2px solid var(--borde); box-shadow: none; }
+  .btn.fantasma:hover:not(:disabled) { border-color: var(--tinta2); }
+  .btn.ancho { width: 100%; }
+  :is(.btn, .opcion, .cap, .orden-item, .volver):focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
+
+  /* ---------- Progreso ---------- */
+  .progreso { height: 8px; background: var(--borde2); border-radius: 999px; overflow: hidden; }
+  .progreso > i { display: block; height: 100%; background: var(--acento); border-radius: 999px; transition: width .35s ease; }
+
+  .estrellas { display: inline-flex; gap: 2px; }
+  .estrellas svg { width: 18px; height: 18px; }
+  .estrellas .on { fill: var(--logro); }
+  .estrellas .off { fill: var(--borde); }
+
+  /* ---------- Mapa de capítulos ---------- */
+  .caps { display: grid; gap: var(--s2); }
+  .cap {
+    display: grid; grid-template-columns: 2.6rem 1fr auto; gap: var(--s2); align-items: center;
+    text-align: left; width: 100%;
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 12px;
+    padding: .85rem 1rem; cursor: pointer; font-family: var(--ui); color: var(--tinta);
+    transition: transform .1s ease, border-color .1s ease;
+  }
+  .cap:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--tinta2); }
+  .cap:disabled { cursor: not-allowed; opacity: .55; }
+  .cap.hecho { border-color: var(--bien); }
+  .cap .num { font-family: var(--display); font-size: 1.5rem; color: var(--acento); line-height: 1; }
+  .cap.hecho .num { color: var(--bien); }
+  .cap .cuerpo { display: grid; gap: 1px; min-width: 0; }
+  .cap .titulo-cap { font-weight: 800; font-size: 1rem; line-height: 1.2; }
+  .cap .anos { font-size: .78rem; color: var(--tinta2); }
+  .cap .lado { display: grid; justify-items: end; gap: 3px; font-size: .74rem; color: var(--tinta2); text-align: right; }
+  .cap .lado .ella { font-weight: 700; color: var(--acento); }
+
+  /* ---------- Lección ---------- */
+  .tarjeta {
+    background: var(--hoja); border: 1px solid var(--borde); border-radius: 12px; box-shadow: var(--sombra);
+    padding: var(--s4) var(--s3); display: grid; gap: var(--s2); min-height: 240px;
+  }
+  .tarjeta p { margin: 0; font-size: 1.05rem; line-height: 1.55; }
+  .tarjeta p + p { margin-top: .3rem; }
+  .tarjeta b { font-weight: 800; }
+  .tarjeta.ellas { border: 2px solid var(--acento); background: linear-gradient(180deg, var(--acento-piel), var(--hoja) 55%); }
+  .tarjeta.ellas .rotulo { color: var(--acento); }
+  .tarjeta .dato { font-size: .9rem; color: var(--tinta2); padding-left: .8rem; border-left: 3px solid var(--borde); }
+  .puntos { display: flex; gap: 5px; justify-content: center; }
+  .puntos i { width: 8px; height: 8px; border-radius: 50%; background: var(--borde); display: block; }
+  .puntos i.ahora { background: var(--acento); }
+  .puntos i.ellas { background: var(--acento); opacity: .45; }
+  .puntos i.ahora.ellas { opacity: 1; }
+
+  /* ---------- Desafío ---------- */
+  .pregunta { font-family: var(--display); font-size: 1.25rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  .opciones { display: grid; gap: var(--s2); }
+  .opcion {
+    text-align: left; font-family: var(--ui); font-size: 1rem; font-weight: 600; color: var(--tinta);
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 10px;
+    padding: .8rem 1rem; cursor: pointer; transition: border-color .1s ease, transform .1s ease;
+    display: grid; grid-template-columns: 1.6rem 1fr; gap: .6rem; align-items: start;
+  }
+  .opcion:hover:not(:disabled) { border-color: var(--tinta2); transform: translateY(-1px); }
+  .opcion:disabled { cursor: default; }
+  .opcion .letra { font-family: var(--display); color: var(--tinta2); }
+  .opcion.bien { border-color: var(--bien); background: var(--bien-piel); }
+  .opcion.mal { border-color: var(--mal); background: var(--mal-piel); }
+  .opcion.bien .letra { color: var(--bien); } .opcion.mal .letra { color: var(--mal); }
+
+  .orden { display: grid; gap: var(--s2); }
+  .orden-item {
+    text-align: left; font-family: var(--ui); font-size: .98rem; font-weight: 600; color: var(--tinta);
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 10px; padding: .75rem 1rem;
+    cursor: pointer; display: grid; grid-template-columns: 1.8rem 1fr; gap: .6rem; align-items: center;
+  }
+  .orden-item .pos { font-family: var(--display); font-size: 1.1rem; color: var(--acento); min-width: 1.4rem; }
+  .orden-item.puesto { border-color: var(--acento); background: var(--acento-piel); }
+  .orden-item.bien { border-color: var(--bien); background: var(--bien-piel); }
+  .orden-item.mal { border-color: var(--mal); background: var(--mal-piel); }
+  .orden-item:disabled { cursor: default; }
+
+  .explica {
+    border-radius: 10px; padding: .9rem 1rem; font-size: .96rem; line-height: 1.5;
+    display: grid; gap: .3rem;
+  }
+  .explica.bien { background: var(--bien-piel); border: 1.5px solid var(--bien); }
+  .explica.mal { background: var(--mal-piel); border: 1.5px solid var(--mal); }
+  .explica .veredicto { font-weight: 800; }
+  .explica.bien .veredicto { color: var(--bien); } .explica.mal .veredicto { color: var(--mal); }
+
+  .racha { font-size: .82rem; font-weight: 700; color: var(--logro); }
+
+  /* ---------- Retrato ---------- */
+  .retrato {
+    border: 3px double var(--acento); border-radius: 14px; padding: var(--s4) var(--s3);
+    background: var(--hoja); display: grid; gap: var(--s2); position: relative;
+    box-shadow: var(--sombra);
+  }
+  .retrato .marco-ini {
+    width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin-inline: auto;
+    background: var(--acento-piel); border: 2px solid var(--acento);
+    font-family: var(--display); font-size: 2rem; color: var(--acento);
+  }
+  .retrato h3 { font-family: var(--display); font-weight: 400; font-size: 1.5rem; margin: 0; text-align: center; line-height: 1.15; }
+  .retrato .anos { text-align: center; font-size: .85rem; color: var(--tinta2); }
+  .retrato .rol { text-align: center; font-weight: 800; color: var(--acento); font-size: .95rem; }
+  .retrato p { margin: 0; font-size: 1rem; line-height: 1.55; }
+  .retrato .sello {
+    position: absolute; top: 12px; right: 12px; transform: rotate(8deg);
+    font-size: .64rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--acento); border: 2px solid var(--acento); border-radius: 4px; padding: .15rem .45rem;
+  }
+  .retrato.chico { padding: var(--s3); gap: var(--s1); }
+  .retrato.chico .marco-ini { width: 56px; height: 56px; font-size: 1.25rem; }
+  .retrato.chico h3 { font-size: 1.15rem; }
+  .retrato.bloqueado { border-style: dashed; border-color: var(--borde); opacity: .55; box-shadow: none; }
+  .retrato.bloqueado .marco-ini { border-color: var(--borde); background: var(--hoja2); color: var(--tinta2); }
+  .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s2); }
+
+  .resumen-num { font-family: var(--display); font-size: clamp(2.6rem, 12vw, 4rem); line-height: 1; color: var(--acento); text-align: center; }
+
+  hr.regla { border: 0; border-top: 1px solid var(--borde); margin: var(--s3) 0; }
+  [hidden] { display: none !important; }
+
+  @keyframes aparece { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .anima { animation: aparece .3s ease; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="marco">
+
+  <!-- ================= PORTADA ================= -->
+  <section id="p-portada">
+    <div class="bloque">
+      <div>
+        <p class="rotulo">Historia · 6° básico · Chile siglo XIX y XX</p>
+        <h1 class="marca" style="margin-top:.4rem">Las que <em>no salen</em> en el libro</h1>
+        <p class="nota" style="margin:.6rem 0 0; max-width:40ch">Seis capítulos con toda la materia de la prueba. Al pasar cada uno, conoces a una mujer que estaba ahí y que el libro se olvidó de contar.</p>
+      </div>
+
+      <div class="hoja bloque">
+        <div class="entre">
+          <span class="rotulo">Tu avance</span>
+          <span class="nota" id="portada-avance">0 de 6 capítulos</span>
+        </div>
+        <div class="progreso"><i id="portada-barra" style="width:0%"></i></div>
+        <div class="fila">
+          <button class="btn" id="btn-jugar">Empezar</button>
+          <button class="btn fantasma" id="btn-galeria">Ver la galería</button>
+          <button class="btn fantasma" id="btn-repaso" hidden>Repasar lo que fallé</button>
+        </div>
+      </div>
+
+      <div class="hoja bloque">
+        <span class="rotulo">Cómo funciona</span>
+        <p style="margin:0">Cada capítulo tiene una <b>lección corta</b>, una tarjeta <b style="color:var(--acento)">¿Y ellas?</b> que cuenta dónde estaban las mujeres en ese momento, y un <b>desafío de seis preguntas</b>. Con cuatro buenas pasas y desbloqueas a una mujer real. Con seis, tres estrellas.</p>
+        <p class="nota" style="margin:0">Cuando te equivocas, te explica por qué. Ahí es donde de verdad se aprende: las preguntas que fallaste quedan guardadas para repasar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAPA ================= -->
+  <section id="p-mapa" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="portada">← Inicio</button>
+      <span class="nota" id="mapa-avance"></span>
+    </div>
+    <div class="bloque">
+      <h2 class="titulo">Los seis capítulos</h2>
+      <div class="caps" id="caps"></div>
+      <p class="nota">Se abren en orden, como pasó la historia. Puedes volver a jugar cualquiera para mejorar tus estrellas.</p>
+    </div>
+  </section>
+
+  <!-- ================= LECCIÓN ================= -->
+  <section id="p-leccion" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="mapa">← Capítulos</button>
+      <span class="nota" id="lec-cap"></span>
+    </div>
+    <div class="bloque">
+      <div class="puntos" id="lec-puntos"></div>
+      <div class="tarjeta anima" id="lec-tarjeta"></div>
+      <div class="entre">
+        <button class="btn fantasma" id="lec-atras">Anterior</button>
+        <button class="btn" id="lec-siguiente">Siguiente</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DESAFÍO ================= -->
+  <section id="p-desafio" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="mapa">← Salir</button>
+      <span class="nota" id="des-contador"></span>
+    </div>
+    <div class="bloque">
+      <div class="progreso"><i id="des-barra" style="width:0%"></i></div>
+      <div class="entre">
+        <span class="rotulo" id="des-tipo"></span>
+        <span class="racha" id="des-racha"></span>
+      </div>
+      <p class="pregunta" id="des-pregunta"></p>
+      <div id="des-cuerpo"></div>
+      <div id="des-explica" hidden></div>
+      <button class="btn ancho" id="des-siguiente" hidden>Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ================= RESULTADO ================= -->
+  <section id="p-resultado" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="mapa">← Capítulos</button>
+      <span></span>
+    </div>
+    <div class="bloque">
+      <div class="hoja bloque" style="text-align:center">
+        <span class="rotulo" id="res-cap"></span>
+        <div class="resumen-num" id="res-num">0/6</div>
+        <div class="estrellas" id="res-estrellas" style="justify-content:center"></div>
+        <p id="res-texto" style="margin:0"></p>
+      </div>
+      <div id="res-retrato" hidden></div>
+      <div class="fila">
+        <button class="btn" id="res-seguir">Siguiente capítulo</button>
+        <button class="btn fantasma" id="res-repetir">Repetir este</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GALERÍA ================= -->
+  <section id="p-galeria" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="portada">← Inicio</button>
+      <span class="nota" id="gal-cuenta"></span>
+    </div>
+    <div class="bloque">
+      <h2 class="titulo">La galería</h2>
+      <p class="nota" style="margin:0">Todas vivieron en Chile mientras pasaba lo que estudias. Ninguna aparece en el temario. Todas cambiaron algo.</p>
+      <div class="galeria" id="galeria"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ========================================================
+     Contenido — sigue el temario de la evaluación N°1, segundo semestre
+     ======================================================== */
+
+  var CAPITULOS = [
+
+    /* ---------- 1 ---------- */
+    {
+      id: "conservadora",
+      titulo: "La República Conservadora",
+      anos: "1831 – 1861",
+      leccion: [
+        { t: "Orden antes que todo",
+          p: ["Después de la Independencia, Chile pasó años de peleas entre bandos. En <b>1831</b> ganaron los conservadores y empezó una etapa de <b>gobiernos fuertes y ordenados</b>.",
+              "El gran organizador fue <b>Diego Portales</b>. No fue presidente: fue <b>ministro</b>. Su idea era simple: un gobierno con mucha autoridad, que hiciera cumplir la ley a todos por igual."] },
+        { t: "Tres presidentes, diez años cada uno",
+          p: ["<b>José Joaquín Prieto</b> (1831–1841), <b>Manuel Bulnes</b> (1841–1851) y <b>Manuel Montt</b> (1851–1861).",
+              "A cada período de diez años se le llama <b>decenio</b>. Cada presidente gobernó cinco años y fue reelegido enseguida por otros cinco."],
+          dato: "Tu colegio lleva el nombre de Manuel Bulnes, el segundo de estos presidentes. En su gobierno se fundó la Universidad de Chile (1842)." },
+        { t: "La Constitución de 1833",
+          p: ["Fue la ley más importante del país por casi cien años. Le daba al presidente <b>muchísimo poder</b>: cinco años, reelección inmediata, y <b>facultades extraordinarias</b> para gobernar sin el Congreso en emergencias.",
+              "La religión oficial era la <b>católica</b>, y no se permitía practicar otra en público."] },
+        { t: "¿Quién podía votar?",
+          p: ["Casi nadie. El voto era <b>censitario</b>: solo hombres, mayores de 25 años (o 21 si estaban casados), que <b>supieran leer y escribir</b> y tuvieran <b>propiedades o renta</b>.",
+              "Un peón del campo, un artesano pobre, un obrero: ninguno votaba."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["En 1833 las mujeres <b>no podían votar</b>, no podían entrar a la universidad y casi no había escuelas para niñas. Al casarse, sus bienes pasaban a ser manejados por el marido.",
+              "Pero ya había una escribiendo. Y escribió sobre el hombre más poderoso del país."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Quién fue Diego Portales?",
+          ops: ["El primer presidente de la República Conservadora", "Un ministro que organizó el Estado con la idea de un gobierno fuerte", "El autor de la Independencia de Chile", "El general que ganó la Guerra del Pacífico"],
+          ok: 1, ex: "Portales nunca fue presidente. Fue ministro, y desde ahí impuso la idea de un gobierno con autoridad que hiciera cumplir la ley a todos." },
+        { tipo: "orden", q: "Ordena a los presidentes de los decenios, del primero al último:",
+          items: ["José Joaquín Prieto", "Manuel Bulnes", "Manuel Montt"],
+          ex: "Prieto (1831), Bulnes (1841), Montt (1851). Cada uno gobernó diez años: cinco más cinco de reelección." },
+        { tipo: "vf", q: "Según la Constitución de 1833, el presidente podía ser reelegido de inmediato por otros cinco años.",
+          ok: true, ex: "Cierto. Por eso los tres presidentes conservadores gobernaron diez años seguidos cada uno." },
+        { tipo: "om", q: "¿Qué significa que el voto fuera censitario?",
+          ops: ["Que se votaba en secreto", "Que votaban solo los que cumplían requisitos de dinero y educación", "Que se votaba una vez cada diez años", "Que todos los mayores de 18 podían votar"],
+          ok: 1, ex: "Censitario viene de censo: una lista de los que cumplían requisitos. Había que ser hombre, saber leer y escribir, y tener propiedad o renta." },
+        { tipo: "om", q: "¿Qué eran las facultades extraordinarias?",
+          ops: ["Poderes especiales del presidente para gobernar sin el Congreso en emergencias", "Los premios que recibían los ministros", "Las clases que daba la Universidad de Chile", "El derecho de los diputados a viajar"],
+          ok: 0, ex: "Eran poderes de emergencia: con ellas el presidente podía saltarse al Congreso. Los liberales las criticaron mucho." },
+        { tipo: "vf", q: "En 1833 una mujer que supiera leer, escribir y tuviera propiedades podía votar.",
+          ok: false, ex: "Falso. La Constitución hablaba solo de hombres. Las mujeres no votaron en Chile hasta el siglo XX, y en 1833 tampoco podían ir a la universidad." }
+      ],
+      ella: {
+        ini: "MM", nombre: "Mercedes Marín del Solar", anos: "1804 – 1866", rol: "La primera poeta publicada de Chile",
+        p: ["Nació en Santiago cuando Chile todavía era colonia. Las niñas de su época no iban a la escuela: aprendió en su casa, sola, leyendo lo que encontraba.",
+            "En 1837 mataron a Diego Portales. Ella escribió el <b>Canto fúnebre a la muerte de don Diego Portales</b>, y se publicó. Fue el primer poema de una mujer chilena que salió impreso.",
+            "Mientras la Constitución decía que las mujeres no existían para la política, una de ellas ya estaba escribiendo la historia del hombre más poderoso del país."]
+      }
+    },
+
+    /* ---------- 2 ---------- */
+    {
+      id: "liberal",
+      titulo: "La República Liberal",
+      anos: "1861 – 1891",
+      leccion: [
+        { t: "Menos presidente, más libertad",
+          p: ["Desde <b>1861</b> gobernaron los liberales: <b>Pérez, Errázuriz Zañartu, Pinto, Santa María y Balmaceda</b>.",
+              "Su idea era la contraria a la de Portales: el presidente tenía <b>demasiado poder</b>, y había que repartirlo con el Congreso y dar más libertades a las personas."] },
+        { t: "Le cambiaron la Constitución del 33",
+          p: ["No hicieron una nueva: la <b>reformaron</b>. Las más importantes:",
+              "<b>1871</b>: se prohíbe la reelección inmediata del presidente. <b>1874</b>: se limitan las facultades extraordinarias, se garantizan las libertades de reunión y asociación, y se amplía el voto: <b>bastaba saber leer y escribir</b>, ya no hacía falta demostrar renta."] },
+        { t: "Las leyes laicas",
+          p: ["Con Santa María (1883–1884) el Estado le quitó a la Iglesia tareas que antes eran suyas: <b>cementerios laicos</b>, <b>matrimonio civil</b> y <b>Registro Civil</b>.",
+              "Desde entonces nacer, casarse y morir se anotan en una oficina del Estado, no en la parroquia."] },
+        { t: "La Guerra del Pacífico",
+          p: ["Entre <b>1879 y 1884</b> Chile peleó contra Perú y Bolivia. Ganó, y se quedó con <b>Tarapacá</b> y <b>Antofagasta</b>.",
+              "Esas tierras estaban llenas de <b>salitre</b>. Esa riqueza es el próximo capítulo. Y en <b>1891</b> una guerra civil terminó con Balmaceda y con el poder de los presidentes."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["En <b>1877</b> el ministro Miguel Luis Amunátegui firmó un decreto que permitió a las mujeres <b>dar exámenes para entrar a la universidad</b>. Es el <b>decreto Amunátegui</b>.",
+              "Sonaba pequeño. No lo era: por esa puerta entró la primera médica de Sudamérica."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Cuál fue la idea central de los liberales?",
+          ops: ["Volver a darle todo el poder al presidente", "Reducir el poder del presidente y ampliar las libertades", "Cerrar el Congreso", "Prohibir la religión católica"],
+          ok: 1, ex: "Los liberales pensaban que la Constitución de 1833 daba demasiado poder al presidente. Por eso la reformaron en vez de reemplazarla." },
+        { tipo: "om", q: "¿Qué cambió la reforma de 1871?",
+          ops: ["Se creó el Registro Civil", "Se prohibió la reelección inmediata del presidente", "Se declaró la Guerra del Pacífico", "Las mujeres pudieron votar"],
+          ok: 1, ex: "Desde 1871 ningún presidente pudo ser reelegido enseguida. Se acabaron los decenios." },
+        { tipo: "om", q: "Las leyes laicas de 1883–1884 fueron:",
+          ops: ["Cementerios laicos, matrimonio civil y Registro Civil", "Voto femenino, escuela obligatoria y jornada de 8 horas", "Nueva Constitución, nueva bandera y nuevo himno", "Ferrocarril, telégrafo y correo"],
+          ok: 0, ex: "Las tres pasaron tareas de la Iglesia al Estado: enterrar, casar y registrar a las personas." },
+        { tipo: "vf", q: "Después de la reforma de 1874, para votar bastaba ser hombre mayor de edad y saber leer y escribir.",
+          ok: true, ex: "Cierto. Se dejó de exigir demostrar renta: saber leer y escribir ya contaba como prueba. Muchos más hombres pudieron votar. Las mujeres, todavía no." },
+        { tipo: "om", q: "¿Qué ganó Chile en la Guerra del Pacífico (1879–1884)?",
+          ops: ["La Patagonia", "La Isla de Pascua", "Tarapacá y Antofagasta, ricas en salitre", "El sur de Perú completo"],
+          ok: 2, ex: "Tarapacá era peruana y Antofagasta boliviana. Con ellas Chile se quedó con casi todo el salitre del mundo." },
+        { tipo: "om", q: "¿Qué permitió el decreto Amunátegui de 1877?",
+          ops: ["Que las mujeres votaran en elecciones municipales", "Que las mujeres dieran exámenes para entrar a la universidad", "Que las niñas fueran a la escuela primaria", "Que las mujeres fueran ministras"],
+          ok: 1, ex: "Abrió la universidad a las mujeres. Antes, aunque supieran lo mismo que un hombre, no podían ni presentarse." }
+      ],
+      ella: {
+        ini: "ED", nombre: "Eloísa Díaz Insunza", anos: "1866 – 1950", rol: "Primera médica de Chile y de Sudamérica",
+        p: ["Entró a Medicina en la Universidad de Chile en 1881, cuatro años después del decreto Amunátegui. Era la única mujer, y tenía que ir a clases <b>acompañada de su madre</b>, sentada al lado, porque una mujer sola en una sala llena de hombres se consideraba escandaloso.",
+            "Se tituló en <b>1887</b>. Trabajó treinta años como médica escolar: impulsó los desayunos en las escuelas, la vacunación de los niños y las colonias de vacaciones para los más pobres.",
+            "Mientras los liberales reformaban la Constitución, ella reformaba algo más difícil: lo que la gente creía que una mujer podía hacer."]
+      }
+    },
+
+    /* ---------- 3 ---------- */
+    {
+      id: "salitre",
+      titulo: "La riqueza del salitre",
+      anos: "1880 – 1930",
+      leccion: [
+        { t: "Oro blanco en el desierto",
+          p: ["El <b>salitre</b> es un mineral que sirve como <b>fertilizante</b> para los cultivos y para fabricar <b>explosivos</b>. Todo el mundo lo quería, y casi todo estaba en la pampa de <b>Tarapacá y Antofagasta</b>.",
+              "Entre 1880 y 1930 Chile vivió de exportarlo. Fue el <b>ciclo del salitre</b>."] },
+        { t: "Las oficinas salitreras",
+          p: ["En medio del desierto se levantaron pueblos enteros alrededor de cada planta: las <b>oficinas salitreras</b>. Humberstone y Santa Laura, en Tarapacá, todavía se pueden visitar.",
+              "Los obreros se llamaban <b>pampinos</b>. Muchos llegaban por el <b>enganche</b>: un agente los convencía en el sur con promesas que después no se cumplían."],
+          dato: "Humberstone y Santa Laura son Patrimonio de la Humanidad desde 2005. Están a una hora de Iquique." },
+        { t: "Las fichas y la pulpería",
+          p: ["A los pampinos no les pagaban con dinero, sino con <b>fichas</b> que solo servían en la <b>pulpería</b>, la tienda de la misma oficina. La empresa fijaba los precios.",
+              "Así el trabajador nunca podía ahorrar ni irse. Fue una de las cosas que más rabia dio."] },
+        { t: "¿Adónde iba la plata?",
+          p: ["Gran parte de las oficinas eran de <b>capitales ingleses</b>. El más famoso, <b>John Thomas North</b>, el <i>rey del salitre</i>.",
+              "El Estado chileno cobraba un impuesto por cada saco exportado. Con eso construyó <b>ferrocarriles, escuelas, puertos y edificios públicos</b>. Llegó a ser la mitad de los ingresos del país.",
+              "Se acabó cuando Alemania inventó el <b>salitre sintético</b> y llegó la <b>crisis de 1929</b>."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["En las oficinas también vivían mujeres: lavaban, cocinaban, cosían, criaban, y muchas trabajaban en las pulperías o vendiendo por su cuenta. Sin ficha, sin contrato, sin nombre en los libros.",
+              "Una de ellas, nacida en Iquique, se convirtió en la dirigenta más importante de la pampa."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Para qué servía el salitre?",
+          ops: ["Para fabricar joyas", "Como fertilizante y para hacer explosivos", "Para construir casas", "Como combustible de los trenes"],
+          ok: 1, ex: "Por eso lo compraba todo el mundo: para los campos y para las guerras." },
+        { tipo: "om", q: "¿Qué era una oficina salitrera?",
+          ops: ["Un edificio del gobierno en Santiago", "Un pueblo completo levantado alrededor de la planta donde se procesaba el salitre", "Una tienda donde se vendía salitre", "El barco que llevaba el salitre a Europa"],
+          ok: 1, ex: "Tenía la planta, las casas, la escuela, la pulpería, el teatro. Un pueblo entero en el desierto." },
+        { tipo: "om", q: "¿Qué eran las fichas?",
+          ops: ["Las entradas para el teatro de la oficina", "Monedas de la empresa que solo servían en su propia pulpería", "Los boletos del tren salitrero", "Los documentos para cruzar la frontera"],
+          ok: 1, ex: "Con fichas no podías comprar en otro lado ni ahorrar. La empresa te pagaba y la empresa te vendía." },
+        { tipo: "vf", q: "El impuesto al salitre llegó a ser la principal entrada de dinero del Estado chileno.",
+          ok: true, ex: "Cierto. Con esa plata se construyeron ferrocarriles, escuelas y obras públicas. Por eso cuando el salitre se acabó, el golpe fue tan duro." },
+        { tipo: "om", q: "¿Quién fue John Thomas North?",
+          ops: ["Un presidente de Chile", "Un inglés dueño de tantas oficinas que le decían el rey del salitre", "El inventor del salitre sintético", "Un dirigente de los pampinos"],
+          ok: 1, ex: "Los ingleses controlaban gran parte del negocio. North fue el más rico de todos." },
+        { tipo: "om", q: "¿Por qué terminó el ciclo del salitre?",
+          ops: ["Porque se acabó el salitre en la pampa", "Porque Perú recuperó Tarapacá", "Porque se inventó el salitre sintético y llegó la crisis de 1929", "Porque los obreros dejaron de trabajar"],
+          ok: 2, ex: "Alemania aprendió a fabricarlo en laboratorio. Nadie necesitaba ya el de Chile. La crisis mundial de 1929 remató el negocio." }
+      ],
+      ella: {
+        ini: "TF", nombre: "Teresa Flores", anos: "1890 – 1952", rol: "Dirigenta obrera de la pampa",
+        p: ["Nació en Iquique, en plena fiebre del salitre. Trabajó desde niña. A los veinte ya organizaba a las mujeres de la pampa, que no tenían ni ficha ni contrato ni derecho a nada.",
+            "En 1913 fundó en Iquique el <b>Centro Femenino Belén de Sárraga</b>, el primer grupo de mujeres obreras del norte, donde se juntaban a leer, discutir y organizarse. Fue cofundadora del Partido Obrero Socialista y compañera de Luis Emilio Recabarren.",
+            "La pampa que estudias tenía dueños ingleses y obreros pampinos. También tenía a Teresa, que se paró frente a los dos."]
+      }
+    },
+
+    /* ---------- 4 ---------- */
+    {
+      id: "cuestion",
+      titulo: "La cuestión social",
+      anos: "1880 – 1924",
+      leccion: [
+        { t: "El otro lado de la riqueza",
+          p: ["El salitre hizo rico al Estado y a algunos empresarios. Pero los <b>obreros</b> vivían pésimo: en el norte en las oficinas, y en las ciudades en <b>conventillos</b>: casas viejas donde vivían muchas familias apiñadas, sin agua ni baño.",
+              "Enfermedades como el cólera y la viruela mataban a miles. Muchos niños morían antes del año."] },
+        { t: "¿Qué es la cuestión social?",
+          p: ["Es el nombre que se le dio a este problema: <b>la pobreza y las malas condiciones de vida de los trabajadores</b>, y la pregunta de qué debía hacer el país al respecto.",
+              "Por primera vez se discutió en serio si el Estado tenía que proteger a los pobres."] },
+        { t: "Huelgas y la Escuela Santa María",
+          p: ["Los obreros empezaron a <b>organizarse</b> y a hacer <b>huelgas</b>: en Valparaíso (1903), en Santiago (1905) y en <b>Iquique</b>.",
+              "El <b>21 de diciembre de 1907</b>, miles de pampinos bajaron a Iquique a pedir que les pagaran en dinero y no en fichas. Se refugiaron en la <b>Escuela Santa María</b>. El ejército disparó. Murieron cientos, entre ellos mujeres y niños."] },
+        { t: "Las leyes sociales",
+          p: ["Después de tanto conflicto, en <b>1924</b> se aprobaron las <b>leyes sociales</b>: contrato de trabajo, jornada de <b>8 horas</b>, seguro contra accidentes y enfermedades, sindicatos legales.",
+              "<b>Luis Emilio Recabarren</b>, tipógrafo y dirigente, fue clave en organizar a los trabajadores. En 1912 fundó el Partido Obrero Socialista."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["Las obreras ganaban la mitad que los hombres por el mismo trabajo. Y como nadie hablaba por ellas, en 1905 una tipógrafa de Valparaíso decidió hacer un periódico para hablar ellas mismas.",
+              "Lo llamó <b>La Alborada</b>: el amanecer."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Qué es la cuestión social?",
+          ops: ["Una fiesta que se hacía en las oficinas salitreras", "El problema de la pobreza y las malas condiciones de vida de los trabajadores", "Una ley sobre el matrimonio civil", "La guerra entre Chile y Perú"],
+          ok: 1, ex: "Fue el gran debate de la época: ¿qué hace el país con la gente que trabaja y vive en la miseria?" },
+        { tipo: "om", q: "¿Qué era un conventillo?",
+          ops: ["Una escuela para obreros", "Un convento de monjas", "Una casa vieja donde vivían muchas familias apiñadas, sin agua ni baño", "La casa del dueño de la oficina"],
+          ok: 2, ex: "En las ciudades era la única vivienda que un obrero podía pagar. Ahí se contagiaban las enfermedades." },
+        { tipo: "om", q: "¿Qué pasó en la Escuela Santa María de Iquique?",
+          ops: ["Se fundó la primera universidad del norte", "El ejército disparó contra obreros en huelga y murieron cientos", "Se firmó la paz con Perú", "Se aprobaron las leyes sociales"],
+          ok: 1, ex: "21 de diciembre de 1907. Pedían que les pagaran en dinero y no en fichas. Fue la matanza obrera más grande de la historia de Chile." },
+        { tipo: "orden", q: "Ordena estos hechos del primero al último:",
+          items: ["Guerra del Pacífico", "Matanza de la Escuela Santa María", "Leyes sociales"],
+          ex: "Guerra del Pacífico (1879), Santa María (1907), leyes sociales (1924). Primero llegó el salitre, después el conflicto, y al final las leyes." },
+        { tipo: "om", q: "¿Cuál de estas fue una de las leyes sociales de 1924?",
+          ops: ["El voto femenino", "La jornada de trabajo de 8 horas", "El Registro Civil", "El decreto Amunátegui"],
+          ok: 1, ex: "Antes no había límite: se trabajaba 12, 14 horas. Las leyes de 1924 fijaron 8 y crearon contratos, seguros y sindicatos." },
+        { tipo: "vf", q: "Las obreras ganaban lo mismo que los obreros por el mismo trabajo.",
+          ok: false, ex: "Falso. Ganaban alrededor de la mitad. Por eso las mujeres trabajadoras empezaron a organizarse aparte." }
+      ],
+      ella: {
+        ini: "CJ", nombre: "Carmela Jeria", anos: "1886 – 1966", rol: "Fundó el primer periódico de mujeres trabajadoras",
+        p: ["Era <b>tipógrafa</b> en Valparaíso: armaba letra por letra las páginas de los diarios. Tenía 19 años cuando pensó que si sabía imprimir las palabras de otros, podía imprimir las suyas.",
+            "En 1905 fundó <b>La Alborada</b>, el primer periódico hecho por y para mujeres obreras de Chile. Se vendía en las fábricas y en los puertos. Hablaba del sueldo, de la jornada, de los hijos, de lo que nadie más escribía.",
+            "La cuestión social que estudias la contaron los diarios de los hombres. Carmela quiso que también la contaran ellas."]
+      }
+    },
+
+    /* ---------- 5 ---------- */
+    {
+      id: "democratizacion",
+      titulo: "La democratización",
+      anos: "1900 – 1970",
+      leccion: [
+        { t: "¿Qué es democratizar?",
+          p: ["Democratizar es <b>hacer que más personas puedan participar</b> en las decisiones del país. Que más gente vote, que más gente estudie, que más gente tenga derechos.",
+              "Durante el siglo XX Chile se democratizó poco a poco. No de una vez: <b>paso a paso</b>."] },
+        { t: "El voto se va abriendo",
+          p: ["<b>1874</b>: hombres que sepan leer y escribir. <b>1934</b>: las mujeres votan en elecciones <b>municipales</b>. <b>1949</b>: las mujeres votan en <b>todas</b> las elecciones. <b>1970</b>: votan los mayores de 18 y también quienes no saben leer.",
+              "Cada fecha es una puerta que se abre. Fíjate cuánto tardó cada una."] },
+        { t: "Educación para todos",
+          p: ["En <b>1920</b> se dictó la <b>Ley de Instrucción Primaria Obligatoria</b>: todos los niños y niñas tenían que ir a la escuela al menos cuatro años. El Estado se hizo responsable de que así fuera.",
+              "En 1925 una nueva <b>Constitución</b> separó la Iglesia del Estado y reemplazó por fin a la de 1833."] },
+        { t: "La cultura llega a todos",
+          p: ["La <b>radio</b> (desde 1922) y el <b>cine</b> hicieron que las noticias y la música llegaran a todo Chile, no solo a los que sabían leer.",
+              "En <b>1945 Gabriela Mistral</b>, profesora de Vicuña, ganó el <b>Premio Nobel de Literatura</b>. Fue la primera persona de Latinoamérica en ganarlo."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["Que las mujeres votaran no fue un regalo: fue una pelea de décadas. En 1935 un grupo de mujeres fundó el <b>MEMCh</b>, el Movimiento Pro-Emancipación de las Mujeres de Chile, para exigirlo.",
+              "Una abogada redactó el proyecto de ley. Cuando por fin se aprobó, a la ceremonia no la invitaron."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Qué significa democratización?",
+          ops: ["Que el presidente tenga más poder", "Que cada vez más personas puedan participar en las decisiones del país", "Que se hagan más elecciones al año", "Que se elimine el Congreso"],
+          ok: 1, ex: "Más gente votando, más gente estudiando, más gente con derechos. Eso es democratizar." },
+        { tipo: "om", q: "¿En qué año pudieron votar las mujeres en todas las elecciones de Chile?",
+          ops: ["1874", "1920", "1934", "1949"],
+          ok: 3, ex: "En 1934 solo municipales. En 1949 se aprobó el voto completo, y en 1952 fue la primera elección presidencial con mujeres votando." },
+        { tipo: "orden", q: "Ordena estas aperturas del voto, de la primera a la última:",
+          items: ["Hombres que saben leer y escribir", "Mujeres en elecciones municipales", "Mujeres en todas las elecciones", "Mayores de 18 y personas que no saben leer"],
+          ex: "1874, 1934, 1949, 1970. Casi cien años para que votaran todos los adultos." },
+        { tipo: "om", q: "¿Qué estableció la Ley de Instrucción Primaria Obligatoria de 1920?",
+          ops: ["Que solo los hombres podían estudiar", "Que todos los niños y niñas debían ir a la escuela", "Que la universidad fuera gratis", "Que se cerraran las escuelas de las oficinas"],
+          ok: 1, ex: "Antes ir a la escuela era optativo, y los pobres no iban. Desde 1920 el Estado tuvo que asegurar que todos fueran." },
+        { tipo: "om", q: "¿Quién fue Gabriela Mistral?",
+          ops: ["La primera médica de Chile", "La primera mujer en votar", "Profesora y poeta, primera latinoamericana en ganar el Premio Nobel de Literatura", "La fundadora del MEMCh"],
+          ok: 2, ex: "Nobel en 1945. Fue profesora rural antes que poeta famosa: la educación y la cultura llegando a todos, en una sola persona." },
+        { tipo: "om", q: "¿Qué era el MEMCh?",
+          ops: ["Un partido político de hombres", "Un movimiento de mujeres fundado en 1935 que exigía el derecho a voto y otros derechos", "Una oficina salitrera", "Un periódico de Valparaíso"],
+          ok: 1, ex: "Movimiento Pro-Emancipación de las Mujeres de Chile. Sin ellas, el voto de 1949 no habría existido." }
+      ],
+      ella: {
+        ini: "EC", nombre: "Elena Caffarena", anos: "1903 – 2003", rol: "Redactó la ley del voto femenino",
+        p: ["Fue una de las primeras abogadas de Chile, en 1926. En 1935 fundó el <b>MEMCh</b> junto a otras mujeres. Recorrieron el país organizando a obreras, profesoras, dueñas de casa.",
+            "Ella redactó, con Flor Heredia, el <b>proyecto de ley del voto femenino</b>. Cuando en 1949 el presidente González Videla lo firmó en una gran ceremonia, <b>a Elena no la invitaron</b>: pensaban que era demasiado de izquierda.",
+            "Vivió cien años. Alcanzó a ver a las mujeres votar, ser ministras y ser diputadas. La ley que estudias tiene su letra."]
+      }
+    },
+
+    /* ---------- 6 ---------- */
+    {
+      id: "democracia",
+      titulo: "La democracia y tus derechos",
+      anos: "hoy",
+      leccion: [
+        { t: "¿Qué hace que un país sea una democracia?",
+          p: ["Que el poder viene del pueblo: <b>soberanía popular</b>. Que hay <b>elecciones libres</b> y periódicas. Que nadie tiene todo el poder: hay <b>separación de poderes</b> (Ejecutivo, Legislativo, Judicial).",
+              "Que se respetan los <b>derechos</b> de todas las personas. Que hay <b>pluralismo</b>: pueden existir ideas distintas. Que quien pierde una elección deja el cargo: <b>alternancia</b>."] },
+        { t: "Cuando se rompió",
+          p: ["El <b>11 de septiembre de 1973</b> un golpe militar derrocó al presidente Salvador Allende. Empezó una <b>dictadura</b> que duró hasta <b>1990</b>: sin elecciones, sin Congreso, con miles de personas perseguidas, detenidas o desaparecidas.",
+              "Hay personas que lo vivieron de formas muy distintas y hoy piensan distinto sobre esos años. Compararlas es parte de tu materia."] },
+        { t: "Cuando se recuperó",
+          p: ["El <b>5 de octubre de 1988</b> hubo un <b>plebiscito</b>: la gente votó <b>Sí</b> o <b>No</b> a que la dictadura siguiera. Ganó el <b>No</b>.",
+              "En 1989 hubo elecciones y el <b>11 de marzo de 1990</b> asumió Patricio Aylwin. Volvió la democracia. Hoy casi todo Chile está de acuerdo en algo: <b>la democracia vale la pena cuidarla</b>."] },
+        { t: "Tus derechos",
+          p: ["Todas las personas tienen <b>derechos</b>: a la vida, a la educación, a opinar, a ser tratadas igual. Los tienen los niños y las niñas también.",
+              "Esos derechos deben ser respetados por <b>tus compañeros y compañeras</b>, por <b>la comunidad</b> y por <b>el Estado</b>. Eso es lo que hace a una sociedad <b>justa</b>."] },
+        { ellas: true, t: "¿Y ellas?",
+          p: ["Con el voto ganado, lo que faltaba era que las mujeres <b>llegaran a los cargos</b>. Primera diputada en 1951. Primera ministra en 1952. Primera senadora en 1953. Primera presidenta en 2006.",
+              "La primera de esa lista fue elegida en Concepción."] }
+      ],
+      preguntas: [
+        { tipo: "om", q: "¿Qué significa separación de poderes?",
+          ops: ["Que el presidente manda sobre los jueces", "Que el poder se reparte entre Ejecutivo, Legislativo y Judicial para que nadie lo tenga todo", "Que cada región tiene su propio presidente", "Que hay dos presidentes al mismo tiempo"],
+          ok: 1, ex: "El que hace las leyes, el que las aplica y el que juzga son distintos. Así se vigilan entre ellos." },
+        { tipo: "om", q: "¿Cuál de estas NO es característica de una democracia?",
+          ops: ["Elecciones libres y periódicas", "Respeto a los derechos de las personas", "Que una sola persona tenga todo el poder para siempre", "Que puedan existir ideas distintas"],
+          ok: 2, ex: "Eso es justamente lo contrario: una dictadura. En democracia el poder se reparte, se elige y se cambia." },
+        { tipo: "om", q: "¿Qué se decidió en el plebiscito del 5 de octubre de 1988?",
+          ops: ["Elegir un nuevo presidente", "Si la dictadura continuaba o no: ganó el No", "Aprobar la Constitución de 1925", "Dar el voto a las mujeres"],
+          ok: 1, ex: "Fue la primera vez en quince años que Chile votó. Ganó el No, y en 1990 volvió la democracia." },
+        { tipo: "vf", q: "Los derechos de una persona solo deben ser respetados por el Estado, no por sus compañeros.",
+          ok: false, ex: "Falso. Deben respetarlos tus pares, tu comunidad y el Estado. Los tres. Eso es lo que hace a una sociedad justa." },
+        { tipo: "om", q: "¿Qué es la alternancia en el poder?",
+          ops: ["Que el presidente cambie de ministros", "Que quien pierde una elección entrega el cargo y otro gobierna", "Que se vote cada dos años", "Que los partidos se turnen sin elecciones"],
+          ok: 1, ex: "En democracia nadie es dueño del cargo. Ganas, gobiernas, y si pierdes, te vas." },
+        { tipo: "om", q: "¿Cuándo tuvo Chile su primera diputada?",
+          ops: ["1874", "1934", "1951", "2006"],
+          ok: 2, ex: "Inés Enríquez, elegida por Concepción en 1951, dos años después del voto femenino completo. La primera presidenta fue Michelle Bachelet, en 2006." }
+      ],
+      ella: {
+        ini: "IE", nombre: "Inés Enríquez Frödden", anos: "1913 – 1998", rol: "Primera diputada de Chile",
+        p: ["Fue abogada y profesora en Concepción. En 1950 el presidente la nombró <b>intendenta</b> de la provincia: la primera mujer en ese cargo en la historia del país.",
+            "En 1951, apenas dos años después de que las mujeres pudieran votar en todo, se presentó a diputada por Concepción. <b>Ganó</b>. Entró a un Congreso donde todos los demás eran hombres.",
+            "La democracia que estudias es la que ella ayudó a construir: no solo que las mujeres votaran, sino que también pudieran ser elegidas."]
+      }
+    }
+  ];
+
+  var APROBAR = 4;
+
+  /* ========================================================
+     Guardado
+     ======================================================== */
+
+  function leer(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function escribir(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var P = leer("lqns.progreso", { caps: {}, falladas: {} });
+  // caps: { id: { mejor: n, hecho: bool } }   falladas: { "capId:idx": true }
+
+  function guardar() { escribir("lqns.progreso", P); }
+  function estadoCap(c) { return P.caps[c.id] || { mejor: 0, hecho: false }; }
+  function hechos() { return CAPITULOS.filter(function (c) { return estadoCap(c).hecho; }).length; }
+  function desbloqueado(i) { return i === 0 || estadoCap(CAPITULOS[i - 1]).hecho; }
+  function estrellasDe(n) { return n >= 6 ? 3 : n >= 5 ? 2 : n >= APROBAR ? 1 : 0; }
+
+  /* ========================================================
+     Estado de juego
+     ======================================================== */
+
+  var S = { cap: 0, tarjeta: 0, preguntas: [], pi: 0, aciertos: 0, racha: 0, ordenElegido: [], enRepaso: false };
+
+  function $(id) { return document.getElementById(id); }
+  function barajar(a) {
+    var b = a.slice();
+    for (var i = b.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = b[i]; b[i] = b[j]; b[j] = t; }
+    return b;
+  }
+
+  var PANTALLAS = ["portada", "mapa", "leccion", "desafio", "resultado", "galeria"];
+  function ir(nombre) {
+    PANTALLAS.forEach(function (p) { $("p-" + p).hidden = p !== nombre; });
+    window.scrollTo(0, 0);
+    if (nombre === "portada") pintarPortada();
+    if (nombre === "mapa") pintarMapa();
+    if (nombre === "galeria") pintarGaleria();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-ir]"), function (b) {
+    b.addEventListener("click", function () { ir(this.dataset.ir); });
+  });
+
+  /* ========================================================
+     Portada y mapa
+     ======================================================== */
+
+  function svgEstrella(on) {
+    return '<svg viewBox="0 0 24 24" class="' + (on ? "on" : "off") + '" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.2 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+  }
+  function estrellasHtml(n) { return svgEstrella(n >= 1) + svgEstrella(n >= 2) + svgEstrella(n >= 3); }
+
+  function pintarPortada() {
+    var h = hechos();
+    $("portada-avance").textContent = h + " de " + CAPITULOS.length + " capítulos";
+    $("portada-barra").style.width = (h / CAPITULOS.length * 100) + "%";
+    $("btn-jugar").textContent = h === 0 ? "Empezar" : h === CAPITULOS.length ? "Volver a jugar" : "Continuar";
+    var nFall = Object.keys(P.falladas).length;
+    $("btn-repaso").hidden = nFall === 0;
+    $("btn-repaso").textContent = "Repasar lo que fallé (" + nFall + ")";
+  }
+
+  function pintarMapa() {
+    var cont = $("caps");
+    cont.textContent = "";
+    CAPITULOS.forEach(function (c, i) {
+      var e = estadoCap(c), abierto = desbloqueado(i);
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cap" + (e.hecho ? " hecho" : "");
+      b.disabled = !abierto;
+
+      var num = document.createElement("span"); num.className = "num"; num.textContent = i + 1;
+      var cuerpo = document.createElement("span"); cuerpo.className = "cuerpo";
+      var t = document.createElement("span"); t.className = "titulo-cap"; t.textContent = c.titulo;
+      var a = document.createElement("span"); a.className = "anos"; a.textContent = c.anos;
+      cuerpo.appendChild(t); cuerpo.appendChild(a);
+
+      var lado = document.createElement("span"); lado.className = "lado";
+      var est = document.createElement("span"); est.className = "estrellas"; est.innerHTML = estrellasHtml(estrellasDe(e.mejor));
+      var ella = document.createElement("span"); ella.className = "ella";
+      ella.textContent = e.hecho ? c.ella.nombre.split(" ")[0] : (abierto ? "¿quién?" : "cerrado");
+      lado.appendChild(est); lado.appendChild(ella);
+
+      b.appendChild(num); b.appendChild(cuerpo); b.appendChild(lado);
+      b.addEventListener("click", function () { empezarCapitulo(i); });
+      cont.appendChild(b);
+    });
+    $("mapa-avance").textContent = hechos() + " / " + CAPITULOS.length;
+  }
+
+  $("btn-jugar").addEventListener("click", function () {
+    var h = hechos();
+    if (h === CAPITULOS.length) { ir("mapa"); return; }
+    empezarCapitulo(h);
+  });
+  $("btn-galeria").addEventListener("click", function () { ir("galeria"); });
+  $("btn-repaso").addEventListener("click", empezarRepaso);
+
+  /* ========================================================
+     Lección
+     ======================================================== */
+
+  function empezarCapitulo(i) {
+    S.cap = i; S.tarjeta = 0; S.enRepaso = false;
+    ir("leccion");
+    pintarTarjeta();
+  }
+
+  function pintarTarjeta() {
+    var c = CAPITULOS[S.cap], t = c.leccion[S.tarjeta], n = c.leccion.length;
+    $("lec-cap").textContent = "Capítulo " + (S.cap + 1) + " · " + c.titulo;
+
+    var puntos = $("lec-puntos"); puntos.textContent = "";
+    c.leccion.forEach(function (x, k) {
+      var i = document.createElement("i");
+      i.className = (k === S.tarjeta ? "ahora" : "") + (x.ellas ? " ellas" : "");
+      puntos.appendChild(i);
+    });
+
+    var caja = $("lec-tarjeta");
+    // Quitar y volver a poner la clase, con un reflow entre medio, reinicia la animación.
+    caja.className = "tarjeta" + (t.ellas ? " ellas" : "");
+    void caja.offsetWidth;
+    caja.classList.add("anima");
+    caja.innerHTML = "";
+    var rot = document.createElement("span"); rot.className = "rotulo"; rot.textContent = t.ellas ? "¿Y ellas?" : "Lección " + (S.tarjeta + 1) + " de " + (n - 1);
+    var h = document.createElement("h3"); h.className = "sub"; h.textContent = t.t;
+    caja.appendChild(rot); caja.appendChild(h);
+    t.p.forEach(function (html) { var p = document.createElement("p"); p.innerHTML = html; caja.appendChild(p); });
+    if (t.dato) { var d = document.createElement("p"); d.className = "dato"; d.textContent = t.dato; caja.appendChild(d); }
+
+    $("lec-atras").disabled = S.tarjeta === 0;
+    $("lec-siguiente").textContent = S.tarjeta === n - 1 ? "Al desafío" : "Siguiente";
+  }
+
+  $("lec-atras").addEventListener("click", function () { if (S.tarjeta > 0) { S.tarjeta--; pintarTarjeta(); } });
+  $("lec-siguiente").addEventListener("click", function () {
+    var n = CAPITULOS[S.cap].leccion.length;
+    if (S.tarjeta < n - 1) { S.tarjeta++; pintarTarjeta(); }
+    else empezarDesafio();
+  });
+
+  /* ========================================================
+     Desafío
+     ======================================================== */
+
+  function empezarDesafio() {
+    var c = CAPITULOS[S.cap];
+    S.preguntas = c.preguntas.map(function (q, idx) { return { q: q, clave: c.id + ":" + idx }; });
+    S.pi = 0; S.aciertos = 0; S.racha = 0;
+    ir("desafio");
+    pintarPregunta();
+  }
+
+  function empezarRepaso() {
+    var lista = [];
+    CAPITULOS.forEach(function (c) {
+      c.preguntas.forEach(function (q, idx) {
+        var clave = c.id + ":" + idx;
+        if (P.falladas[clave]) lista.push({ q: q, clave: clave });
+      });
+    });
+    if (!lista.length) return;
+    S.enRepaso = true;
+    S.preguntas = barajar(lista);
+    S.pi = 0; S.aciertos = 0; S.racha = 0;
+    ir("desafio");
+    pintarPregunta();
+  }
+
+  function pintarPregunta() {
+    var item = S.preguntas[S.pi], q = item.q, n = S.preguntas.length;
+    $("des-contador").textContent = (S.enRepaso ? "Repaso · " : "") + (S.pi + 1) + " de " + n;
+    $("des-barra").style.width = (S.pi / n * 100) + "%";
+    $("des-tipo").textContent = q.tipo === "om" ? "Elige una" : q.tipo === "vf" ? "¿Verdadero o falso?" : "Toca en orden";
+    $("des-racha").textContent = S.racha >= 2 ? "Racha de " + S.racha : "";
+    $("des-pregunta").textContent = q.q;
+    $("des-explica").hidden = true;
+    $("des-siguiente").hidden = true;
+
+    var cuerpo = $("des-cuerpo");
+    cuerpo.textContent = "";
+    S.ordenElegido = [];
+
+    if (q.tipo === "om" || q.tipo === "vf") {
+      var caja = document.createElement("div"); caja.className = "opciones";
+      var ops = q.tipo === "vf" ? ["Verdadero", "Falso"] : q.ops;
+      ops.forEach(function (txt, k) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "opcion";
+        var l = document.createElement("span"); l.className = "letra"; l.textContent = "ABCD"[k];
+        var s = document.createElement("span"); s.textContent = txt;
+        b.appendChild(l); b.appendChild(s);
+        b.addEventListener("click", function () { responderOpcion(k); });
+        caja.appendChild(b);
+      });
+      cuerpo.appendChild(caja);
+    } else {
+      var lista = document.createElement("div"); lista.className = "orden";
+      barajar(q.items.map(function (x, k) { return { txt: x, k: k }; })).forEach(function (it) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "orden-item"; b.dataset.k = it.k;
+        var pos = document.createElement("span"); pos.className = "pos"; pos.textContent = "·";
+        var s = document.createElement("span"); s.textContent = it.txt;
+        b.appendChild(pos); b.appendChild(s);
+        b.addEventListener("click", function () { tocarOrden(this); });
+        lista.appendChild(b);
+      });
+      cuerpo.appendChild(lista);
+    }
+  }
+
+  function anotar(item, bien) {
+    if (bien) { S.aciertos++; S.racha++; if (S.enRepaso) delete P.falladas[item.clave]; }
+    else { S.racha = 0; P.falladas[item.clave] = true; }
+    guardar();
+  }
+
+  function mostrarExplica(bien, texto) {
+    var e = $("des-explica");
+    e.className = "explica " + (bien ? "bien" : "mal") + " anima";
+    e.innerHTML = "";
+    var v = document.createElement("span"); v.className = "veredicto";
+    v.textContent = bien ? (S.racha >= 3 ? "¡Bien! Racha de " + S.racha + "." : "¡Bien!") : "No era esa.";
+    var t = document.createElement("span"); t.textContent = texto;
+    e.appendChild(v); e.appendChild(t);
+    e.hidden = false;
+    var b = $("des-siguiente");
+    b.hidden = false;
+    b.textContent = S.pi === S.preguntas.length - 1 ? (S.enRepaso ? "Terminar repaso" : "Ver resultado") : "Siguiente";
+    b.focus();
+  }
+
+  function responderOpcion(k) {
+    var item = S.preguntas[S.pi], q = item.q;
+    var correcta = q.tipo === "vf" ? (q.ok ? 0 : 1) : q.ok;
+    var bien = k === correcta;
+    var botones = $("des-cuerpo").querySelectorAll(".opcion");
+    Array.prototype.forEach.call(botones, function (b, i) {
+      b.disabled = true;
+      if (i === correcta) b.classList.add("bien");
+      else if (i === k) b.classList.add("mal");
+    });
+    anotar(item, bien);
+    mostrarExplica(bien, q.ex);
+  }
+
+  function tocarOrden(btn) {
+    if (btn.classList.contains("puesto")) return;
+    var item = S.preguntas[S.pi], q = item.q;
+    S.ordenElegido.push(Number(btn.dataset.k));
+    btn.classList.add("puesto");
+    btn.querySelector(".pos").textContent = S.ordenElegido.length;
+
+    if (S.ordenElegido.length < q.items.length) return;
+
+    var bien = S.ordenElegido.every(function (k, i) { return k === i; });
+    var botones = $("des-cuerpo").querySelectorAll(".orden-item");
+    Array.prototype.forEach.call(botones, function (b) {
+      b.disabled = true;
+      var k = Number(b.dataset.k), posElegida = S.ordenElegido.indexOf(k);
+      b.classList.remove("puesto");
+      b.classList.add(posElegida === k ? "bien" : "mal");
+      b.querySelector(".pos").textContent = (k + 1) + "°";
+    });
+    anotar(item, bien);
+    mostrarExplica(bien, q.ex);
+  }
+
+  $("des-siguiente").addEventListener("click", function () {
+    if (S.pi < S.preguntas.length - 1) { S.pi++; pintarPregunta(); return; }
+    if (S.enRepaso) { ir("portada"); return; }
+    terminarCapitulo();
+  });
+
+  /* ========================================================
+     Resultado
+     ======================================================== */
+
+  function retratoHtml(ella, chico, bloqueado) {
+    var d = document.createElement("div");
+    d.className = "retrato" + (chico ? " chico" : "") + (bloqueado ? " bloqueado" : "") + " anima";
+    if (!bloqueado && !chico) { var s = document.createElement("span"); s.className = "sello"; s.textContent = "desbloqueada"; d.appendChild(s); }
+    var ini = document.createElement("div"); ini.className = "marco-ini"; ini.textContent = bloqueado ? "?" : ella.ini;
+    var h = document.createElement("h3"); h.textContent = bloqueado ? "Todavía no" : ella.nombre;
+    var a = document.createElement("div"); a.className = "anos"; a.textContent = bloqueado ? "pasa el capítulo para conocerla" : ella.anos;
+    d.appendChild(ini); d.appendChild(h); d.appendChild(a);
+    if (!bloqueado) {
+      var r = document.createElement("div"); r.className = "rol"; r.textContent = ella.rol; d.appendChild(r);
+      if (!chico) ella.p.forEach(function (html) { var p = document.createElement("p"); p.innerHTML = html; d.appendChild(p); });
+    }
+    return d;
+  }
+
+  function terminarCapitulo() {
+    var c = CAPITULOS[S.cap], e = estadoCap(c);
+    var paso = S.aciertos >= APROBAR;
+    var reciente = paso && !e.hecho;
+    P.caps[c.id] = { mejor: Math.max(e.mejor, S.aciertos), hecho: e.hecho || paso };
+    guardar();
+
+    ir("resultado");
+    $("res-cap").textContent = "Capítulo " + (S.cap + 1) + " · " + c.titulo;
+    $("res-num").textContent = S.aciertos + "/" + c.preguntas.length;
+    $("res-estrellas").innerHTML = estrellasHtml(estrellasDe(S.aciertos));
+    $("res-texto").textContent = !paso
+      ? "Con " + APROBAR + " buenas pasas. Vuelve a leer la lección: las respuestas están ahí."
+      : S.aciertos === 6 ? "Perfecto. Esta materia ya es tuya."
+      : reciente ? "Pasaste. Y hay alguien que te está esperando." : "Pasaste de nuevo.";
+
+    var ret = $("res-retrato");
+    ret.hidden = !paso;
+    ret.innerHTML = "";
+    if (paso) {
+      var rot = document.createElement("p"); rot.className = "rotulo"; rot.style.textAlign = "center";
+      rot.textContent = reciente ? "Ella no sale en el libro" : "Ya la conoces";
+      ret.appendChild(rot);
+      ret.appendChild(retratoHtml(c.ella, false, false));
+    }
+
+    var ultimo = S.cap === CAPITULOS.length - 1;
+    $("res-seguir").hidden = !paso;
+    $("res-seguir").textContent = ultimo ? "Ver la galería completa" : "Siguiente capítulo";
+    $("res-repetir").textContent = paso ? "Repetir para mejorar" : "Volver a intentar";
+  }
+
+  $("res-seguir").addEventListener("click", function () {
+    if (S.cap === CAPITULOS.length - 1) ir("galeria");
+    else empezarCapitulo(S.cap + 1);
+  });
+  $("res-repetir").addEventListener("click", function () { empezarCapitulo(S.cap); });
+
+  /* ========================================================
+     Galería
+     ======================================================== */
+
+  function pintarGaleria() {
+    var cont = $("galeria");
+    cont.textContent = "";
+    var n = 0;
+    CAPITULOS.forEach(function (c) {
+      var hecho = estadoCap(c).hecho;
+      if (hecho) n++;
+      var d = retratoHtml(c.ella, true, !hecho);
+      if (hecho) {
+        d.style.cursor = "pointer";
+        d.setAttribute("role", "button"); d.tabIndex = 0;
+        var abrir = function () {
+          d.replaceWith(retratoHtml(c.ella, false, false));
+        };
+        d.addEventListener("click", abrir);
+        d.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); abrir(); } });
+      }
+      cont.appendChild(d);
+    });
+    $("gal-cuenta").textContent = n + " de " + CAPITULOS.length;
+  }
+
+  /* ========================================================
+     Arranque
+     ======================================================== */
+
+  ir("portada");
+
+  try {
+    if (window.claude && claude.hot && claude.hot.snapshot) {
+      claude.hot.snapshot(function () { return {}; });
+    }
+  } catch (e) {}
+
+})();
+</script>
