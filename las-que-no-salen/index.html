@@ -20,6 +20,7 @@
     --bien-piel: #DDF3E8;
     --mal:      #C43D3D;
     --mal-piel: #FBE3E3;
+    --ficha:    #B7791F;
     --sombra:   0 1px 0 rgba(27,40,56,.04), 0 12px 28px -20px rgba(27,40,56,.45);
 
     --s1:.35rem; --s2:.7rem; --s3:1.1rem; --s4:1.7rem; --s5:2.6rem; --s6:4rem;
@@ -44,6 +45,7 @@
       --bien-piel: #17352A;
       --mal:     #F07070;
       --mal-piel: #3C1F1F;
+      --ficha:   #E2A33A;
       --sombra:  0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
     }
   }
@@ -63,6 +65,7 @@
     --bien-piel: #17352A;
     --mal:     #F07070;
     --mal-piel: #3C1F1F;
+    --ficha:   #E2A33A;
     --sombra:  0 1px 0 rgba(0,0,0,.4), 0 16px 34px -22px rgba(0,0,0,.95);
   }
 
@@ -111,9 +114,8 @@
   .btn.fantasma { background: transparent; color: var(--tinta); border: 2px solid var(--borde); box-shadow: none; }
   .btn.fantasma:hover:not(:disabled) { border-color: var(--tinta2); }
   .btn.ancho { width: 100%; }
-  :is(.btn, .opcion, .cap, .orden-item, .volver):focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
+  :is(.btn, .opcion, .cap, .orden-item, .volver, .lado-btn, .naipe, .chip, .tecla, .hueco):focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
 
-  /* ---------- Progreso ---------- */
   .progreso { height: 8px; background: var(--borde2); border-radius: 999px; overflow: hidden; }
   .progreso > i { display: block; height: 100%; background: var(--acento); border-radius: 999px; transition: width .35s ease; }
 
@@ -122,7 +124,7 @@
   .estrellas .on { fill: var(--logro); }
   .estrellas .off { fill: var(--borde); }
 
-  /* ---------- Mapa de capítulos ---------- */
+  /* ---------- Mapa ---------- */
   .caps { display: grid; gap: var(--s2); }
   .cap {
     display: grid; grid-template-columns: 2.6rem 1fr auto; gap: var(--s2); align-items: center;
@@ -148,7 +150,6 @@
     padding: var(--s4) var(--s3); display: grid; gap: var(--s2); min-height: 240px;
   }
   .tarjeta p { margin: 0; font-size: 1.05rem; line-height: 1.55; }
-  .tarjeta p + p { margin-top: .3rem; }
   .tarjeta b { font-weight: 800; }
   .tarjeta.ellas { border: 2px solid var(--acento); background: linear-gradient(180deg, var(--acento-piel), var(--hoja) 55%); }
   .tarjeta.ellas .rotulo { color: var(--acento); }
@@ -159,7 +160,114 @@
   .puntos i.ellas { background: var(--acento); opacity: .45; }
   .puntos i.ahora.ellas { opacity: 1; }
 
-  /* ---------- Desafío ---------- */
+  /* ---------- Juegos: comunes ---------- */
+  .juego-cab { display: grid; gap: var(--s1); }
+  .juego-cab .titulo-juego { font-family: var(--display); font-size: 1.3rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+  .marcadorcito { display: flex; gap: var(--s3); font-size: .82rem; color: var(--tinta2); }
+  .marcadorcito b { color: var(--tinta); }
+  .explica {
+    border-radius: 10px; padding: .9rem 1rem; font-size: .96rem; line-height: 1.5; display: grid; gap: .3rem;
+  }
+  .explica.bien { background: var(--bien-piel); border: 1.5px solid var(--bien); }
+  .explica.mal { background: var(--mal-piel); border: 1.5px solid var(--mal); }
+  .explica .veredicto { font-weight: 800; }
+  .explica.bien .veredicto { color: var(--bien); } .explica.mal .veredicto { color: var(--mal); }
+
+  /* Clasificar */
+  .clasif-tarjeta {
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 14px; box-shadow: var(--sombra);
+    padding: var(--s4) var(--s3); min-height: 150px; display: grid; place-items: center; text-align: center;
+    font-size: 1.2rem; font-weight: 700; line-height: 1.35; text-wrap: balance;
+  }
+  .clasif-tarjeta.bien { border-color: var(--bien); background: var(--bien-piel); }
+  .clasif-tarjeta.mal { border-color: var(--mal); background: var(--mal-piel); }
+  .lados { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+  .lado-btn {
+    font-family: var(--ui); font-size: 1.05rem; font-weight: 800; color: var(--tinta);
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 12px; padding: 1rem .6rem; cursor: pointer;
+    transition: transform .1s ease, border-color .1s ease;
+  }
+  .lado-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--tinta2); }
+  .lado-btn:disabled { cursor: default; }
+  .lado-btn.bien { border-color: var(--bien); background: var(--bien-piel); }
+  .lado-btn.mal { border-color: var(--mal); background: var(--mal-piel); }
+
+  /* Memorice */
+  .naipes { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2); }
+  .naipe {
+    aspect-ratio: 4 / 3; border-radius: 10px; border: 2px solid var(--borde); background: var(--hoja);
+    font-family: var(--ui); font-size: .8rem; font-weight: 700; line-height: 1.25; color: var(--tinta);
+    padding: .4rem; cursor: pointer; display: grid; place-items: center; text-align: center;
+    transition: transform .12s ease, border-color .12s ease, background-color .12s ease;
+    overflow: hidden;
+  }
+  .naipe.oculto { background: var(--acento-piel); border-color: var(--acento); color: var(--acento); font-family: var(--display); font-size: 1.6rem; }
+  .naipe.oculto:hover { transform: translateY(-2px); }
+  .naipe.abierto { border-color: var(--tinta2); }
+  .naipe.hecho { border-color: var(--bien); background: var(--bien-piel); cursor: default; }
+  .naipe.error { border-color: var(--mal); background: var(--mal-piel); }
+  .naipe:disabled { cursor: default; }
+  @media (min-width: 480px) { .naipe { font-size: .88rem; } }
+
+  /* Línea del tiempo */
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; min-height: 44px; }
+  .chip {
+    font-family: var(--ui); font-size: .88rem; font-weight: 700; color: var(--tinta);
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 999px; padding: .45rem .85rem; cursor: pointer;
+    transition: transform .1s ease, border-color .1s ease;
+  }
+  .chip:hover:not(:disabled) { transform: translateY(-1px); border-color: var(--tinta2); }
+  .chip.tiembla { animation: tiembla .3s ease; border-color: var(--mal); }
+  .chip.usado { display: none; }
+  @keyframes tiembla { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .linea { display: grid; gap: 0; position: relative; padding-left: 1.6rem; }
+  .linea::before { content: ""; position: absolute; left: .45rem; top: 8px; bottom: 8px; width: 3px; background: var(--borde); border-radius: 2px; }
+  .hueco { position: relative; display: grid; grid-template-columns: 3.4rem 1fr; gap: var(--s2); align-items: center; padding: .45rem 0; min-height: 44px; }
+  .hueco::before { content: ""; position: absolute; left: -1.6rem; top: 50%; width: 12px; height: 12px; border-radius: 50%; background: var(--hoja); border: 3px solid var(--borde); transform: translate(.05rem, -50%); }
+  .hueco.ahora::before { border-color: var(--acento); background: var(--acento); }
+  .hueco.hecho::before { border-color: var(--bien); background: var(--bien); }
+  .hueco .ano { font-family: var(--display); font-size: 1.05rem; color: var(--tinta2); }
+  .hueco.ahora .ano { color: var(--acento); }
+  .hueco .evento { font-size: .92rem; font-weight: 600; color: var(--tinta2); border-bottom: 2px dashed var(--borde); padding: .2rem 0; min-height: 1.8rem; }
+  .hueco.ahora .evento { border-bottom-color: var(--acento); }
+  .hueco.hecho .evento { color: var(--tinta); border-bottom-color: var(--bien); border-bottom-style: solid; }
+
+  /* Palabra oculta */
+  .palabra { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: center; }
+  .letra-hueco {
+    width: 2rem; height: 2.5rem; border-bottom: 3px solid var(--tinta2); display: grid; place-items: center;
+    font-family: var(--display); font-size: 1.4rem; text-transform: uppercase;
+  }
+  .letra-hueco.bien { border-bottom-color: var(--bien); }
+  .letra-hueco.revelada { color: var(--mal); border-bottom-color: var(--mal); }
+  .teclado { display: grid; grid-template-columns: repeat(7, 1fr); gap: .35rem; }
+  .tecla {
+    font-family: var(--ui); font-size: 1rem; font-weight: 800; color: var(--tinta);
+    background: var(--hoja); border: 2px solid var(--borde); border-radius: 8px; padding: .5rem 0; cursor: pointer;
+  }
+  .tecla:hover:not(:disabled) { border-color: var(--tinta2); }
+  .tecla:disabled { cursor: default; opacity: .35; }
+  .tecla.bien { border-color: var(--bien); background: var(--bien-piel); opacity: 1; }
+  .tecla.mal { border-color: var(--mal); background: var(--mal-piel); opacity: 1; }
+  .vidas { display: flex; gap: 4px; }
+  .vidas i { width: 14px; height: 14px; border-radius: 50%; background: var(--acento); display: block; }
+  .vidas i.perdida { background: var(--borde); }
+  .pista { font-size: 1rem; color: var(--tinta2); text-align: center; text-wrap: balance; margin: 0; }
+
+  /* Pulpería */
+  .escena { display: grid; gap: var(--s2); }
+  .escena p { margin: 0; font-size: 1.05rem; line-height: 1.55; }
+  .fichas { display: flex; align-items: center; gap: var(--s2); padding: .6rem .9rem; background: var(--logro-piel); border: 1.5px solid var(--ficha); border-radius: 10px; }
+  .fichas .cuenta { font-family: var(--display); font-size: 1.6rem; color: var(--ficha); line-height: 1; font-variant-numeric: tabular-nums; }
+  .fichas .txt { font-size: .85rem; color: var(--tinta2); }
+  .fichas .txt b { color: var(--tinta); }
+  .compra { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+  .compra .f { display: grid; grid-template-columns: 1fr auto; gap: var(--s2); background: var(--hoja); padding: .5rem .85rem; font-size: .95rem; }
+  .compra .f.total { font-weight: 800; background: var(--hoja2); }
+  .compra .f .subio { color: var(--mal); font-weight: 800; font-size: .8rem; margin-left: .4rem; }
+  .compra .f .precio { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+  /* Opciones (simulacro y preguntas) */
   .pregunta { font-family: var(--display); font-size: 1.25rem; line-height: 1.3; margin: 0; text-wrap: balance; }
   .opciones { display: grid; gap: var(--s2); }
   .opcion {
@@ -174,7 +282,6 @@
   .opcion.bien { border-color: var(--bien); background: var(--bien-piel); }
   .opcion.mal { border-color: var(--mal); background: var(--mal-piel); }
   .opcion.bien .letra { color: var(--bien); } .opcion.mal .letra { color: var(--mal); }
-
   .orden { display: grid; gap: var(--s2); }
   .orden-item {
     text-align: left; font-family: var(--ui); font-size: .98rem; font-weight: 600; color: var(--tinta);
@@ -186,23 +293,18 @@
   .orden-item.bien { border-color: var(--bien); background: var(--bien-piel); }
   .orden-item.mal { border-color: var(--mal); background: var(--mal-piel); }
   .orden-item:disabled { cursor: default; }
-
-  .explica {
-    border-radius: 10px; padding: .9rem 1rem; font-size: .96rem; line-height: 1.5;
-    display: grid; gap: .3rem;
-  }
-  .explica.bien { background: var(--bien-piel); border: 1.5px solid var(--bien); }
-  .explica.mal { background: var(--mal-piel); border: 1.5px solid var(--mal); }
-  .explica .veredicto { font-weight: 800; }
-  .explica.bien .veredicto { color: var(--bien); } .explica.mal .veredicto { color: var(--mal); }
-
   .racha { font-size: .82rem; font-weight: 700; color: var(--logro); }
+
+  /* ---------- Resultado ---------- */
+  .desglose { display: grid; gap: 1px; background: var(--borde); border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+  .desglose .f { display: grid; grid-template-columns: 1fr auto; gap: var(--s2); background: var(--hoja); padding: .55rem .85rem; font-size: .92rem; align-items: center; }
+  .desglose .f .pts { font-weight: 800; font-variant-numeric: tabular-nums; }
+  .resumen-num { font-family: var(--display); font-size: clamp(2.6rem, 12vw, 4rem); line-height: 1; color: var(--acento); text-align: center; }
 
   /* ---------- Retrato ---------- */
   .retrato {
     border: 3px double var(--acento); border-radius: 14px; padding: var(--s4) var(--s3);
-    background: var(--hoja); display: grid; gap: var(--s2); position: relative;
-    box-shadow: var(--sombra);
+    background: var(--hoja); display: grid; gap: var(--s2); position: relative; box-shadow: var(--sombra);
   }
   .retrato .marco-ini {
     width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin-inline: auto;
@@ -225,8 +327,6 @@
   .retrato.bloqueado .marco-ini { border-color: var(--borde); background: var(--hoja2); color: var(--tinta2); }
   .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s2); }
 
-  .resumen-num { font-family: var(--display); font-size: clamp(2.6rem, 12vw, 4rem); line-height: 1; color: var(--acento); text-align: center; }
-
   hr.regla { border: 0; border-top: 1px solid var(--borde); margin: var(--s3) 0; }
   [hidden] { display: none !important; }
 
@@ -243,7 +343,7 @@
       <div>
         <p class="rotulo">Historia · 6° básico · Chile siglo XIX y XX</p>
         <h1 class="marca" style="margin-top:.4rem">Las que <em>no salen</em> en el libro</h1>
-        <p class="nota" style="margin:.6rem 0 0; max-width:40ch">Seis capítulos con toda la materia de la prueba. Al pasar cada uno, conoces a una mujer que estaba ahí y que el libro se olvidó de contar.</p>
+        <p class="nota" style="margin:.6rem 0 0; max-width:40ch">Seis capítulos con toda la materia de la prueba, cada uno con dos juegos. Al pasarlo, conoces a una mujer que estaba ahí y que el libro se olvidó de contar.</p>
       </div>
 
       <div class="hoja bloque">
@@ -255,14 +355,24 @@
         <div class="fila">
           <button class="btn" id="btn-jugar">Empezar</button>
           <button class="btn fantasma" id="btn-galeria">Ver la galería</button>
+        </div>
+      </div>
+
+      <div class="hoja bloque">
+        <div class="entre">
+          <span class="rotulo">Simulacro de prueba</span>
+          <span class="nota" id="sim-mejor"></span>
+        </div>
+        <p style="margin:0">Doce preguntas al azar de toda la materia, como en la prueba de verdad. Cada respuesta te explica por qué.</p>
+        <div class="fila">
+          <button class="btn fantasma" id="btn-simulacro">Hacer un simulacro</button>
           <button class="btn fantasma" id="btn-repaso" hidden>Repasar lo que fallé</button>
         </div>
       </div>
 
       <div class="hoja bloque">
         <span class="rotulo">Cómo funciona</span>
-        <p style="margin:0">Cada capítulo tiene una <b>lección corta</b>, una tarjeta <b style="color:var(--acento)">¿Y ellas?</b> que cuenta dónde estaban las mujeres en ese momento, y un <b>desafío de seis preguntas</b>. Con cuatro buenas pasas y desbloqueas a una mujer real. Con seis, tres estrellas.</p>
-        <p class="nota" style="margin:0">Cuando te equivocas, te explica por qué. Ahí es donde de verdad se aprende: las preguntas que fallaste quedan guardadas para repasar.</p>
+        <p style="margin:0">Cada capítulo tiene una <b>lección corta</b>, una tarjeta <b style="color:var(--acento)">¿Y ellas?</b> que cuenta dónde estaban las mujeres en ese momento, y <b>dos juegos</b>: clasificar, memorice, línea del tiempo, palabra oculta o una visita a la pulpería. Con 60 puntos pasas y desbloqueas a una mujer real. Con 90, tres estrellas.</p>
       </div>
     </div>
   </section>
@@ -288,7 +398,7 @@
     </div>
     <div class="bloque">
       <div class="puntos" id="lec-puntos"></div>
-      <div class="tarjeta anima" id="lec-tarjeta"></div>
+      <div class="tarjeta" id="lec-tarjeta"></div>
       <div class="entre">
         <button class="btn fantasma" id="lec-atras">Anterior</button>
         <button class="btn" id="lec-siguiente">Siguiente</button>
@@ -296,22 +406,41 @@
     </div>
   </section>
 
-  <!-- ================= DESAFÍO ================= -->
-  <section id="p-desafio" hidden>
+  <!-- ================= JUEGO ================= -->
+  <section id="p-juego" hidden>
     <div class="cabecera">
       <button class="volver" data-ir="mapa">← Salir</button>
-      <span class="nota" id="des-contador"></span>
+      <span class="nota" id="juego-contador"></span>
     </div>
     <div class="bloque">
-      <div class="progreso"><i id="des-barra" style="width:0%"></i></div>
-      <div class="entre">
-        <span class="rotulo" id="des-tipo"></span>
-        <span class="racha" id="des-racha"></span>
+      <div class="progreso"><i id="juego-barra" style="width:0%"></i></div>
+      <div class="juego-cab">
+        <span class="rotulo" id="juego-tipo"></span>
+        <h2 class="titulo-juego" id="juego-titulo"></h2>
+        <div class="marcadorcito" id="juego-marcador"></div>
       </div>
-      <p class="pregunta" id="des-pregunta"></p>
-      <div id="des-cuerpo"></div>
-      <div id="des-explica" hidden></div>
-      <button class="btn ancho" id="des-siguiente" hidden>Siguiente</button>
+      <div id="juego-cuerpo"></div>
+      <div id="juego-explica" hidden></div>
+      <button class="btn ancho" id="juego-siguiente" hidden>Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ================= SIMULACRO ================= -->
+  <section id="p-simulacro" hidden>
+    <div class="cabecera">
+      <button class="volver" data-ir="portada">← Salir</button>
+      <span class="nota" id="sim-contador"></span>
+    </div>
+    <div class="bloque">
+      <div class="progreso"><i id="sim-barra" style="width:0%"></i></div>
+      <div class="entre">
+        <span class="rotulo" id="sim-tipo"></span>
+        <span class="racha" id="sim-racha"></span>
+      </div>
+      <p class="pregunta" id="sim-pregunta"></p>
+      <div id="sim-cuerpo"></div>
+      <div id="sim-explica" hidden></div>
+      <button class="btn ancho" id="sim-siguiente" hidden>Siguiente</button>
     </div>
   </section>
 
@@ -324,9 +453,10 @@
     <div class="bloque">
       <div class="hoja bloque" style="text-align:center">
         <span class="rotulo" id="res-cap"></span>
-        <div class="resumen-num" id="res-num">0/6</div>
+        <div class="resumen-num" id="res-num">0</div>
         <div class="estrellas" id="res-estrellas" style="justify-content:center"></div>
         <p id="res-texto" style="margin:0"></p>
+        <div class="desglose" id="res-desglose" style="text-align:left"></div>
       </div>
       <div id="res-retrato" hidden></div>
       <div class="fila">
@@ -384,6 +514,28 @@
           p: ["En 1833 las mujeres <b>no podían votar</b>, no podían entrar a la universidad y casi no había escuelas para niñas. Al casarse, sus bienes pasaban a ser manejados por el marido.",
               "Pero ya había una escribiendo. Y escribió sobre el hombre más poderoso del país."] }
       ],
+      juegos: [
+        { tipo: "clasificar", titulo: "¿Quién vota en 1833?", izq: "Vota", der: "No vota",
+          tarjetas: [
+            { t: "Hombre de 30 años, dueño de una hacienda, sabe leer y escribir", lado: 0, ex: "Cumple todo: hombre, mayor de 25, sabe leer y tiene propiedad." },
+            { t: "Mujer de 40 años, dueña de una casa, sabe leer y escribir", lado: 1, ex: "Tiene propiedad y sabe leer, pero la Constitución solo hablaba de hombres. Las mujeres no votaban." },
+            { t: "Peón de campo de 35 años, no sabe leer", lado: 1, ex: "Sin saber leer y escribir no se podía votar, aunque fuera mayor y hombre." },
+            { t: "Comerciante de 26 años con tienda propia, sabe leer", lado: 0, ex: "Hombre, mayor de 25, con renta y alfabetizado. Vota." },
+            { t: "Hombre soltero de 22 años, sabe leer, sin propiedades", lado: 1, ex: "Soltero tenía que tener 25. Y además no tiene renta ni propiedad." },
+            { t: "Hombre casado de 23 años, sabe leer, con renta", lado: 0, ex: "Casado bastaba con 21 años. Tiene renta y sabe leer: vota." },
+            { t: "Minero de 50 años con ahorros, no sabe leer", lado: 1, ex: "Tener plata no alcanzaba: había que saber leer y escribir." },
+            { t: "Artesano de 40 años, sabe leer, sin renta suficiente", lado: 1, ex: "Saber leer era necesario pero no suficiente: también había que demostrar renta o propiedad." }
+          ] },
+        { tipo: "memorice", titulo: "Memorice de la República Conservadora",
+          pares: [
+            ["Diego Portales", "Ministro que organizó el Estado"],
+            ["José Joaquín Prieto", "Presidente 1831 – 1841"],
+            ["Manuel Bulnes", "Presidente 1841 – 1851"],
+            ["Manuel Montt", "Presidente 1851 – 1861"],
+            ["Decenio", "Diez años de gobierno seguidos"],
+            ["Voto censitario", "Solo hombres con renta que saben leer"]
+          ] }
+      ],
       preguntas: [
         { tipo: "om", q: "¿Quién fue Diego Portales?",
           ops: ["El primer presidente de la República Conservadora", "Un ministro que organizó el Estado con la idea de un gobierno fuerte", "El autor de la Independencia de Chile", "El general que ganó la Guerra del Pacífico"],
@@ -431,6 +583,29 @@
         { ellas: true, t: "¿Y ellas?",
           p: ["En <b>1877</b> el ministro Miguel Luis Amunátegui firmó un decreto que permitió a las mujeres <b>dar exámenes para entrar a la universidad</b>. Es el <b>decreto Amunátegui</b>.",
               "Sonaba pequeño. No lo era: por esa puerta entró la primera médica de Sudamérica."] }
+      ],
+      juegos: [
+        { tipo: "clasificar", titulo: "¿Idea conservadora o liberal?", izq: "Conservadora", der: "Liberal",
+          tarjetas: [
+            { t: "El presidente puede gobernar sin el Congreso en emergencias", lado: 0, ex: "Facultades extraordinarias: el corazón del poder presidencial de 1833." },
+            { t: "Prohibir la reelección inmediata del presidente", lado: 1, ex: "Reforma liberal de 1871. Se acabaron los decenios." },
+            { t: "La religión católica es la única permitida", lado: 0, ex: "Así lo decía la Constitución de 1833. Los liberales lo fueron cambiando." },
+            { t: "Cementerios laicos y matrimonio civil", lado: 1, ex: "Leyes laicas de 1883–1884, con el presidente Santa María." },
+            { t: "Para votar basta con saber leer y escribir", lado: 1, ex: "Reforma de 1874. Ya no había que demostrar renta." },
+            { t: "Gobiernos de diez años seguidos", lado: 0, ex: "Prieto, Bulnes y Montt: cinco años más reelección inmediata." },
+            { t: "Garantizar la libertad de reunión y de asociación", lado: 1, ex: "Reforma de 1874. Con ella los trabajadores pudieron organizarse legalmente." },
+            { t: "Un gobierno con mucha autoridad que haga cumplir la ley a todos", lado: 0, ex: "La idea de Portales, tal cual." }
+          ] },
+        { tipo: "linea", titulo: "La línea de la República Liberal",
+          eventos: [
+            { ano: "1861", t: "Empieza la República Liberal" },
+            { ano: "1871", t: "Se prohíbe la reelección inmediata" },
+            { ano: "1874", t: "Se amplía el voto: basta saber leer y escribir" },
+            { ano: "1877", t: "Decreto Amunátegui: mujeres a la universidad" },
+            { ano: "1879", t: "Empieza la Guerra del Pacífico" },
+            { ano: "1884", t: "Leyes laicas: Registro Civil y matrimonio civil" },
+            { ano: "1891", t: "Guerra civil y fin de Balmaceda" }
+          ] }
       ],
       preguntas: [
         { tipo: "om", q: "¿Cuál fue la idea central de los liberales?",
@@ -483,6 +658,17 @@
           p: ["En las oficinas también vivían mujeres: lavaban, cocinaban, cosían, criaban, y muchas trabajaban en las pulperías o vendiendo por su cuenta. Sin ficha, sin contrato, sin nombre en los libros.",
               "Una de ellas, nacida en Iquique, se convirtió en la dirigenta más importante de la pampa."] }
       ],
+      juegos: [
+        { tipo: "pulperia", titulo: "Una semana en la oficina Santa Laura" },
+        { tipo: "palabra", titulo: "Palabras de la pampa",
+          palabras: [
+            { w: "SALITRE", pista: "Mineral que se usaba como fertilizante y para hacer explosivos" },
+            { w: "PULPERIA", pista: "La tienda de la oficina, la única donde servían las fichas" },
+            { w: "PAMPINO", pista: "Así se llamaba al obrero del salitre" },
+            { w: "ENGANCHE", pista: "Sistema para convencer a trabajadores del sur con promesas" },
+            { w: "FICHA", pista: "Con esto les pagaban, en vez de dinero" }
+          ] }
+      ],
       preguntas: [
         { tipo: "om", q: "¿Para qué servía el salitre?",
           ops: ["Para fabricar joyas", "Como fertilizante y para hacer explosivos", "Para construir casas", "Como combustible de los trenes"],
@@ -532,6 +718,26 @@
           p: ["Las obreras ganaban la mitad que los hombres por el mismo trabajo. Y como nadie hablaba por ellas, en 1905 una tipógrafa de Valparaíso decidió hacer un periódico para hablar ellas mismas.",
               "Lo llamó <b>La Alborada</b>: el amanecer."] }
       ],
+      juegos: [
+        { tipo: "memorice", titulo: "Memorice de la cuestión social",
+          pares: [
+            ["Conventillo", "Casa vieja, familias apiñadas, sin agua ni baño"],
+            ["Cuestión social", "La pobreza de los trabajadores como problema del país"],
+            ["Huelga", "Los obreros dejan de trabajar para exigir"],
+            ["Escuela Santa María", "Matanza de Iquique, 1907"],
+            ["Leyes sociales", "1924: jornada de 8 horas y contrato"],
+            ["Recabarren", "Tipógrafo y dirigente obrero"]
+          ] },
+        { tipo: "linea", titulo: "Del salitre a las leyes sociales",
+          eventos: [
+            { ano: "1879", t: "Empieza la Guerra del Pacífico" },
+            { ano: "1903", t: "Huelga de los portuarios en Valparaíso" },
+            { ano: "1905", t: "Huelga de la carne en Santiago" },
+            { ano: "1907", t: "Matanza de la Escuela Santa María" },
+            { ano: "1912", t: "Recabarren funda el Partido Obrero Socialista" },
+            { ano: "1924", t: "Se aprueban las leyes sociales" }
+          ] }
+      ],
       preguntas: [
         { tipo: "om", q: "¿Qué es la cuestión social?",
           ops: ["Una fiesta que se hacía en las oficinas salitreras", "El problema de la pobreza y las malas condiciones de vida de los trabajadores", "Una ley sobre el matrimonio civil", "La guerra entre Chile y Perú"],
@@ -580,6 +786,29 @@
         { ellas: true, t: "¿Y ellas?",
           p: ["Que las mujeres votaran no fue un regalo: fue una pelea de décadas. En 1935 un grupo de mujeres fundó el <b>MEMCh</b>, el Movimiento Pro-Emancipación de las Mujeres de Chile, para exigirlo.",
               "Una abogada redactó el proyecto de ley. Cuando por fin se aprobó, a la ceremonia no la invitaron."] }
+      ],
+      juegos: [
+        { tipo: "linea", titulo: "Las puertas que se fueron abriendo",
+          eventos: [
+            { ano: "1874", t: "Votan los hombres que saben leer y escribir" },
+            { ano: "1920", t: "Ley de Instrucción Primaria Obligatoria" },
+            { ano: "1925", t: "Nueva Constitución: Iglesia y Estado separados" },
+            { ano: "1934", t: "Las mujeres votan en elecciones municipales" },
+            { ano: "1945", t: "Gabriela Mistral gana el Nobel" },
+            { ano: "1949", t: "Las mujeres votan en todas las elecciones" },
+            { ano: "1970", t: "Votan los mayores de 18 y quienes no saben leer" }
+          ] },
+        { tipo: "clasificar", titulo: "¿Quién vota en la presidencial de 1952?", izq: "Vota", der: "No vota",
+          tarjetas: [
+            { t: "Mujer de 30 años, sabe leer y escribir", lado: 0, ex: "Desde 1949 las mujeres votan en todas las elecciones. 1952 fue la primera presidencial con mujeres." },
+            { t: "Hombre de 19 años, sabe leer", lado: 1, ex: "Hasta 1970 había que tener 21 años." },
+            { t: "Hombre de 40 años que no sabe leer", lado: 1, ex: "Saber leer y escribir fue requisito hasta 1970." },
+            { t: "Profesora de 22 años", lado: 0, ex: "Mujer, mayor de 21, sabe leer: vota." },
+            { t: "Obrero de 25 años, sabe leer", lado: 0, ex: "Desde 1874 no hacía falta renta. Sabe leer y es mayor: vota." },
+            { t: "Mujer de 50 años que no sabe leer", lado: 1, ex: "El requisito de saber leer valía para todos hasta 1970." },
+            { t: "Niña de 12 años", lado: 1, ex: "Hay que ser mayor de edad. En 1952, 21 años." },
+            { t: "Hombre de 21 años, casado, sabe leer", lado: 0, ex: "Mayor de edad y alfabetizado. Vota." }
+          ] }
       ],
       preguntas: [
         { tipo: "om", q: "¿Qué significa democratización?",
@@ -631,6 +860,28 @@
           p: ["Con el voto ganado, lo que faltaba era que las mujeres <b>llegaran a los cargos</b>. Primera diputada en 1951. Primera ministra en 1952. Primera senadora en 1953. Primera presidenta en 2006.",
               "La primera de esa lista fue elegida en Concepción."] }
       ],
+      juegos: [
+        { tipo: "clasificar", titulo: "¿Democracia o dictadura?", izq: "Democracia", der: "Dictadura",
+          tarjetas: [
+            { t: "Hay elecciones libres cada cierto tiempo", lado: 0, ex: "Elecciones periódicas y libres: la base de una democracia." },
+            { t: "Una persona tiene todo el poder por tiempo indefinido", lado: 1, ex: "Sin alternancia ni separación de poderes. Eso es una dictadura." },
+            { t: "El Congreso está cerrado", lado: 1, ex: "Sin Legislativo no hay separación de poderes. Pasó en Chile en 1973." },
+            { t: "Ejecutivo, Legislativo y Judicial son poderes distintos", lado: 0, ex: "Separación de poderes: nadie lo tiene todo, y se vigilan entre ellos." },
+            { t: "Se persigue a quienes piensan distinto", lado: 1, ex: "Sin pluralismo ni respeto a los derechos. Marca de dictadura." },
+            { t: "Quien pierde una elección deja el cargo", lado: 0, ex: "Alternancia. Nadie es dueño del cargo." },
+            { t: "Pueden existir partidos con ideas distintas", lado: 0, ex: "Pluralismo: la democracia necesita que existan ideas diferentes." },
+            { t: "La prensa no puede publicar lo que quiera", lado: 1, ex: "Sin libertad de expresión no hay democracia." }
+          ] },
+        { tipo: "memorice", titulo: "Memorice de la democracia",
+          pares: [
+            ["Soberanía popular", "El poder viene del pueblo"],
+            ["Separación de poderes", "Ejecutivo, Legislativo y Judicial"],
+            ["Plebiscito de 1988", "Votación Sí o No: ganó el No"],
+            ["Alternancia", "Quien pierde deja el cargo"],
+            ["Pluralismo", "Pueden existir ideas distintas"],
+            ["11 de marzo de 1990", "Vuelve la democracia"]
+          ] }
+      ],
       preguntas: [
         { tipo: "om", q: "¿Qué significa separación de poderes?",
           ops: ["Que el presidente manda sobre los jueces", "Que el poder se reparte entre Ejecutivo, Legislativo y Judicial para que nadie lo tenga todo", "Que cada región tiene su propio presidente", "Que hay dos presidentes al mismo tiempo"],
@@ -659,7 +910,30 @@
     }
   ];
 
-  var APROBAR = 4;
+  /* El guion de la pulpería: una semana de fichas. */
+  var PULPERIA = [
+    { txt: ["Es sábado en la oficina <b>Santa Laura</b>. Trabajaste seis días bajo el sol de la pampa picando caliche.", "El pagador te entrega tu sueldo. No es dinero: son <b>12 fichas</b> de la Compañía."],
+      fichas: 12, btn: "Ir a la pulpería" },
+    { txt: ["La <b>pulpería</b> es la única tienda en kilómetros. Es de la misma Compañía que te paga.", "Necesitas para la semana:"],
+      lista: [["Harina", 4], ["Agua", 3], ["Velas", 1], ["Carbón", 3]], fichas: 12, btn: "Comprar" },
+    { txt: ["Te sobró <b>1 ficha</b>. La guardas: si juntas varias, quizás algún día puedas irte.", "Pasa otra semana. Otras 12 fichas. Vuelves a la pulpería, y los precios <b>subieron</b>. Nadie te avisó. La Compañía los fija."],
+      lista: [["Harina", 5, true], ["Agua", 4, true], ["Velas", 1], ["Carbón", 3]], fichas: 13, btn: "Comprar" },
+    { txt: ["Te quedaste en <b>cero</b>. Tu ficha ahorrada se fue en la subida de precios.", "Tercera semana. Un compañero te cuenta que en <b>Iquique</b> la harina cuesta la mitad. Tienes 12 fichas nuevas. ¿Qué haces?"],
+      fichas: 12, decision: [
+        { t: "Bajar a Iquique a comprar más barato", r: ["Llegas a Iquique después de horas de camino. En el almacén miran tus fichas y se ríen: <b>aquí no sirven</b>. Solo valen en tu oficina.", "Vuelves con las manos vacías y sin comida para la semana."] },
+        { t: "Comprar en la pulpería, como siempre", r: ["Compras. Otra vez a cero. Ni una ficha guardada."] }
+      ] },
+    { txt: ["Cuarta semana. Decides que te vas al sur, donde dicen que pagan <b>en pesos</b>. El tren cuesta 20 pesos.", "Tienes 12 fichas. El boletero no las acepta. <b>No puedes pagar el tren. No puedes irte.</b>"],
+      fichas: 12, btn: "Entender qué pasó" },
+    { pregunta: "¿Por qué el sistema de fichas mantenía al pampino atado a la oficina?",
+      ops: ["Porque las fichas pesaban mucho y no se podían transportar",
+            "Porque solo servían en la pulpería de su propia oficina: no podía ahorrar, comprar afuera ni pagar un pasaje",
+            "Porque los pampinos preferían las fichas al dinero",
+            "Porque el gobierno prohibía usar dinero en el norte"],
+      ok: 1, ex: "La Compañía te pagaba y la Compañía te vendía. Fijaba tu sueldo y fijaba los precios. Con fichas no había afuera. Por eso en 1907 miles bajaron a Iquique a pedir que les pagaran en dinero. Eso es el próximo capítulo." }
+  ];
+
+  var PASAR = 60;
 
   /* ========================================================
      Guardado
@@ -668,20 +942,19 @@
   function leer(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function escribir(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-  var P = leer("lqns.progreso", { caps: {}, falladas: {} });
-  // caps: { id: { mejor: n, hecho: bool } }   falladas: { "capId:idx": true }
+  var P = leer("lqns.v2", { caps: {}, falladas: {}, simMejor: -1 });
 
-  function guardar() { escribir("lqns.progreso", P); }
+  function guardar() { escribir("lqns.v2", P); }
   function estadoCap(c) { return P.caps[c.id] || { mejor: 0, hecho: false }; }
   function hechos() { return CAPITULOS.filter(function (c) { return estadoCap(c).hecho; }).length; }
   function desbloqueado(i) { return i === 0 || estadoCap(CAPITULOS[i - 1]).hecho; }
-  function estrellasDe(n) { return n >= 6 ? 3 : n >= 5 ? 2 : n >= APROBAR ? 1 : 0; }
+  function estrellasDe(pts) { return pts >= 90 ? 3 : pts >= 75 ? 2 : pts >= PASAR ? 1 : 0; }
 
   /* ========================================================
-     Estado de juego
+     Estado
      ======================================================== */
 
-  var S = { cap: 0, tarjeta: 0, preguntas: [], pi: 0, aciertos: 0, racha: 0, ordenElegido: [], enRepaso: false };
+  var S = { cap: 0, tarjeta: 0, ji: 0, puntajes: [], sim: null };
 
   function $(id) { return document.getElementById(id); }
   function barajar(a) {
@@ -689,8 +962,10 @@
     for (var i = b.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = b[i]; b[i] = b[j]; b[j] = t; }
     return b;
   }
+  function limpiar(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
 
-  var PANTALLAS = ["portada", "mapa", "leccion", "desafio", "resultado", "galeria"];
+  var PANTALLAS = ["portada", "mapa", "leccion", "juego", "simulacro", "resultado", "galeria"];
   function ir(nombre) {
     PANTALLAS.forEach(function (p) { $("p-" + p).hidden = p !== nombre; });
     window.scrollTo(0, 0);
@@ -719,31 +994,28 @@
     var nFall = Object.keys(P.falladas).length;
     $("btn-repaso").hidden = nFall === 0;
     $("btn-repaso").textContent = "Repasar lo que fallé (" + nFall + ")";
+    $("sim-mejor").textContent = P.simMejor >= 0 ? "Mejor: " + P.simMejor + " de 12" : "";
   }
 
   function pintarMapa() {
     var cont = $("caps");
-    cont.textContent = "";
+    limpiar(cont);
     CAPITULOS.forEach(function (c, i) {
       var e = estadoCap(c), abierto = desbloqueado(i);
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "cap" + (e.hecho ? " hecho" : "");
-      b.disabled = !abierto;
+      var b = el("button", "cap" + (e.hecho ? " hecho" : ""));
+      b.type = "button"; b.disabled = !abierto;
 
-      var num = document.createElement("span"); num.className = "num"; num.textContent = i + 1;
-      var cuerpo = document.createElement("span"); cuerpo.className = "cuerpo";
-      var t = document.createElement("span"); t.className = "titulo-cap"; t.textContent = c.titulo;
-      var a = document.createElement("span"); a.className = "anos"; a.textContent = c.anos;
-      cuerpo.appendChild(t); cuerpo.appendChild(a);
+      var cuerpo = el("span", "cuerpo");
+      cuerpo.appendChild(el("span", "titulo-cap", c.titulo));
+      cuerpo.appendChild(el("span", "anos", c.anos));
 
-      var lado = document.createElement("span"); lado.className = "lado";
-      var est = document.createElement("span"); est.className = "estrellas"; est.innerHTML = estrellasHtml(estrellasDe(e.mejor));
-      var ella = document.createElement("span"); ella.className = "ella";
-      ella.textContent = e.hecho ? c.ella.nombre.split(" ")[0] : (abierto ? "¿quién?" : "cerrado");
-      lado.appendChild(est); lado.appendChild(ella);
+      var lado = el("span", "lado");
+      var est = el("span", "estrellas"); est.innerHTML = estrellasHtml(estrellasDe(e.mejor));
+      lado.appendChild(est);
+      lado.appendChild(el("span", "ella", e.hecho ? c.ella.nombre.split(" ")[0] : (abierto ? "¿quién?" : "cerrado")));
 
-      b.appendChild(num); b.appendChild(cuerpo); b.appendChild(lado);
+      b.appendChild(el("span", "num", String(i + 1)));
+      b.appendChild(cuerpo); b.appendChild(lado);
       b.addEventListener("click", function () { empezarCapitulo(i); });
       cont.appendChild(b);
     });
@@ -756,14 +1028,15 @@
     empezarCapitulo(h);
   });
   $("btn-galeria").addEventListener("click", function () { ir("galeria"); });
-  $("btn-repaso").addEventListener("click", empezarRepaso);
+  $("btn-simulacro").addEventListener("click", function () { empezarSimulacro(false); });
+  $("btn-repaso").addEventListener("click", function () { empezarSimulacro(true); });
 
   /* ========================================================
      Lección
      ======================================================== */
 
   function empezarCapitulo(i) {
-    S.cap = i; S.tarjeta = 0; S.enRepaso = false;
+    S.cap = i; S.tarjeta = 0;
     ir("leccion");
     pintarTarjeta();
   }
@@ -772,212 +1045,443 @@
     var c = CAPITULOS[S.cap], t = c.leccion[S.tarjeta], n = c.leccion.length;
     $("lec-cap").textContent = "Capítulo " + (S.cap + 1) + " · " + c.titulo;
 
-    var puntos = $("lec-puntos"); puntos.textContent = "";
+    var puntos = $("lec-puntos"); limpiar(puntos);
     c.leccion.forEach(function (x, k) {
-      var i = document.createElement("i");
-      i.className = (k === S.tarjeta ? "ahora" : "") + (x.ellas ? " ellas" : "");
-      puntos.appendChild(i);
+      puntos.appendChild(el("i", (k === S.tarjeta ? "ahora" : "") + (x.ellas ? " ellas" : "")));
     });
 
     var caja = $("lec-tarjeta");
-    // Quitar y volver a poner la clase, con un reflow entre medio, reinicia la animación.
     caja.className = "tarjeta" + (t.ellas ? " ellas" : "");
     void caja.offsetWidth;
     caja.classList.add("anima");
-    caja.innerHTML = "";
-    var rot = document.createElement("span"); rot.className = "rotulo"; rot.textContent = t.ellas ? "¿Y ellas?" : "Lección " + (S.tarjeta + 1) + " de " + (n - 1);
-    var h = document.createElement("h3"); h.className = "sub"; h.textContent = t.t;
-    caja.appendChild(rot); caja.appendChild(h);
-    t.p.forEach(function (html) { var p = document.createElement("p"); p.innerHTML = html; caja.appendChild(p); });
-    if (t.dato) { var d = document.createElement("p"); d.className = "dato"; d.textContent = t.dato; caja.appendChild(d); }
+    limpiar(caja);
+    caja.appendChild(el("span", "rotulo", t.ellas ? "¿Y ellas?" : "Lección " + (S.tarjeta + 1) + " de " + (n - 1)));
+    caja.appendChild(el("h3", "sub", t.t));
+    t.p.forEach(function (html) { var p = el("p"); p.innerHTML = html; caja.appendChild(p); });
+    if (t.dato) caja.appendChild(el("p", "dato", t.dato));
 
     $("lec-atras").disabled = S.tarjeta === 0;
-    $("lec-siguiente").textContent = S.tarjeta === n - 1 ? "Al desafío" : "Siguiente";
+    $("lec-siguiente").textContent = S.tarjeta === n - 1 ? "A jugar" : "Siguiente";
   }
 
   $("lec-atras").addEventListener("click", function () { if (S.tarjeta > 0) { S.tarjeta--; pintarTarjeta(); } });
   $("lec-siguiente").addEventListener("click", function () {
     var n = CAPITULOS[S.cap].leccion.length;
     if (S.tarjeta < n - 1) { S.tarjeta++; pintarTarjeta(); }
-    else empezarDesafio();
+    else empezarJuegos();
   });
 
   /* ========================================================
-     Desafío
+     Juegos: armazón común
      ======================================================== */
 
-  function empezarDesafio() {
-    var c = CAPITULOS[S.cap];
-    S.preguntas = c.preguntas.map(function (q, idx) { return { q: q, clave: c.id + ":" + idx }; });
-    S.pi = 0; S.aciertos = 0; S.racha = 0;
-    ir("desafio");
-    pintarPregunta();
+  var J = null; // estado del minijuego en curso
+
+  function empezarJuegos() {
+    S.ji = 0; S.puntajes = [];
+    ir("juego");
+    montarJuego();
   }
 
-  function empezarRepaso() {
-    var lista = [];
-    CAPITULOS.forEach(function (c) {
-      c.preguntas.forEach(function (q, idx) {
-        var clave = c.id + ":" + idx;
-        if (P.falladas[clave]) lista.push({ q: q, clave: clave });
-      });
+  function montarJuego() {
+    var c = CAPITULOS[S.cap], g = c.juegos[S.ji];
+    $("juego-contador").textContent = "Juego " + (S.ji + 1) + " de " + c.juegos.length;
+    $("juego-barra").style.width = (S.ji / c.juegos.length * 100) + "%";
+    $("juego-titulo").textContent = g.titulo;
+    $("juego-explica").hidden = true;
+    $("juego-siguiente").hidden = true;
+    limpiar($("juego-cuerpo"));
+    limpiar($("juego-marcador"));
+
+    var tipos = { clasificar: "Clasifica", memorice: "Memorice", linea: "Línea del tiempo", palabra: "Palabra oculta", pulperia: "Historia con decisiones" };
+    $("juego-tipo").textContent = tipos[g.tipo];
+
+    if (g.tipo === "clasificar") montarClasificar(g);
+    else if (g.tipo === "memorice") montarMemorice(g);
+    else if (g.tipo === "linea") montarLinea(g);
+    else if (g.tipo === "palabra") montarPalabra(g);
+    else if (g.tipo === "pulperia") montarPulperia(g);
+  }
+
+  function marcador(pares) {
+    var m = $("juego-marcador"); limpiar(m);
+    pares.forEach(function (p) {
+      var s = el("span"); s.appendChild(document.createTextNode(p[0] + " "));
+      s.appendChild(el("b", null, String(p[1]))); m.appendChild(s);
     });
-    if (!lista.length) return;
-    S.enRepaso = true;
-    S.preguntas = barajar(lista);
-    S.pi = 0; S.aciertos = 0; S.racha = 0;
-    ir("desafio");
-    pintarPregunta();
   }
 
-  function pintarPregunta() {
-    var item = S.preguntas[S.pi], q = item.q, n = S.preguntas.length;
-    $("des-contador").textContent = (S.enRepaso ? "Repaso · " : "") + (S.pi + 1) + " de " + n;
-    $("des-barra").style.width = (S.pi / n * 100) + "%";
-    $("des-tipo").textContent = q.tipo === "om" ? "Elige una" : q.tipo === "vf" ? "¿Verdadero o falso?" : "Toca en orden";
-    $("des-racha").textContent = S.racha >= 2 ? "Racha de " + S.racha : "";
-    $("des-pregunta").textContent = q.q;
-    $("des-explica").hidden = true;
-    $("des-siguiente").hidden = true;
-
-    var cuerpo = $("des-cuerpo");
-    cuerpo.textContent = "";
-    S.ordenElegido = [];
-
-    if (q.tipo === "om" || q.tipo === "vf") {
-      var caja = document.createElement("div"); caja.className = "opciones";
-      var ops = q.tipo === "vf" ? ["Verdadero", "Falso"] : q.ops;
-      ops.forEach(function (txt, k) {
-        var b = document.createElement("button");
-        b.type = "button"; b.className = "opcion";
-        var l = document.createElement("span"); l.className = "letra"; l.textContent = "ABCD"[k];
-        var s = document.createElement("span"); s.textContent = txt;
-        b.appendChild(l); b.appendChild(s);
-        b.addEventListener("click", function () { responderOpcion(k); });
-        caja.appendChild(b);
-      });
-      cuerpo.appendChild(caja);
-    } else {
-      var lista = document.createElement("div"); lista.className = "orden";
-      barajar(q.items.map(function (x, k) { return { txt: x, k: k }; })).forEach(function (it) {
-        var b = document.createElement("button");
-        b.type = "button"; b.className = "orden-item"; b.dataset.k = it.k;
-        var pos = document.createElement("span"); pos.className = "pos"; pos.textContent = "·";
-        var s = document.createElement("span"); s.textContent = it.txt;
-        b.appendChild(pos); b.appendChild(s);
-        b.addEventListener("click", function () { tocarOrden(this); });
-        lista.appendChild(b);
-      });
-      cuerpo.appendChild(lista);
-    }
-  }
-
-  function anotar(item, bien) {
-    if (bien) { S.aciertos++; S.racha++; if (S.enRepaso) delete P.falladas[item.clave]; }
-    else { S.racha = 0; P.falladas[item.clave] = true; }
-    guardar();
-  }
-
-  function mostrarExplica(bien, texto) {
-    var e = $("des-explica");
+  function explicar(bien, texto, textoBtn) {
+    var e = $("juego-explica");
     e.className = "explica " + (bien ? "bien" : "mal") + " anima";
-    e.innerHTML = "";
-    var v = document.createElement("span"); v.className = "veredicto";
-    v.textContent = bien ? (S.racha >= 3 ? "¡Bien! Racha de " + S.racha + "." : "¡Bien!") : "No era esa.";
-    var t = document.createElement("span"); t.textContent = texto;
-    e.appendChild(v); e.appendChild(t);
+    limpiar(e);
+    e.appendChild(el("span", "veredicto", bien ? "¡Bien!" : "No era así."));
+    e.appendChild(el("span", null, texto));
     e.hidden = false;
-    var b = $("des-siguiente");
-    b.hidden = false;
-    b.textContent = S.pi === S.preguntas.length - 1 ? (S.enRepaso ? "Terminar repaso" : "Ver resultado") : "Siguiente";
+    var b = $("juego-siguiente");
+    b.hidden = false; b.textContent = textoBtn || "Siguiente";
     b.focus();
   }
 
-  function responderOpcion(k) {
-    var item = S.preguntas[S.pi], q = item.q;
-    var correcta = q.tipo === "vf" ? (q.ok ? 0 : 1) : q.ok;
-    var bien = k === correcta;
-    var botones = $("des-cuerpo").querySelectorAll(".opcion");
-    Array.prototype.forEach.call(botones, function (b, i) {
-      b.disabled = true;
-      if (i === correcta) b.classList.add("bien");
-      else if (i === k) b.classList.add("mal");
-    });
-    anotar(item, bien);
-    mostrarExplica(bien, q.ex);
+  /** Cierra el minijuego con un puntaje 0–100 y pasa al siguiente o al resultado. */
+  function terminarJuego(pts, etiqueta) {
+    S.puntajes.push({ titulo: CAPITULOS[S.cap].juegos[S.ji].titulo, pts: Math.round(pts), etiqueta: etiqueta });
+    var b = $("juego-siguiente");
+    b.hidden = false;
+    b.textContent = S.ji < CAPITULOS[S.cap].juegos.length - 1 ? "Siguiente juego" : "Ver resultado";
+    b.onclick = function () {
+      b.onclick = null;
+      if (S.ji < CAPITULOS[S.cap].juegos.length - 1) { S.ji++; montarJuego(); }
+      else terminarCapitulo();
+    };
+    b.focus();
   }
 
-  function tocarOrden(btn) {
-    if (btn.classList.contains("puesto")) return;
-    var item = S.preguntas[S.pi], q = item.q;
-    S.ordenElegido.push(Number(btn.dataset.k));
-    btn.classList.add("puesto");
-    btn.querySelector(".pos").textContent = S.ordenElegido.length;
+  /* ---------- Clasificar ---------- */
+  function montarClasificar(g) {
+    J = { i: 0, aciertos: 0, tarjetas: barajar(g.tarjetas) };
+    var cuerpo = $("juego-cuerpo");
+    var tarjeta = el("div", "clasif-tarjeta anima");
+    var lados = el("div", "lados");
+    var bIzq = el("button", "lado-btn", g.izq), bDer = el("button", "lado-btn", g.der);
+    bIzq.type = bDer.type = "button";
+    lados.appendChild(bIzq); lados.appendChild(bDer);
+    cuerpo.appendChild(tarjeta); cuerpo.appendChild(lados);
 
-    if (S.ordenElegido.length < q.items.length) return;
+    function pintar() {
+      var t = J.tarjetas[J.i];
+      tarjeta.className = "clasif-tarjeta";
+      void tarjeta.offsetWidth; tarjeta.classList.add("anima");
+      tarjeta.textContent = t.t;
+      bIzq.className = bDer.className = "lado-btn";
+      bIzq.disabled = bDer.disabled = false;
+      $("juego-explica").hidden = true; $("juego-siguiente").hidden = true;
+      marcador([["Tarjeta", (J.i + 1) + " de " + J.tarjetas.length], ["Aciertos", J.aciertos]]);
+    }
 
-    var bien = S.ordenElegido.every(function (k, i) { return k === i; });
-    var botones = $("des-cuerpo").querySelectorAll(".orden-item");
-    Array.prototype.forEach.call(botones, function (b) {
-      b.disabled = true;
-      var k = Number(b.dataset.k), posElegida = S.ordenElegido.indexOf(k);
-      b.classList.remove("puesto");
-      b.classList.add(posElegida === k ? "bien" : "mal");
-      b.querySelector(".pos").textContent = (k + 1) + "°";
-    });
-    anotar(item, bien);
-    mostrarExplica(bien, q.ex);
+    function responder(lado) {
+      var t = J.tarjetas[J.i], bien = lado === t.lado;
+      if (bien) J.aciertos++;
+      bIzq.disabled = bDer.disabled = true;
+      (t.lado === 0 ? bIzq : bDer).classList.add("bien");
+      if (!bien) (lado === 0 ? bIzq : bDer).classList.add("mal");
+      tarjeta.classList.add(bien ? "bien" : "mal");
+      marcador([["Tarjeta", (J.i + 1) + " de " + J.tarjetas.length], ["Aciertos", J.aciertos]]);
+      var ultimo = J.i === J.tarjetas.length - 1;
+      explicar(bien, t.ex, "Siguiente");
+      if (ultimo) { terminarJuego(J.aciertos / J.tarjetas.length * 100, J.aciertos + " de " + J.tarjetas.length); return; }
+      $("juego-siguiente").onclick = function () { $("juego-siguiente").onclick = null; J.i++; pintar(); };
+    }
+
+    bIzq.addEventListener("click", function () { responder(0); });
+    bDer.addEventListener("click", function () { responder(1); });
+    pintar();
   }
 
-  $("des-siguiente").addEventListener("click", function () {
-    if (S.pi < S.preguntas.length - 1) { S.pi++; pintarPregunta(); return; }
-    if (S.enRepaso) { ir("portada"); return; }
-    terminarCapitulo();
-  });
+  /* ---------- Memorice ---------- */
+  function montarMemorice(g) {
+    var cartas = [];
+    g.pares.forEach(function (p, k) { cartas.push({ k: k, txt: p[0] }); cartas.push({ k: k, txt: p[1] }); });
+    J = { intentos: 0, hechos: 0, abiertas: [], bloqueado: false, total: g.pares.length };
+
+    var grid = el("div", "naipes");
+    barajar(cartas).forEach(function (c) {
+      var b = el("button", "naipe oculto", "?");
+      b.type = "button"; b.dataset.k = c.k; b.dataset.txt = c.txt;
+      b.setAttribute("aria-label", "Carta tapada");
+      b.addEventListener("click", function () { voltear(b); });
+      grid.appendChild(b);
+    });
+    $("juego-cuerpo").appendChild(grid);
+    var pista = el("p", "nota", "Encuentra cada concepto con su significado. Menos intentos, más puntos.");
+    pista.style.margin = "0";
+    $("juego-cuerpo").appendChild(pista);
+    marcador([["Pares", "0 de " + J.total], ["Intentos", 0]]);
+
+    function voltear(b) {
+      if (J.bloqueado || !b.classList.contains("oculto")) return;
+      b.classList.remove("oculto"); b.classList.add("abierto");
+      b.textContent = b.dataset.txt; b.setAttribute("aria-label", b.dataset.txt);
+      J.abiertas.push(b);
+      if (J.abiertas.length < 2) return;
+
+      J.intentos++;
+      var a = J.abiertas[0], c = J.abiertas[1];
+      J.abiertas = [];
+      marcador([["Pares", J.hechos + " de " + J.total], ["Intentos", J.intentos]]);
+
+      if (a.dataset.k === c.dataset.k) {
+        a.className = c.className = "naipe hecho"; a.disabled = c.disabled = true;
+        J.hechos++;
+        marcador([["Pares", J.hechos + " de " + J.total], ["Intentos", J.intentos]]);
+        if (J.hechos === J.total) {
+          // Con 6 pares, 6 intentos es perfecto. Cada intento de más descuenta.
+          var extra = J.intentos - J.total;
+          var pts = extra <= 2 ? 100 : extra <= 5 ? 85 : extra <= 9 ? 70 : extra <= 14 ? 55 : 40;
+          explicar(true, "Todos los pares en " + J.intentos + " intentos.", "Terminar");
+          terminarJuego(pts, J.intentos + " intentos");
+        }
+        return;
+      }
+      J.bloqueado = true;
+      a.classList.add("error"); c.classList.add("error");
+      setTimeout(function () {
+        [a, c].forEach(function (x) { x.className = "naipe oculto"; x.textContent = "?"; x.setAttribute("aria-label", "Carta tapada"); });
+        J.bloqueado = false;
+      }, 850);
+    }
+  }
+
+  /* ---------- Línea del tiempo ---------- */
+  function montarLinea(g) {
+    J = { sig: 0, aciertos: 0, fallosEnEste: 0, total: g.eventos.length };
+    var cuerpo = $("juego-cuerpo");
+    var pista = el("p", "nota", "Toca el hecho que va en el año marcado. Van en orden, del más antiguo al más nuevo.");
+    pista.style.margin = "0";
+    var chips = el("div", "chips");
+    var linea = el("div", "linea");
+    cuerpo.appendChild(pista); cuerpo.appendChild(chips); cuerpo.appendChild(linea);
+
+    var huecos = g.eventos.map(function (e, k) {
+      var h = el("div", "hueco" + (k === 0 ? " ahora" : ""));
+      h.appendChild(el("span", "ano", e.ano));
+      h.appendChild(el("span", "evento", ""));
+      linea.appendChild(h);
+      return h;
+    });
+
+    barajar(g.eventos.map(function (e, k) { return { k: k, t: e.t }; })).forEach(function (it) {
+      var b = el("button", "chip", it.t);
+      b.type = "button"; b.dataset.k = it.k;
+      b.addEventListener("click", function () { tocar(b); });
+      chips.appendChild(b);
+    });
+    marcador([["Colocados", "0 de " + J.total], ["A la primera", 0]]);
+
+    function tocar(b) {
+      var k = Number(b.dataset.k);
+      if (k !== J.sig) {
+        J.fallosEnEste++;
+        b.classList.remove("tiembla"); void b.offsetWidth; b.classList.add("tiembla");
+        return;
+      }
+      if (J.fallosEnEste === 0) J.aciertos++;
+      J.fallosEnEste = 0;
+      b.classList.add("usado");
+      var h = huecos[k];
+      h.className = "hueco hecho";
+      h.querySelector(".evento").textContent = b.textContent;
+      J.sig++;
+      if (J.sig < J.total) huecos[J.sig].classList.add("ahora");
+      marcador([["Colocados", J.sig + " de " + J.total], ["A la primera", J.aciertos]]);
+      if (J.sig === J.total) {
+        explicar(true, J.aciertos === J.total ? "Toda la línea a la primera." : J.aciertos + " de " + J.total + " a la primera. Los otros los encontraste igual.", "Terminar");
+        terminarJuego(J.aciertos / J.total * 100, J.aciertos + " de " + J.total + " a la primera");
+      }
+    }
+  }
+
+  /* ---------- Palabra oculta ---------- */
+  function montarPalabra(g) {
+    J = { i: 0, adivinadas: 0, palabras: barajar(g.palabras) };
+    var cuerpo = $("juego-cuerpo");
+    var pista = el("p", "pista");
+    var vidas = el("div", "vidas"); vidas.style.justifyContent = "center";
+    var palabra = el("div", "palabra");
+    var teclado = el("div", "teclado");
+    cuerpo.appendChild(pista); cuerpo.appendChild(palabra); cuerpo.appendChild(vidas); cuerpo.appendChild(teclado);
+
+    var LETRAS = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+    var VIDAS = 6;
+
+    function montar() {
+      var w = J.palabras[J.i];
+      J.errores = 0; J.usadas = {};
+      J.letras = w.w.split("");
+      pista.textContent = w.pista;
+      limpiar(palabra); limpiar(teclado); limpiar(vidas);
+      J.letras.forEach(function () { palabra.appendChild(el("span", "letra-hueco", "")); });
+      for (var v = 0; v < VIDAS; v++) vidas.appendChild(el("i"));
+      LETRAS.forEach(function (L) {
+        var t = el("button", "tecla", L);
+        t.type = "button";
+        t.addEventListener("click", function () { probar(L, t); });
+        teclado.appendChild(t);
+      });
+      $("juego-explica").hidden = true; $("juego-siguiente").hidden = true;
+      marcador([["Palabra", (J.i + 1) + " de " + J.palabras.length], ["Adivinadas", J.adivinadas]]);
+    }
+
+    function probar(L, tecla) {
+      if (J.usadas[L]) return;
+      J.usadas[L] = true;
+      tecla.disabled = true;
+      var huecos = palabra.querySelectorAll(".letra-hueco");
+      var hay = false;
+      J.letras.forEach(function (x, k) { if (x === L) { hay = true; huecos[k].textContent = L; huecos[k].classList.add("bien"); } });
+      if (hay) {
+        tecla.classList.add("bien");
+        var completa = J.letras.every(function (x) { return J.usadas[x]; });
+        if (completa) cerrar(true);
+        return;
+      }
+      tecla.classList.add("mal");
+      J.errores++;
+      vidas.children[VIDAS - J.errores].classList.add("perdida");
+      if (J.errores >= VIDAS) cerrar(false);
+    }
+
+    function cerrar(bien) {
+      var w = J.palabras[J.i];
+      if (bien) J.adivinadas++;
+      else {
+        var huecos = palabra.querySelectorAll(".letra-hueco");
+        J.letras.forEach(function (x, k) { if (!J.usadas[x]) { huecos[k].textContent = x; huecos[k].classList.add("revelada"); } });
+      }
+      Array.prototype.forEach.call(teclado.children, function (t) { t.disabled = true; });
+      marcador([["Palabra", (J.i + 1) + " de " + J.palabras.length], ["Adivinadas", J.adivinadas]]);
+      var ultima = J.i === J.palabras.length - 1;
+      explicar(bien, (bien ? "" : "Era " + w.w + ". ") + w.pista + ".", "Siguiente palabra");
+      if (ultima) { terminarJuego(J.adivinadas / J.palabras.length * 100, J.adivinadas + " de " + J.palabras.length); return; }
+      $("juego-siguiente").onclick = function () { $("juego-siguiente").onclick = null; J.i++; montar(); };
+    }
+
+    montar();
+  }
+
+  /* ---------- La pulpería ---------- */
+  function montarPulperia(g) {
+    J = { paso: 0 };
+    var cuerpo = $("juego-cuerpo");
+
+    function pintar() {
+      var p = PULPERIA[J.paso];
+      limpiar(cuerpo);
+      $("juego-explica").hidden = true; $("juego-siguiente").hidden = true;
+      marcador([["Escena", (J.paso + 1) + " de " + PULPERIA.length]]);
+
+      if (p.pregunta) {
+        var q = el("p", "pregunta", p.pregunta);
+        var ops = el("div", "opciones");
+        cuerpo.appendChild(q); cuerpo.appendChild(ops);
+        p.ops.forEach(function (txt, k) {
+          var b = el("button", "opcion"); b.type = "button";
+          b.appendChild(el("span", "letra", "ABCD"[k])); b.appendChild(el("span", null, txt));
+          b.addEventListener("click", function () {
+            var bien = k === p.ok;
+            Array.prototype.forEach.call(ops.children, function (x, i) {
+              x.disabled = true;
+              if (i === p.ok) x.classList.add("bien"); else if (i === k) x.classList.add("mal");
+            });
+            explicar(bien, p.ex, "Terminar");
+            terminarJuego(bien ? 100 : 50, bien ? "entendido" : "casi");
+          });
+          ops.appendChild(b);
+        });
+        return;
+      }
+
+      var esc = el("div", "escena anima");
+      p.txt.forEach(function (html) { var x = el("p"); x.innerHTML = html; esc.appendChild(x); });
+
+      if (p.lista) {
+        var lista = el("div", "compra"), total = 0;
+        p.lista.forEach(function (it) {
+          var f = el("div", "f");
+          var n = el("span", null, it[0]);
+          if (it[2]) n.appendChild(el("span", "subio", "subió"));
+          f.appendChild(n); f.appendChild(el("span", "precio", it[1] + (it[1] === 1 ? " ficha" : " fichas")));
+          lista.appendChild(f); total += it[1];
+        });
+        var ft = el("div", "f total"); ft.appendChild(el("span", null, "Total")); ft.appendChild(el("span", "precio", total + " fichas"));
+        lista.appendChild(ft);
+        esc.appendChild(lista);
+      }
+
+      if (p.fichas != null) {
+        var fz = el("div", "fichas");
+        fz.appendChild(el("span", "cuenta", String(p.fichas)));
+        var tx = el("span", "txt"); tx.appendChild(el("b", null, "fichas")); tx.appendChild(document.createTextNode(" de la Compañía. No son dinero."));
+        fz.appendChild(tx);
+        esc.appendChild(fz);
+      }
+
+      cuerpo.appendChild(esc);
+
+      if (p.decision) {
+        var ops2 = el("div", "opciones");
+        p.decision.forEach(function (d) {
+          var b = el("button", "opcion"); b.type = "button";
+          b.appendChild(el("span", "letra", "→")); b.appendChild(el("span", null, d.t));
+          b.addEventListener("click", function () {
+            Array.prototype.forEach.call(ops2.children, function (x) { x.disabled = true; });
+            b.classList.add("mal");
+            var r = el("div", "escena anima");
+            d.r.forEach(function (html) { var x = el("p"); x.innerHTML = html; r.appendChild(x); });
+            cuerpo.appendChild(r);
+            var s = $("juego-siguiente"); s.hidden = false; s.textContent = "Seguir";
+            s.onclick = function () { s.onclick = null; J.paso++; pintar(); };
+          });
+          ops2.appendChild(b);
+        });
+        cuerpo.appendChild(ops2);
+        return;
+      }
+
+      var s = $("juego-siguiente"); s.hidden = false; s.textContent = p.btn;
+      s.onclick = function () { s.onclick = null; J.paso++; pintar(); };
+    }
+
+    pintar();
+  }
 
   /* ========================================================
-     Resultado
+     Resultado del capítulo
      ======================================================== */
 
   function retratoHtml(ella, chico, bloqueado) {
-    var d = document.createElement("div");
-    d.className = "retrato" + (chico ? " chico" : "") + (bloqueado ? " bloqueado" : "") + " anima";
-    if (!bloqueado && !chico) { var s = document.createElement("span"); s.className = "sello"; s.textContent = "desbloqueada"; d.appendChild(s); }
-    var ini = document.createElement("div"); ini.className = "marco-ini"; ini.textContent = bloqueado ? "?" : ella.ini;
-    var h = document.createElement("h3"); h.textContent = bloqueado ? "Todavía no" : ella.nombre;
-    var a = document.createElement("div"); a.className = "anos"; a.textContent = bloqueado ? "pasa el capítulo para conocerla" : ella.anos;
-    d.appendChild(ini); d.appendChild(h); d.appendChild(a);
+    var d = el("div", "retrato" + (chico ? " chico" : "") + (bloqueado ? " bloqueado" : "") + " anima");
+    if (!bloqueado && !chico) d.appendChild(el("span", "sello", "desbloqueada"));
+    d.appendChild(el("div", "marco-ini", bloqueado ? "?" : ella.ini));
+    d.appendChild(el("h3", null, bloqueado ? "Todavía no" : ella.nombre));
+    d.appendChild(el("div", "anos", bloqueado ? "pasa el capítulo para conocerla" : ella.anos));
     if (!bloqueado) {
-      var r = document.createElement("div"); r.className = "rol"; r.textContent = ella.rol; d.appendChild(r);
-      if (!chico) ella.p.forEach(function (html) { var p = document.createElement("p"); p.innerHTML = html; d.appendChild(p); });
+      d.appendChild(el("div", "rol", ella.rol));
+      if (!chico) ella.p.forEach(function (html) { var p = el("p"); p.innerHTML = html; d.appendChild(p); });
     }
     return d;
   }
 
   function terminarCapitulo() {
     var c = CAPITULOS[S.cap], e = estadoCap(c);
-    var paso = S.aciertos >= APROBAR;
-    var reciente = paso && !e.hecho;
-    P.caps[c.id] = { mejor: Math.max(e.mejor, S.aciertos), hecho: e.hecho || paso };
+    var pts = Math.round(S.puntajes.reduce(function (a, x) { return a + x.pts; }, 0) / S.puntajes.length);
+    var paso = pts >= PASAR, reciente = paso && !e.hecho;
+    P.caps[c.id] = { mejor: Math.max(e.mejor, pts), hecho: e.hecho || paso };
     guardar();
 
     ir("resultado");
     $("res-cap").textContent = "Capítulo " + (S.cap + 1) + " · " + c.titulo;
-    $("res-num").textContent = S.aciertos + "/" + c.preguntas.length;
-    $("res-estrellas").innerHTML = estrellasHtml(estrellasDe(S.aciertos));
+    $("res-num").textContent = pts;
+    $("res-estrellas").innerHTML = estrellasHtml(estrellasDe(pts));
     $("res-texto").textContent = !paso
-      ? "Con " + APROBAR + " buenas pasas. Vuelve a leer la lección: las respuestas están ahí."
-      : S.aciertos === 6 ? "Perfecto. Esta materia ya es tuya."
+      ? "Con " + PASAR + " puntos pasas. Vuelve a leer la lección: todo está ahí."
+      : pts >= 90 ? "Casi perfecto. Esta materia ya es tuya."
       : reciente ? "Pasaste. Y hay alguien que te está esperando." : "Pasaste de nuevo.";
 
+    var des = $("res-desglose"); limpiar(des);
+    S.puntajes.forEach(function (x) {
+      var f = el("div", "f");
+      var n = el("span"); n.appendChild(document.createTextNode(x.titulo + " ")); n.appendChild(el("span", "nota", "· " + x.etiqueta));
+      f.appendChild(n); f.appendChild(el("span", "pts", String(x.pts)));
+      des.appendChild(f);
+    });
+
     var ret = $("res-retrato");
-    ret.hidden = !paso;
-    ret.innerHTML = "";
+    ret.hidden = !paso; limpiar(ret);
     if (paso) {
-      var rot = document.createElement("p"); rot.className = "rotulo"; rot.style.textAlign = "center";
-      rot.textContent = reciente ? "Ella no sale en el libro" : "Ya la conoces";
-      ret.appendChild(rot);
-      ret.appendChild(retratoHtml(c.ella, false, false));
+      var rot = el("p", "rotulo", reciente ? "Ella no sale en el libro" : "Ya la conoces");
+      rot.style.textAlign = "center";
+      ret.appendChild(rot); ret.appendChild(retratoHtml(c.ella, false, false));
     }
 
     var ultimo = S.cap === CAPITULOS.length - 1;
@@ -993,23 +1497,126 @@
   $("res-repetir").addEventListener("click", function () { empezarCapitulo(S.cap); });
 
   /* ========================================================
+     Simulacro y repaso
+     ======================================================== */
+
+  function todasLasPreguntas() {
+    var lista = [];
+    CAPITULOS.forEach(function (c) {
+      c.preguntas.forEach(function (q, idx) { lista.push({ q: q, clave: c.id + ":" + idx }); });
+    });
+    return lista;
+  }
+
+  function empezarSimulacro(repaso) {
+    var todas = todasLasPreguntas();
+    var lista = repaso ? todas.filter(function (x) { return P.falladas[x.clave]; }) : barajar(todas).slice(0, 12);
+    if (!lista.length) return;
+    S.sim = { repaso: repaso, preguntas: barajar(lista), i: 0, aciertos: 0, racha: 0, orden: [] };
+    ir("simulacro");
+    pintarSim();
+  }
+
+  function pintarSim() {
+    var s = S.sim, item = s.preguntas[s.i], q = item.q, n = s.preguntas.length;
+    $("sim-contador").textContent = (s.repaso ? "Repaso · " : "Simulacro · ") + (s.i + 1) + " de " + n;
+    $("sim-barra").style.width = (s.i / n * 100) + "%";
+    $("sim-tipo").textContent = q.tipo === "om" ? "Elige una" : q.tipo === "vf" ? "¿Verdadero o falso?" : "Toca en orden";
+    $("sim-racha").textContent = s.racha >= 2 ? "Racha de " + s.racha : "";
+    $("sim-pregunta").textContent = q.q;
+    $("sim-explica").hidden = true; $("sim-siguiente").hidden = true;
+    var cuerpo = $("sim-cuerpo"); limpiar(cuerpo);
+    s.orden = [];
+
+    if (q.tipo === "om" || q.tipo === "vf") {
+      var caja = el("div", "opciones");
+      (q.tipo === "vf" ? ["Verdadero", "Falso"] : q.ops).forEach(function (txt, k) {
+        var b = el("button", "opcion"); b.type = "button";
+        b.appendChild(el("span", "letra", "ABCD"[k])); b.appendChild(el("span", null, txt));
+        b.addEventListener("click", function () { responderSim(k); });
+        caja.appendChild(b);
+      });
+      cuerpo.appendChild(caja);
+    } else {
+      var lista = el("div", "orden");
+      barajar(q.items.map(function (x, k) { return { txt: x, k: k }; })).forEach(function (it) {
+        var b = el("button", "orden-item"); b.type = "button"; b.dataset.k = it.k;
+        b.appendChild(el("span", "pos", "·")); b.appendChild(el("span", null, it.txt));
+        b.addEventListener("click", function () { tocarOrdenSim(b); });
+        lista.appendChild(b);
+      });
+      cuerpo.appendChild(lista);
+    }
+  }
+
+  function anotarSim(item, bien) {
+    var s = S.sim;
+    if (bien) { s.aciertos++; s.racha++; if (s.repaso) delete P.falladas[item.clave]; }
+    else { s.racha = 0; P.falladas[item.clave] = true; }
+    guardar();
+  }
+
+  function explicarSim(bien, texto) {
+    var s = S.sim, e = $("sim-explica");
+    e.className = "explica " + (bien ? "bien" : "mal") + " anima";
+    limpiar(e);
+    e.appendChild(el("span", "veredicto", bien ? (s.racha >= 3 ? "¡Bien! Racha de " + s.racha + "." : "¡Bien!") : "No era esa."));
+    e.appendChild(el("span", null, texto));
+    e.hidden = false;
+    var b = $("sim-siguiente"); b.hidden = false;
+    b.textContent = s.i === s.preguntas.length - 1 ? "Terminar" : "Siguiente";
+    b.focus();
+  }
+
+  function responderSim(k) {
+    var s = S.sim, item = s.preguntas[s.i], q = item.q;
+    var correcta = q.tipo === "vf" ? (q.ok ? 0 : 1) : q.ok, bien = k === correcta;
+    Array.prototype.forEach.call($("sim-cuerpo").querySelectorAll(".opcion"), function (b, i) {
+      b.disabled = true;
+      if (i === correcta) b.classList.add("bien"); else if (i === k) b.classList.add("mal");
+    });
+    anotarSim(item, bien); explicarSim(bien, q.ex);
+  }
+
+  function tocarOrdenSim(btn) {
+    if (btn.classList.contains("puesto")) return;
+    var s = S.sim, item = s.preguntas[s.i], q = item.q;
+    s.orden.push(Number(btn.dataset.k));
+    btn.classList.add("puesto"); btn.querySelector(".pos").textContent = s.orden.length;
+    if (s.orden.length < q.items.length) return;
+    var bien = s.orden.every(function (k, i) { return k === i; });
+    Array.prototype.forEach.call($("sim-cuerpo").querySelectorAll(".orden-item"), function (b) {
+      b.disabled = true;
+      var k = Number(b.dataset.k);
+      b.classList.remove("puesto"); b.classList.add(s.orden.indexOf(k) === k ? "bien" : "mal");
+      b.querySelector(".pos").textContent = (k + 1) + "°";
+    });
+    anotarSim(item, bien); explicarSim(bien, q.ex);
+  }
+
+  $("sim-siguiente").addEventListener("click", function () {
+    var s = S.sim;
+    if (s.i < s.preguntas.length - 1) { s.i++; pintarSim(); return; }
+    if (!s.repaso) { P.simMejor = Math.max(P.simMejor, s.aciertos); guardar(); }
+    ir("portada");
+    $("sim-mejor").textContent = (s.repaso ? "Repaso: " : "Último: ") + s.aciertos + " de " + s.preguntas.length +
+      (!s.repaso && P.simMejor > s.aciertos ? " · mejor " + P.simMejor : "");
+  });
+
+  /* ========================================================
      Galería
      ======================================================== */
 
   function pintarGaleria() {
-    var cont = $("galeria");
-    cont.textContent = "";
+    var cont = $("galeria"); limpiar(cont);
     var n = 0;
     CAPITULOS.forEach(function (c) {
       var hecho = estadoCap(c).hecho;
       if (hecho) n++;
       var d = retratoHtml(c.ella, true, !hecho);
       if (hecho) {
-        d.style.cursor = "pointer";
-        d.setAttribute("role", "button"); d.tabIndex = 0;
-        var abrir = function () {
-          d.replaceWith(retratoHtml(c.ella, false, false));
-        };
+        d.style.cursor = "pointer"; d.setAttribute("role", "button"); d.tabIndex = 0;
+        var abrir = function () { d.replaceWith(retratoHtml(c.ella, false, false)); };
         d.addEventListener("click", abrir);
         d.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); abrir(); } });
       }
@@ -1025,9 +1632,7 @@
   ir("portada");
 
   try {
-    if (window.claude && claude.hot && claude.hot.snapshot) {
-      claude.hot.snapshot(function () { return {}; });
-    }
+    if (window.claude && claude.hot && claude.hot.snapshot) claude.hot.snapshot(function () { return {}; });
   } catch (e) {}
 
 })();

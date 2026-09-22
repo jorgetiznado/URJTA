@@ -7,8 +7,30 @@ del salitre, cuestión social, democratización, democracia y derechos).
 
 Seis capítulos. Cada uno tiene una lección de cuatro tarjetas, una quinta
 tarjeta llamada **¿Y ellas?** que cuenta dónde estaban las mujeres en ese
-momento, y un desafío de seis preguntas. Con cuatro buenas se pasa y se
-desbloquea una mujer real que vivió esa época. Con seis, tres estrellas.
+momento, y **dos juegos**. Cada juego da un puntaje de 0 a 100; con 60 de
+promedio se pasa y se desbloquea una mujer real que vivió esa época. Con 90,
+tres estrellas.
+
+## Los juegos
+
+| Mecánica | Qué practica | Dónde |
+|---|---|---|
+| **Clasificar** | Una tarjeta, dos lados. ¿Vota o no vota en 1833? ¿Idea conservadora o liberal? ¿Democracia o dictadura? Cada respuesta explica por qué. | Caps. 1, 2, 5, 6 |
+| **Memorice** | Doce naipes boca abajo: concepto y su significado. Menos intentos, más puntos. | Caps. 1, 4, 6 |
+| **Línea del tiempo** | Los años en orden con huecos; se toca el hecho que va en el año marcado. Cuenta los colocados a la primera. | Caps. 2, 4, 5 |
+| **Palabra oculta** | Ahorcado con pista: SALITRE, PULPERIA, PAMPINO, ENGANCHE, FICHA. | Cap. 3 |
+| **La pulpería** | Una semana en Santa Laura con fichas en vez de dinero. Los precios suben, en Iquique no las aceptan, el tren no se paga con ellas. Cierra con una pregunta. | Cap. 3 |
+
+La pulpería es el único juego con guion: enseña el sistema de fichas
+haciéndolo vivir, no describiéndolo. Es la parte del temario que más se
+entiende jugándola.
+
+## El simulacro
+
+Las 36 preguntas de tipo prueba (elegir, verdadero o falso, ordenar) no están
+en los capítulos: son un **simulacro** desde la portada, doce al azar cada vez,
+con explicación en cada respuesta. Las falladas quedan guardadas y se repasan
+aparte hasta que salen bien. Dos días antes de la prueba es lo que más sirve.
 
 ## Por qué "ellas"
 
@@ -32,16 +54,14 @@ archivo con sus iniciales.
 
 ## Cómo está pensado para estudiar
 
-- **Se equivoca y aprende ahí mismo.** Cada respuesta, buena o mala, viene con
-  una explicación de dos líneas. Las preguntas falladas quedan guardadas y se
-  repasan desde la portada, barajadas, hasta que salen bien.
-- **Se puede terminar en una tarde.** Seis capítulos de unos siete minutos cada
-  uno. El repaso de lo fallado toma cinco.
+- **Se equivoca y aprende ahí mismo.** En clasificar y en la pulpería cada
+  respuesta trae una explicación. En la línea del tiempo el error rebota sin
+  castigo y se sigue buscando; en el memorice y la palabra oculta el juego
+  mismo enseña.
+- **Se puede terminar en una tarde.** Seis capítulos de unos ocho minutos cada
+  uno. Un simulacro toma cinco.
 - **Sin tiempo ni penalizaciones.** Es para estudiar, no para competir. Las
   estrellas premian; nada castiga.
-- **Tres tipos de pregunta**: elegir una, verdadero o falso con explicación, y
-  ordenar hechos tocándolos en secuencia. La de ordenar es la que más se parece
-  a lo que preguntan en la prueba.
 
 ## Cómo está hecho
 
