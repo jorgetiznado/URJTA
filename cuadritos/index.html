@@ -477,6 +477,7 @@
     var c = e && e.code;
     if (c === "quota_exceeded") return "El juego llegó a su tope de partidas guardadas. Borra mesas viejas.";
     if (c === "resource_exhausted") return "Demasiadas acciones seguidas. Espera un par de segundos.";
+    if (c === "invalid_argument") return "Puedes ver esta partida pero no jugar: tu permiso es de solo lectura. Pídele a quien te pasó el link que te dé permiso para interactuar, no solo para ver.";
     if (c === "revoked" || c === "not_granted") return "Perdiste el acceso a la partida. Recarga la página.";
     return (e && e.message) || "Algo falló. Intenta otra vez.";
   }
