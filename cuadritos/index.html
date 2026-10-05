@@ -222,6 +222,19 @@
     </div>
 
     <div class="apartado">
+      <span class="rotulo">Solo contra el bot</span>
+      <div class="lamina bloque">
+        <p class="nota">Sin código. Cantas tú, después canta el bot, seis turnos igual que siempre.</p>
+        <div class="fila">
+          <button class="btn" id="btn-solo-facil">Fácil</button>
+          <button class="btn fantasma" id="btn-solo-normal">Normal</button>
+          <button class="btn fantasma" id="btn-solo-dificil">Difícil</button>
+        </div>
+        <p class="nota">Mientras más difícil, más rápido encuentra tu número y más rápido raya.</p>
+      </div>
+    </div>
+
+    <div class="apartado">
       <span class="rotulo">Cómo se juega</span>
       <div class="lamina bloque">
         <ol class="pasos">
@@ -415,6 +428,9 @@
     ultimoEnvio: 0,
     temporizadorEnvio: null,
     temporizadorRescate: null,
+    solo: null,
+    soloReloj: null,
+    soloTic: null,
     subs: []
   };
 
@@ -668,6 +684,11 @@
   $("btn-seguir").addEventListener("click", function () {
     this.disabled = true;
     var siguiente = S.mesa.turno + 1;
+    if (S.solo) {
+      if (siguiente > TOTAL_TURNOS) { pararRelojesSolo(); S.mesa.estado = "fin"; pintar(); }
+      else soloArrancar(siguiente);
+      return;
+    }
     var p = siguiente > TOTAL_TURNOS
       ? S.db.doc("mesas/" + S.code).update({ estado: "fin" })
       : arrancarTurno(siguiente);
@@ -675,6 +696,7 @@
   });
 
   $("btn-revancha").addEventListener("click", function () {
+    if (S.solo) { iniciarSolo(S.solo.nivel); return; }
     var borrar = S.turnos.map(function (t) { return S.db.doc("mesas/" + S.code + "/turnos/t" + t.turno).delete(); });
     Promise.all(borrar).then(function () {
       return S.db.doc("mesas/" + S.code).update({ estado: "lobby", turno: 0, cantorId: "", numero: 0, tablero: [] });
@@ -684,6 +706,7 @@
   $("btn-salir-lobby").addEventListener("click", salir);
   $("btn-salir-fin").addEventListener("click", salir);
   function salir() {
+    if (S.solo) { soloSalir(); return; }
     var ref = S.code ? S.db.doc("mesas/" + S.code + "/jugadores/" + MI_ID) : null;
     alInicio("");
     if (ref) ref.delete().catch(function () {});
@@ -696,6 +719,109 @@
       navigator.clipboard.writeText(texto).then(listo, function () { btn.textContent = texto; });
     } else { btn.textContent = texto; }
   });
+
+  /* ========================================================
+     Modo solo: bot en el mismo teléfono
+     ======================================================== */
+
+  var NIVELES_BOT = {
+    facil:   { nombre: "Bot fácil",   busca: [8000, 15000], raya: 2.6 },
+    normal:  { nombre: "Bot normal",  busca: [4000, 8000],  raya: 4.7 },
+    dificil: { nombre: "Bot difícil", busca: [1800, 4000],  raya: 7.5 }
+  };
+
+  function pararRelojesSolo() {
+    if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+    if (S.soloTic) { clearInterval(S.soloTic); S.soloTic = null; }
+  }
+
+  function iniciarSolo(nivel) {
+    limpiarSubs(); pararRescate(); pararRelojesSolo();
+    var nombre = nombreEscrito() || "Tú";
+    S.nombre = nombre; escribir("cuadritos.nombre", nombre);
+    verError("");
+    S.code = null;
+    S.solo = { nivel: nivel };
+    S.turnos = [];
+    S.jugadores = [
+      { pid: MI_ID, nombre: nombre, rayandoAhora: 0, entroEn: 1 },
+      { pid: "BOT", nombre: NIVELES_BOT[nivel].nombre, rayandoAhora: 0, entroEn: 2 }
+    ];
+    S.mesa = { estado: "cantando", hostId: MI_ID, turno: 0, cantorId: MI_ID, numero: 0, tablero: [], cantadoEn: 0 };
+    soloArrancar(1);
+  }
+
+  function soloArrancar(turno) {
+    pararRelojesSolo();
+    S.rayados = 0;
+    S.jugadores.forEach(function (j) { j.rayandoAhora = 0; });
+    S.mesa.estado = "cantando";
+    S.mesa.turno = turno;
+    S.mesa.cantorId = (turno % 2 === 1) ? MI_ID : "BOT";
+    S.mesa.numero = 0;
+    S.mesa.tablero = barajar(NUMEROS);
+    S.mesa.cantadoEn = 0;
+    pintar();
+    if (S.mesa.cantorId === "BOT") {
+      S.soloReloj = setTimeout(function () {
+        soloCantar(1 + Math.floor(Math.random() * NUMEROS));
+      }, 900 + Math.random() * 700);
+    }
+  }
+
+  function soloCantar(n) {
+    S.mesa.numero = n;
+    S.mesa.estado = "buscando";
+    S.mesa.cantadoEn = Date.now();
+    S.turnoPintado = S.mesa.turno;
+    if (S.mesa.cantorId === MI_ID) construirZonaRayado(); else construirGrillaBuscar();
+    pintar();
+    if (S.mesa.cantorId === MI_ID) soloBuscaElBot(); else soloRayaElBot();
+  }
+
+  /** Yo canté: el bot se demora en encontrar el número mientras yo rayo. */
+  function soloBuscaElBot() {
+    var r = NIVELES_BOT[S.solo.nivel].busca;
+    var ms = r[0] + Math.random() * (r[1] - r[0]);
+    S.soloReloj = setTimeout(function () {
+      S.soloReloj = null;
+      if (!S.solo || !S.mesa || S.mesa.estado !== "buscando") return;
+      soloCerrar(S.rayados);
+    }, ms);
+  }
+
+  /** Cantó el bot: raya a su ritmo mientras yo busco en la grilla. */
+  function soloRayaElBot() {
+    var bot = S.jugadores[1];
+    bot.rayandoAhora = 0;
+    var cada = 1000 / NIVELES_BOT[S.solo.nivel].raya;
+    S.soloTic = setInterval(function () {
+      if (!S.solo || !S.mesa || S.mesa.estado !== "buscando") { pararRelojesSolo(); return; }
+      if (bot.rayandoAhora < CUADRITOS) bot.rayandoAhora++;
+      $("buscar-rival-cuenta").textContent = bot.rayandoAhora;
+    }, cada);
+  }
+
+  function soloCerrar(rayados) {
+    var ms = S.mesa.cantadoEn ? Math.max(0, Date.now() - S.mesa.cantadoEn) : 0;
+    pararRelojesSolo();
+    S.turnos.push({
+      turno: S.mesa.turno, cantorId: S.mesa.cantorId, numero: S.mesa.numero,
+      rayados: rayados, ms: ms, cerradoEn: Date.now()
+    });
+    S.mesa.estado = "resumen";
+    pintar();
+  }
+
+  function soloSalir() {
+    pararRelojesSolo();
+    S.solo = null; S.mesa = null; S.jugadores = []; S.turnos = []; S.rayados = 0;
+    pintar();
+  }
+
+  $("btn-solo-facil").addEventListener("click", function () { iniciarSolo("facil"); });
+  $("btn-solo-normal").addEventListener("click", function () { iniciarSolo("normal"); });
+  $("btn-solo-dificil").addEventListener("click", function () { iniciarSolo("dificil"); });
 
   /* ========================================================
      Rayar
@@ -762,6 +888,9 @@
 
     this.classList.add("acertada");
     Array.prototype.forEach.call($("buscar-grilla").children, function (b) { b.disabled = true; });
+
+    if (S.solo) { soloCerrar(S.jugadores[1].rayandoAhora); return; }
+
     S.db.doc("mesas/" + S.code).update({ estado: "resumen", encontradoEn: Date.now() })
       .catch(function (e) { console.warn("No se pudo cerrar la búsqueda", e); });
   }
@@ -799,6 +928,7 @@
       b.addEventListener("click", function () {
         if (!soyCantor() || S.mesa.estado !== "cantando") return;
         Array.prototype.forEach.call(cont.children, function (x) { x.disabled = true; });
+        if (S.solo) { soloCantar(Number(this.dataset.n)); return; }
         cantar(Number(this.dataset.n)).catch(function (e) {
           Array.prototype.forEach.call(cont.children, function (x) { x.disabled = false; });
           console.warn(textoError(e));
@@ -857,7 +987,7 @@
   }
 
   function pintar() {
-    var enMesa = !!(S.code && S.mesa);
+    var enMesa = !!((S.code || S.solo) && S.mesa);
     var est = enMesa ? S.mesa.estado : "inicio";
     var yoCanto = enMesa && soyCantor();
 
@@ -927,11 +1057,13 @@
       pintarTablero($("res-tablero"), true);
 
       // Avanza quien va a cantar el próximo turno: el que acaba de buscar.
-      var meTocaSeguir = !yoCanto;
+      var meTocaSeguir = S.solo ? true : !yoCanto;
       var ultimo = turno >= TOTAL_TURNOS;
       $("btn-seguir").hidden = !meTocaSeguir;
       $("btn-seguir").disabled = !doc;
-      $("btn-seguir").textContent = ultimo ? "Ver el resultado" : "Ahora canto yo";
+      $("btn-seguir").textContent = ultimo
+        ? "Ver el resultado"
+        : (S.solo && (turno + 1) % 2 === 0 ? "Que cante el bot" : "Ahora canto yo");
       $("res-espera").hidden = meTocaSeguir;
       $("res-espera").textContent = "Le toca cantar a " + nombreDe(rival() ? rival().pid : "") + ".";
     }
@@ -977,3 +1109,4 @@
 
 })();
 </script>
+

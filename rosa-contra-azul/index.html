@@ -207,6 +207,19 @@
     </div>
 
     <div class="apartado">
+      <span class="rotulo">Solo contra el bot</span>
+      <div class="carta bloque">
+        <p class="nota">Sin código y sin esperar a nadie. Elige qué tan duro juega.</p>
+        <div class="fila">
+          <button class="btn" id="btn-solo-facil">Fácil</button>
+          <button class="btn fantasma" id="btn-solo-normal">Normal</button>
+          <button class="btn fantasma" id="btn-solo-dificil">Difícil</button>
+        </div>
+        <p class="nota" id="nota-solo">Fácil regala cuadrados. Difícil te deja las cadenas largas a ti.</p>
+      </div>
+    </div>
+
+    <div class="apartado">
       <span class="rotulo">Cómo se juega</span>
       <div class="carta bloque">
         <ol class="pasos">
@@ -377,6 +390,8 @@
     mesa: null,
     jugadores: [],
     enviando: false,
+    solo: null,
+    soloReloj: null,
     subs: []
   };
 
@@ -559,10 +574,155 @@
     }).catch(function (e) { $("lobby-nota").textContent = textoError(e); $("btn-empezar").disabled = false; });
   });
 
+  /* ========================================================
+     Modo solo: bot en el mismo teléfono
+     ======================================================== */
+
+  var NIVELES_BOT = {
+    facil:   { nombre: "Bot fácil",   espera: [420, 700] },
+    normal:  { nombre: "Bot normal",  espera: [500, 850] },
+    dificil: { nombre: "Bot difícil", espera: [600, 1000] }
+  };
+
+  function ladosDe(h, v, r, c) {
+    return (h[iH(r, c)] ? 1 : 0) + (h[iH(r + 1, c)] ? 1 : 0) +
+           (v[iV(r, c)] ? 1 : 0) + (v[iV(r, c + 1)] ? 1 : 0);
+  }
+
+  function librasDe(h, v) {
+    var out = [], i;
+    for (i = 0; i < TOTAL_H; i++) if (!h[i]) out.push({ t: "h", i: i });
+    for (i = 0; i < TOTAL_V; i++) if (!v[i]) out.push({ t: "v", i: i });
+    return out;
+  }
+
+  /** ¿Esta línea cierra un cuadrado ahora mismo? */
+  function cierra(h, v, t, i) {
+    return vecinos(t, i).some(function (rc) { return ladosDe(h, v, rc[0], rc[1]) === 3; });
+  }
+
+  /** ¿Esta línea deja un cuadrado en tres lados, servido para el rival? */
+  function regala(h, v, t, i) {
+    var nh = h.slice(), nv = v.slice();
+    (t === "h" ? nh : nv)[i] = 9;
+    return vecinos(t, i).some(function (rc) { return ladosDe(nh, nv, rc[0], rc[1]) === 3; });
+  }
+
+  /** Cuántos cuadrados se lleva alguien goloso que empieza a cobrar aquí. */
+  function cosecha(h, v) {
+    var nh = h.slice(), nv = v.slice(), suma = 0, hubo = true;
+    while (hubo) {
+      hubo = false;
+      var libres = librasDe(nh, nv);
+      for (var k = 0; k < libres.length; k++) {
+        var m = libres[k];
+        if (cierra(nh, nv, m.t, m.i)) {
+          (m.t === "h" ? nh : nv)[m.i] = 9;
+          suma++; hubo = true; break;
+        }
+      }
+    }
+    return suma;
+  }
+
+  function azar(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
+
+  function jugadaBot(nivel, h, v) {
+    var libres = librasDe(h, v);
+    if (!libres.length) return null;
+
+    var capturas = libres.filter(function (m) { return cierra(h, v, m.t, m.i); });
+    var seguras = libres.filter(function (m) {
+      return !cierra(h, v, m.t, m.i) && !regala(h, v, m.t, m.i);
+    });
+
+    if (nivel === "facil") {
+      // Se le pasan cuadrados servidos y no cuida las cadenas.
+      if (capturas.length && Math.random() < 0.6) return azar(capturas);
+      if (Math.random() < 0.25 && seguras.length) return azar(seguras);
+      return azar(libres);
+    }
+
+    if (capturas.length) return azar(capturas);
+
+    if (nivel === "normal") {
+      if (seguras.length) return azar(seguras);
+      return azar(libres);
+    }
+
+    // Difícil: si no queda jugada segura, entrega la cadena más corta.
+    if (seguras.length) return azar(seguras);
+    var mejor = null, menor = Infinity;
+    libres.forEach(function (m) {
+      var nh = h.slice(), nv = v.slice();
+      (m.t === "h" ? nh : nv)[m.i] = 9;
+      var cuanto = cosecha(nh, nv);
+      if (cuanto < menor || (cuanto === menor && Math.random() < 0.4)) { menor = cuanto; mejor = m; }
+    });
+    return mejor || azar(libres);
+  }
+
+  function iniciarSolo(nivel) {
+    limpiarSubs();
+    if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+    var nombre = nombreEscrito() || "Tú";
+    S.nombre = nombre; escribir("rca.nombre", nombre);
+    verError("");
+    S.code = null;
+    S.solo = { nivel: nivel };
+    S.jugadores = [
+      { pid: MI_ID, nombre: nombre },
+      { pid: "BOT", nombre: NIVELES_BOT[nivel].nombre }
+    ];
+    S.mesa = {
+      estado: "jugando", hostId: MI_ID, orden: [MI_ID, "BOT"], turnoDe: MI_ID,
+      h: ceros(TOTAL_H), v: ceros(TOTAL_V), cuadros: ceros(TOTAL_CUADROS),
+      ultimaT: "", ultimaI: -1
+    };
+    pintar();
+  }
+
+  function aplicarSolo(tipo, idx, quien) {
+    var res = jugar(S.mesa.h, S.mesa.v, S.mesa.cuadros, tipo, idx, quien);
+    if (!res) return false;
+
+    S.mesa.h = res.h; S.mesa.v = res.v; S.mesa.cuadros = res.cuadros;
+    S.mesa.ultimaT = tipo; S.mesa.ultimaI = idx;
+
+    var tomadas = res.h.filter(Boolean).length + res.v.filter(Boolean).length;
+    if (tomadas >= TOTAL_LINEAS) {
+      S.mesa.estado = "fin"; S.mesa.turnoDe = "";
+    } else if (res.cerrados === 0) {
+      S.mesa.turnoDe = quien === 1 ? "BOT" : MI_ID;
+    }
+
+    pintar();
+    if (S.mesa.estado === "jugando" && S.mesa.turnoDe === "BOT") programarBot();
+    return true;
+  }
+
+  function programarBot() {
+    if (S.soloReloj) clearTimeout(S.soloReloj);
+    var esperas = NIVELES_BOT[S.solo.nivel].espera;
+    var ms = esperas[0] + Math.random() * (esperas[1] - esperas[0]);
+    S.soloReloj = setTimeout(function () {
+      S.soloReloj = null;
+      if (!S.solo || !S.mesa || S.mesa.estado !== "jugando" || S.mesa.turnoDe !== "BOT") return;
+      var m = jugadaBot(S.solo.nivel, S.mesa.h, S.mesa.v);
+      if (m) aplicarSolo(m.t, m.i, 2);
+    }, ms);
+  }
+
+  $("btn-solo-facil").addEventListener("click", function () { iniciarSolo("facil"); });
+  $("btn-solo-normal").addEventListener("click", function () { iniciarSolo("normal"); });
+  $("btn-solo-dificil").addEventListener("click", function () { iniciarSolo("dificil"); });
+
   function alTocarLinea() {
     var tipo = this.dataset.t, idx = Number(this.dataset.i);
     if (S.enviando) return;
     if (!S.mesa || S.mesa.estado !== "jugando" || !esMiTurno()) return;
+
+    if (S.solo) { aplicarSolo(tipo, idx, 1); return; }
 
     var yo = miNumero();
     if (!yo) return;
@@ -590,6 +750,7 @@
   }
 
   $("btn-revancha").addEventListener("click", function () {
+    if (S.solo) { iniciarSolo(S.solo.nivel); return; }
     var orden = S.jugadores.map(function (j) { return j.pid; });
     // Parte el que perdió la anterior; con empate, parte el otro.
     var cuenta = contar();
@@ -604,6 +765,12 @@
   $("btn-salir-lobby").addEventListener("click", salir);
   $("btn-salir-fin").addEventListener("click", salir);
   function salir() {
+    if (S.solo) {
+      if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+      S.solo = null; S.mesa = null; S.jugadores = [];
+      pintar();
+      return;
+    }
     var ref = S.code ? S.db.doc("duelos/" + S.code + "/jugadores/" + MI_ID) : null;
     alInicio("");
     if (ref) ref.delete().catch(function () {});
@@ -741,7 +908,7 @@
   }
 
   function pintar() {
-    var enMesa = !!(S.code && S.mesa);
+    var enMesa = !!((S.code || S.solo) && S.mesa);
     var est = enMesa ? S.mesa.estado : "inicio";
 
     $("p-inicio").hidden = enMesa;
@@ -843,3 +1010,4 @@
 
 })();
 </script>
+

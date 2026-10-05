@@ -245,6 +245,16 @@
     </div>
 
     <div class="apartado">
+      <div class="hoja bloque">
+        <span class="eyebrow">Solo contra el bot</span>
+        <p class="aviso">Sin código. El bot llena su hoja mientras tú llenas la tuya, y grita cuando termina.</p>
+        <div class="fila-btns">
+          <button class="btn" id="btn-solo">Jugar contra el bot</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="apartado">
       <p class="nota-ejemplo">Ejemplo de una ronda — no es una partida real</p>
       <div class="hoja">
         <div class="franja-ronda">
@@ -489,6 +499,9 @@
     rondaCalculada: -1,
     tickReloj: null,
     temporizadorCierre: null,
+    solo: null,
+    soloHoja: {},
+    soloRelojes: [],
     subs: []
   };
 
@@ -663,6 +676,193 @@
     pintar();
   }
 
+
+  /* ========================================================
+     Modo solo: bot en el mismo teléfono
+     ======================================================== */
+
+  // Lo que el bot sabe escribir. Si una letra no está, la deja en blanco.
+  var PALABRAS_BOT = {
+    nombre: {
+      A:"Ana|Andrés|Alicia", B:"Bárbara|Benjamín", C:"Camila|Carlos", D:"Daniela|Diego",
+      E:"Elena|Esteban", F:"Fernanda|Felipe", G:"Gabriel|Gloria", H:"Héctor|Helena",
+      I:"Ignacio|Isidora", J:"Javiera|Joaquín", L:"Lucía|Lucas", M:"Martina|Matías",
+      N:"Natalia|Nicolás", O:"Olivia|Óscar", P:"Paula|Pablo", R:"Rocío|Rodrigo",
+      S:"Sofía|Sebastián", T:"Tomás|Teresa", U:"Úrsula|Ulises", V:"Valentina|Víctor"
+    },
+    apellido: {
+      A:"Araya|Álvarez", B:"Bravo|Bustos", C:"Contreras|Castro", D:"Díaz|Donoso",
+      E:"Espinoza|Escobar", F:"Fuentes|Flores", G:"González|Gutiérrez", H:"Herrera|Hernández",
+      I:"Ibarra|Iturra", J:"Jara|Jiménez", L:"López|Leiva", M:"Muñoz|Morales",
+      N:"Navarro|Núñez", O:"Ortiz|Ojeda", P:"Pérez|Poblete", R:"Rojas|Ramírez",
+      S:"Soto|Sepúlveda", T:"Torres|Tapia", U:"Urrutia|Ulloa", V:"Vergara|Valenzuela"
+    },
+    animal: {
+      A:"Araña|Ardilla", B:"Ballena|Búho", C:"Caballo|Conejo", D:"Delfín|Dromedario",
+      E:"Elefante|Erizo", F:"Foca|Flamenco", G:"Gato|Gaviota", H:"Hormiga|Hipopótamo",
+      I:"Iguana|Impala", J:"Jirafa|Jaguar", L:"León|Lobo", M:"Mono|Murciélago",
+      N:"Nutria|Narval", O:"Oso|Oveja", P:"Perro|Pingüino", R:"Rana|Ratón",
+      S:"Serpiente|Sapo", T:"Tigre|Tortuga", U:"Urraca|Unicornio", V:"Vaca|Venado"
+    },
+    lugar: {
+      A:"Arica|Argentina", B:"Brasil|Bolivia", C:"Chile|Concepción", D:"Dinamarca|Dubái",
+      E:"Ecuador|España", F:"Francia|Filipinas", G:"Grecia|Guatemala", H:"Holanda|Honduras",
+      I:"Iquique|Italia", J:"Japón|Jamaica", L:"Lima|Londres", M:"México|Madrid",
+      N:"Noruega|Nicaragua", O:"Osorno|Oslo", P:"Perú|Panamá", R:"Rusia|Roma",
+      S:"Santiago|Suecia", T:"Tokio|Turquía", U:"Uruguay|Ucrania", V:"Valparaíso|Venezuela"
+    },
+    cosa: {
+      A:"Azul|Anillo", B:"Blanco|Botella", C:"Café|Cuchara", D:"Dorado|Dedal",
+      E:"Escoba|Espejo", F:"Fucsia|Frazada", G:"Gris|Goma", H:"Hilo|Hacha",
+      I:"Índigo|Imán", J:"Jarro|Jabón", L:"Lila|Lápiz", M:"Morado|Mesa",
+      N:"Negro|Nudo", O:"Ocre|Olla", P:"Plateado|Peineta", R:"Rojo|Reloj",
+      S:"Silla|Sábana", T:"Turquesa|Tijera", U:"Uniforme|Urna", V:"Verde|Vaso"
+    },
+    fruta: {
+      A:"Arándano|Ajo", B:"Banana|Betarraga", C:"Cereza|Cebolla", D:"Damasco|Dátil",
+      E:"Espinaca|Escarola", F:"Frutilla|Frambuesa", G:"Guayaba|Granada", H:"Higo|Hinojo",
+      J:"Jengibre|Jícama", L:"Limón|Lechuga", M:"Manzana|Mandarina", N:"Naranja|Nectarina",
+      O:"Oliva", P:"Pera|Papaya", R:"Rábano|Repollo", S:"Sandía|Salvia",
+      T:"Tomate|Tuna", U:"Uva", V:"Vainita"
+    },
+    musica: {
+      A:"Ana Tijoux|Adele", B:"Bad Bunny|Beatles", C:"Cazzu|Coldplay", D:"Dua Lipa|Daddy Yankee",
+      E:"Enrique Iglesias|Elton John", F:"Fito Páez|Franco de Vita", G:"Gepe|Gorillaz",
+      H:"Harry Styles|Héroes del Silencio", I:"Illapu|Imagine Dragons", J:"Juanes|Julieta Venegas",
+      L:"Los Prisioneros|Lady Gaga", M:"Mon Laferte|Maná", N:"Nicki Nicole|Nirvana",
+      O:"Olivia Rodrigo|Oasis", P:"Paloma Mami|Prince", R:"Rosalía|Rauw Alejandro",
+      S:"Shakira|Soda Stereo", T:"Tini|Taylor Swift", U:"U2|Usher", V:"Violeta Parra|Vicentico"
+    },
+    pantalla: {
+      A:"Avatar|Aladdín", B:"Barbie|Breaking Bad", C:"Coco|Cars", D:"Deadpool|Dumbo",
+      E:"Encanto|El Padrino", F:"Frozen|Friends", G:"Glee|Gladiador", H:"Harry Potter|House",
+      I:"Intensamente|It", J:"Jumanji|Jurassic Park", L:"Luca|La La Land", M:"Matrix|Moana",
+      N:"Narnia|Narcos", O:"Oppenheimer|Overboard", P:"Pinocho|Prison Break",
+      R:"Ratatouille|Rocky", S:"Shrek|Stranger Things", T:"Titanic|Toy Story",
+      U:"Up|Uncharted", V:"Vaiana|Vikingos"
+    }
+  };
+
+  function palabraBot(catId, letra) {
+    var fila = PALABRAS_BOT[catId] || {};
+    var opciones = fila[letra];
+    if (!opciones) return "";
+    var lista = opciones.split("|");
+    return lista[Math.floor(Math.random() * lista.length)];
+  }
+
+  function pararRelojesSolo() {
+    (S.soloRelojes || []).forEach(function (t) { clearTimeout(t); });
+    S.soloRelojes = [];
+  }
+
+  function iniciarSolo() {
+    limpiarSubs(); detenerReloj(); pararRelojesSolo();
+    var nombre = nombreEscrito() || "Tú";
+    S.nombre = nombre; guardar("bachi.nombre", nombre);
+    mostrarError("");
+    S.code = null;
+    S.solo = { nivel: "normal" };
+    S.jugadores = [
+      { pid: MI_ID, nombre: nombre },
+      { pid: "BOT", nombre: "Bot" }
+    ];
+    S.resultados = [];
+    S.misRespuestas = {};
+    S.sala = {
+      estado: "jugando", hostId: MI_ID, ronda: 0, letra: "",
+      letrasUsadas: [], iniciadaEn: 0, detenidaPor: ""
+    };
+    rondaSolo(1);
+  }
+
+  function rondaSolo(n) {
+    pararRelojesSolo();
+    var usadas = (S.sala.letrasUsadas || []).slice();
+    var letra = letraNueva(usadas);
+    if (usadas.length >= LETRAS.length) usadas = [];
+    usadas.push(letra);
+
+    S.sala.estado = "jugando";
+    S.sala.ronda = n;
+    S.sala.letra = letra;
+    S.sala.letrasUsadas = usadas;
+    S.sala.iniciadaEn = Date.now();
+    S.sala.detenidaPor = "";
+    S.misRespuestas = {};
+    S.soloHoja = {};
+
+    construirRenglones();
+    pintar();
+    arrancarReloj();
+
+    var primero = document.querySelector("#juego-renglones input");
+    if (primero) setTimeout(function () { primero.focus(); }, 60);
+
+    // El bot arma su hoja de a poco, como si escribiera.
+    var plan = [];
+    CATS.forEach(function (cat) {
+      var pal = palabraBot(cat.id, letra);
+      if (pal && Math.random() > 0.18) plan.push({ cat: cat.id, pal: pal });
+    });
+    plan.sort(function () { return Math.random() - 0.5; });
+
+    var t = 2500;
+    plan.forEach(function (paso, i) {
+      t += 2800 + Math.random() * 3200;
+      S.soloRelojes.push(setTimeout(function () {
+        if (!S.solo || S.sala.estado !== "jugando" || S.sala.ronda !== n) return;
+        S.soloHoja[paso.cat] = paso.pal;
+        var listas = Object.keys(S.soloHoja).length;
+        $("juego-aviso").textContent = "El bot lleva " + listas + " de " + CATS.length + " renglones.";
+        if (i === plan.length - 1) {
+          S.soloRelojes.push(setTimeout(function () {
+            if (!S.solo || S.sala.estado !== "jugando" || S.sala.ronda !== n) return;
+            cerrarRondaSolo("BOT");
+          }, 900 + Math.random() * 900));
+        }
+      }, t));
+    });
+
+    if (!plan.length) {
+      S.soloRelojes.push(setTimeout(function () {
+        if (S.solo && S.sala.estado === "jugando" && S.sala.ronda === n) cerrarRondaSolo("BOT");
+      }, 30000));
+    }
+  }
+
+  function cerrarRondaSolo(quien) {
+    pararRelojesSolo(); detenerReloj();
+    var ronda = S.sala.ronda;
+    var mias = leerRenglones();
+    S.misRespuestas = mias;
+
+    var pids = [MI_ID, "BOT"];
+    var nombres = {}; S.jugadores.forEach(function (j) { nombres[j.pid] = j.nombre; });
+    var respuestas = {}; respuestas[MI_ID] = mias; respuestas.BOT = S.soloHoja || {};
+
+    var calc = puntuar(S.sala.letra, pids, respuestas, {});
+    S.resultados = S.resultados.filter(function (r) { return r.ronda !== ronda; });
+    S.resultados.push({
+      ronda: ronda, letra: S.sala.letra, pids: pids, nombres: nombres,
+      respuestas: respuestas, anuladas: {},
+      detalle: calc.detalle, puntos: calc.puntos,
+      detenidaPor: quien, cerradaEn: Date.now()
+    });
+    S.sala.estado = "revision";
+    S.sala.detenidaPor = quien;
+    pintar();
+  }
+
+  function soloSalir() {
+    pararRelojesSolo(); detenerReloj();
+    S.solo = null; S.sala = null; S.code = null;
+    S.jugadores = []; S.resultados = []; S.misRespuestas = {};
+    pintar();
+  }
+
+  $("btn-solo").addEventListener("click", function () { iniciarSolo(); });
+
   /* ========================================================
      Ciclo de la ronda
      ======================================================== */
@@ -781,6 +981,7 @@
   $("btn-bachillerato").addEventListener("click", function () {
     if (!S.sala || S.sala.estado !== "jugando") return;
     this.disabled = true;
+    if (S.solo) { cerrarRondaSolo(MI_ID); return; }
     var ronda = S.sala.ronda;
     entregarHoja(ronda).then(function () {
       return S.db.doc("salas/" + S.code).update({ estado: "revision", detenidaPor: MI_ID, detenidaEn: Date.now() });
@@ -792,14 +993,17 @@
 
   $("btn-siguiente").addEventListener("click", function () {
     this.disabled = true;
+    if (S.solo) { rondaSolo(S.sala.ronda + 1); return; }
     repartir().catch(function (e) { $("rev-espera").hidden = false; $("rev-espera").textContent = textoError(e); });
   });
 
   $("btn-terminar").addEventListener("click", function () {
+    if (S.solo) { pararRelojesSolo(); S.sala.estado = "fin"; pintar(); return; }
     S.db.doc("salas/" + S.code).update({ estado: "fin" });
   });
 
   $("btn-revancha").addEventListener("click", function () {
+    if (S.solo) { iniciarSolo(); return; }
     var borrados = S.resultados.map(function (r) {
       return S.db.doc("salas/" + S.code + "/resultados/r" + r.ronda).delete();
     });
@@ -812,6 +1016,7 @@
   $("btn-salir-fin").addEventListener("click", salir);
 
   function salir() {
+    if (S.solo) { soloSalir(); return; }
     var ref = S.code ? S.db.doc("salas/" + S.code + "/jugadores/" + MI_ID) : null;
     volverAlInicio("");
     if (ref) ref.delete().catch(function () {});
@@ -840,6 +1045,10 @@
     if (anuladas[clave]) delete anuladas[clave]; else anuladas[clave] = true;
 
     var calc = puntuar(res.letra, res.pids || [], res.respuestas || {}, anuladas);
+    if (S.solo) {
+      res.anuladas = anuladas; res.detalle = calc.detalle; res.puntos = calc.puntos;
+      pintar(); return;
+    }
     S.db.doc("salas/" + S.code + "/resultados/r" + ronda)
       .update({ anuladas: anuladas, detalle: calc.detalle, puntos: calc.puntos })
       .catch(function (e) { console.warn("No se pudo anular", e); });
@@ -1008,7 +1217,7 @@
   }
 
   function pintar() {
-    var enSala = !!(S.code && S.sala);
+    var enSala = !!((S.code || S.solo) && S.sala);
     var est = enSala ? S.sala.estado : "inicio";
 
     $("pantalla-inicio").hidden = enSala;
@@ -1035,7 +1244,9 @@
       $("juego-ronda").textContent = "Ronda " + S.sala.ronda + " · " + S.jugadores.length + " jugando";
       $("juego-letra-lectura").textContent = "Todo tiene que empezar con " + S.sala.letra + ".";
       $("btn-bachillerato").disabled = false;
-      $("juego-aviso").textContent = "Cuando termines, aprieta y todos paran.";
+      $("juego-aviso").textContent = S.solo
+        ? "El bot está llenando su hoja. Aprieta cuando termines."
+        : "Cuando termines, aprieta y todos paran.";
     }
 
     if (est === "revision") pintarRevision();
@@ -1108,3 +1319,4 @@
 
 })();
 </script>
+

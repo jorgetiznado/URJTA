@@ -244,6 +244,19 @@
     </div>
 
     <div class="apartado">
+      <span class="rotulo">Solo contra el bot</span>
+      <div class="lamina bloque">
+        <p class="nota">Uno contra uno, sin código. Reparte al tiro.</p>
+        <div class="fila">
+          <button class="btn" id="btn-solo-facil">Fácil</button>
+          <button class="btn fantasma" id="btn-solo-normal">Normal</button>
+          <button class="btn fantasma" id="btn-solo-dificil">Difícil</button>
+        </div>
+        <p class="nota">El difícil te ataca el órgano que más te sirve y se inmuniza apenas puede.</p>
+      </div>
+    </div>
+
+    <div class="apartado">
       <span class="rotulo">Las cartas</span>
       <div class="panel bloque">
         <div class="mano" id="demo-cartas" style="grid-template-columns:repeat(auto-fill,minmax(88px,1fr))"></div>
@@ -458,6 +471,8 @@
     enviando: false,
     sel: null,           // { id, x, paso, org }
     marcadas: {},        // ids marcados para descartar
+    solo: null,
+    soloReloj: null,
     subs: []
   };
 
@@ -677,6 +692,7 @@
   });
 
   $("btn-revancha").addEventListener("click", function () {
+    if (S.solo) { iniciarSolo(S.solo.nivel); return; }
     var orden = S.par.orden.slice();
     orden.push(orden.shift());                       // parte el siguiente
     var mazo = barajar(CARTAS.map(function (c) { return c.id; }));
@@ -692,6 +708,7 @@
   $("btn-salir-lobby").addEventListener("click", salir);
   $("btn-salir-fin").addEventListener("click", salir);
   function salir() {
+    if (S.solo) { soloSalir(); return; }
     var ref = S.code ? S.db.doc("clinicas/" + S.code + "/jugadores/" + MI_ID) : null;
     alInicio(""); if (ref) ref.delete().catch(function () {});
   }
@@ -743,14 +760,16 @@
   }
 
   /** Cierra el turno: rellena la mano, revisa victoria y pasa. */
-  function cerrarTurno(E, linea) {
+  function cerrarTurno(E, linea, actor) {
+    actor = actor || MI_ID;
     if (linea) E.bitacora.push(linea);
-    robar(E, MI_ID, Math.max(0, 3 - E.manos[MI_ID].length));
+    robar(E, actor, Math.max(0, 3 - E.manos[actor].length));
 
     var ganador = "";
     S.par.orden.forEach(function (pid) { if (!ganador && ganaCon(E.cuerpos[pid])) ganador = pid; });
 
-    var sig = siguientePid();
+    var orden = S.par.orden;
+    var sig = orden[(orden.indexOf(actor) + 1) % orden.length];
     if (E.manos[sig] && E.manos[sig].length < 3) robar(E, sig, 3 - E.manos[sig].length);
 
     var cambios = {
@@ -766,10 +785,290 @@
 
     S.enviando = true;
     S.sel = null; S.marcadas = {};
+
+    if (S.solo) { aplicarLocal(cambios); return Promise.resolve(); }
+
     return S.db.doc("clinicas/" + S.code).update(cambios)
       .catch(function (e) { console.warn(textoError(e)); pintar(); })
       .then(function () { S.enviando = false; });
   }
+
+  /* ========================================================
+     Modo solo: bot en el mismo teléfono
+     ======================================================== */
+
+  var NIVELES_BOT = {
+    facil:   { nombre: "Bot fácil",   torpeza: 0.6,  pausa: [900, 1500] },
+    normal:  { nombre: "Bot normal",  torpeza: 0.18, pausa: [1100, 1800] },
+    dificil: { nombre: "Bot difícil", torpeza: 0,    pausa: [1200, 2000] }
+  };
+
+  function iniciarSolo(nivel) {
+    limpiarSubs();
+    if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+    var nombre = nombreEscrito() || "Tú";
+    S.nombre = nombre; escribir("co.nombre", nombre);
+    verError("");
+    S.code = null;
+    S.solo = { nivel: nivel };
+    S.jugadores = [
+      { pid: MI_ID, nombre: nombre },
+      { pid: "BOT", nombre: NIVELES_BOT[nivel].nombre }
+    ];
+    var mazo = barajar(CARTAS.map(function (c) { return c.id; }));
+    var orden = [MI_ID, "BOT"], manos = {}, cuerpos = {};
+    orden.forEach(function (pid) { manos[pid] = mazo.splice(0, 3); cuerpos[pid] = nuevoCuerpo(); });
+    S.par = {
+      estado: "jugando", hostId: MI_ID, orden: orden, turnoDe: MI_ID,
+      mazo: mazo, descarte: [], manos: manos, cuerpos: cuerpos, ganador: "",
+      bitacora: ["Se repartieron las cartas. Partes tú."]
+    };
+    S.sel = null; S.marcadas = {}; S.enviando = false;
+    pintar();
+  }
+
+  function aplicarLocal(cambios) {
+    Object.keys(cambios).forEach(function (k) { S.par[k] = cambios[k]; });
+    S.enviando = false;
+    pintar();
+    if (S.par.estado === "jugando" && S.par.turnoDe === "BOT") {
+      if (S.soloReloj) clearTimeout(S.soloReloj);
+      var p = NIVELES_BOT[S.solo.nivel].pausa;
+      S.soloReloj = setTimeout(turnoBot, p[0] + Math.random() * (p[1] - p[0]));
+    }
+  }
+
+  function soloSalir() {
+    if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+    S.solo = null; S.par = null; S.jugadores = []; S.sel = null; S.marcadas = {};
+    pintar();
+  }
+
+  /* ---------- decisiones del bot ---------- */
+
+  function limpios(cuerpo) { return cuerpo.filter(sano).length; }
+
+  /** Colores limpios distintos: qué tan cerca está de ganar. */
+  function cercania(cuerpo) {
+    var vistos = {}, com = 0, d = 0;
+    cuerpo.filter(sano).forEach(function (o) {
+      if (o.c === "multi") { com++; return; }
+      if (!vistos[o.c]) { vistos[o.c] = true; d++; }
+    });
+    return d + com;
+  }
+
+  function turnoBot() {
+    S.soloReloj = null;
+    if (!S.solo || !S.par || S.par.estado !== "jugando" || S.par.turnoDe !== "BOT") return;
+
+    var YO = "BOT", nom = nombreDe(YO), nivel = S.solo.nivel;
+    var E = instantanea();
+    var mano = E.manos[YO].slice();
+    var otros = S.par.orden.filter(function (p) { return p !== YO; });
+    var opciones = [];
+
+    // El rival más cerca de ganar es el blanco preferido.
+    var blanco = otros.slice().sort(function (a, b) {
+      return cercania(E.cuerpos[b]) - cercania(E.cuerpos[a]);
+    })[0];
+
+    mano.forEach(function (id) {
+      var x = carta(id);
+
+      if (x.t === "organo") {
+        if (tieneColor(E.cuerpos[YO], x.c)) return;
+        var completa = cercania(E.cuerpos[YO]) >= 3;
+        opciones.push({
+          p: completa ? 1000 : 100,
+          hacer: function () {
+            quitarDeMano(E, YO, id);
+            E.cuerpos[YO].push(nuevoOrgano(x.c, id));
+            return nom + " puso un " + ORGANO_NOMBRE[x.c].toLowerCase() + ".";
+          }
+        });
+        return;
+      }
+
+      if (x.t === "medicina") {
+        E.cuerpos[YO].forEach(function (o, idx) {
+          if (!pega(x.c, o.c) || estadoOrgano(o) === "inmune") return;
+          var est = estadoOrgano(o);
+          var p = est === "infectado" ? 120 : (est === "protegido" ? 70 : 45);
+          opciones.push({
+            p: p,
+            hacer: function () {
+              var oo = E.cuerpos[YO][idx];
+              quitarDeMano(E, YO, id);
+              if (estadoOrgano(oo) === "infectado") { E.descarte.push(id, oo.v.pop()); return nom + " curó un órgano."; }
+              oo.m.push(id);
+              return estadoOrgano(oo) === "inmune" ? nom + " inmunizó un órgano." : nom + " protegió un órgano.";
+            }
+          });
+        });
+        return;
+      }
+
+      if (x.t === "virus") {
+        otros.forEach(function (pid) {
+          E.cuerpos[pid].forEach(function (o, idx) {
+            if (!pega(x.c, o.c) || estadoOrgano(o) === "inmune") return;
+            var est = estadoOrgano(o);
+            var p = est === "infectado" ? 130 : (est === "protegido" ? 60 : 85);
+            if (pid === blanco) p += 20;
+            opciones.push({
+              p: p,
+              hacer: function () {
+                var oo = E.cuerpos[pid][idx], e2 = estadoOrgano(oo);
+                quitarDeMano(E, YO, id);
+                if (e2 === "protegido") { E.descarte.push(id, oo.m.pop()); return nom + " le quemó la medicina a " + nombreDe(pid) + "."; }
+                if (e2 === "infectado") {
+                  E.cuerpos[pid].splice(idx, 1);
+                  E.descarte = E.descarte.concat([id], cartasDe(oo));
+                  return nom + " destruyó un órgano de " + nombreDe(pid) + ".";
+                }
+                oo.v.push(id);
+                return nom + " infectó un órgano de " + nombreDe(pid) + ".";
+              }
+            });
+          });
+        });
+        return;
+      }
+
+      // Tratamientos
+      if (x.k === "robo") {
+        otros.forEach(function (pid) {
+          E.cuerpos[pid].forEach(function (o, idx) {
+            if (estadoOrgano(o) === "inmune" || tieneColor(E.cuerpos[YO], o.c)) return;
+            opciones.push({
+              p: (sano(o) ? 140 : 70) + (pid === blanco ? 20 : 0),
+              hacer: function () {
+                quitarDeMano(E, YO, id); E.descarte.push(id);
+                var oo = E.cuerpos[pid].splice(idx, 1)[0];
+                E.cuerpos[YO].push(oo);
+                return nom + " le robó un órgano a " + nombreDe(pid) + ".";
+              }
+            });
+          });
+        });
+        return;
+      }
+
+      if (x.k === "trasplante") {
+        E.cuerpos[YO].forEach(function (mio, im) {
+          if (estadoOrgano(mio) === "inmune") return;
+          otros.forEach(function (pid) {
+            E.cuerpos[pid].forEach(function (suyo, is) {
+              if (estadoOrgano(suyo) === "inmune") return;
+              var miSinEl = E.cuerpos[YO].filter(function (_, k) { return k !== im; });
+              var suSinEl = E.cuerpos[pid].filter(function (_, k) { return k !== is; });
+              if (tieneColor(miSinEl, suyo.c) || tieneColor(suSinEl, mio.c)) return;
+              var gano = (sano(suyo) ? 1 : 0) - (sano(mio) ? 1 : 0);
+              if (gano <= 0) return;                 // sólo si sale ganando
+              opciones.push({
+                p: 110,
+                hacer: function () {
+                  quitarDeMano(E, YO, id); E.descarte.push(id);
+                  var a = E.cuerpos[YO][im], b = E.cuerpos[pid][is];
+                  E.cuerpos[YO][im] = b; E.cuerpos[pid][is] = a;
+                  return nom + " intercambió un órgano con " + nombreDe(pid) + ".";
+                }
+              });
+            });
+          });
+        });
+        return;
+      }
+
+      if (x.k === "pabellon") {
+        otros.forEach(function (pid) {
+          var diferencia = limpios(E.cuerpos[pid]) - limpios(E.cuerpos[YO]);
+          if (diferencia < 1) return;
+          opciones.push({
+            p: 90 + diferencia * 15,
+            hacer: function () {
+              quitarDeMano(E, YO, id); E.descarte.push(id);
+              var mio = E.cuerpos[YO];
+              E.cuerpos[YO] = E.cuerpos[pid]; E.cuerpos[pid] = mio;
+              return nom + " se cambió el cuerpo entero con " + nombreDe(pid) + ".";
+            }
+          });
+        });
+        return;
+      }
+
+      if (x.k === "contagio") {
+        var hayVirus = E.cuerpos[YO].some(function (o) { return o.v.length; });
+        if (!hayVirus) return;
+        opciones.push({
+          p: 95,
+          hacer: function () {
+            quitarDeMano(E, YO, id); E.descarte.push(id);
+            var saltos = 0;
+            E.cuerpos[YO].forEach(function (o) {
+              if (!o.v.length) return;
+              var destino = null;
+              otros.some(function (p) {
+                return (E.cuerpos[p] || []).some(function (d) {
+                  if (estadoOrgano(d) === "sano" && pega(o.c, d.c)) { destino = d; return true; }
+                  return false;
+                });
+              });
+              if (destino) { destino.v.push(o.v.pop()); saltos++; }
+            });
+            return saltos ? nom + " repartió " + saltos + " virus." : nom + " intentó contagiar, pero no había dónde.";
+          }
+        });
+        return;
+      }
+
+      if (x.k === "manos") {
+        var cartasRivales = otros.reduce(function (t, p) { return t + (E.manos[p] || []).length; }, 0);
+        if (!cartasRivales) return;
+        opciones.push({
+          p: 40 + cartasRivales * 6,
+          hacer: function () {
+            quitarDeMano(E, YO, id); E.descarte.push(id);
+            var botadas = 0;
+            otros.forEach(function (p) {
+              botadas += (E.manos[p] || []).length;
+              E.descarte = E.descarte.concat(E.manos[p] || []);
+              E.manos[p] = [];
+            });
+            return nom + " hizo botar " + botadas + " cartas a la mesa.";
+          }
+        });
+      }
+    });
+
+    var elegida = null;
+    if (opciones.length) {
+      var torpe = NIVELES_BOT[nivel].torpeza;
+      if (torpe && Math.random() < torpe) {
+        elegida = opciones[Math.floor(Math.random() * opciones.length)];   // juega cualquier cosa
+      } else {
+        opciones.sort(function (a, b) { return b.p - a.p; });
+        var tope = opciones.filter(function (o) { return o.p === opciones[0].p; });
+        elegida = tope[Math.floor(Math.random() * tope.length)];
+      }
+    }
+
+    if (elegida) {
+      var linea = elegida.hacer();
+      cerrarTurno(E, linea, YO);
+      return;
+    }
+
+    // Nada que jugar: bota cartas.
+    var botar = mano.slice(0, nivel === "facil" ? 1 : mano.length);
+    botar.forEach(function (id) { quitarDeMano(E, YO, id); E.descarte.push(id); });
+    cerrarTurno(E, nom + " botó " + botar.length + (botar.length === 1 ? " carta." : " cartas."), YO);
+  }
+
+  $("btn-solo-facil").addEventListener("click", function () { iniciarSolo("facil"); });
+  $("btn-solo-normal").addEventListener("click", function () { iniciarSolo("normal"); });
+  $("btn-solo-dificil").addEventListener("click", function () { iniciarSolo("dificil"); });
 
   /* ========================================================
      Jugadas
@@ -1158,7 +1457,7 @@
   }
 
   function pintar() {
-    var enPartida = !!(S.code && S.par);
+    var enPartida = !!((S.code || S.solo) && S.par);
     var est = enPartida ? S.par.estado : "inicio";
 
     $("p-inicio").hidden = enPartida;
@@ -1264,3 +1563,4 @@
 
 })();
 </script>
+

@@ -198,6 +198,18 @@
     </div>
 
     <div class="apartado">
+      <span class="rotulo">Solo contra el bot</span>
+      <div class="panel bloque">
+        <p class="nota">Sin código. El bot también dibuja a ojo, con mejor o peor pulso según el nivel.</p>
+        <div class="fila">
+          <button class="btn" id="btn-solo-facil">Fácil</button>
+          <button class="btn fantasma" id="btn-solo-normal">Normal</button>
+          <button class="btn fantasma" id="btn-solo-dificil">Difícil</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="apartado">
       <span class="rotulo">Cómo se juega</span>
       <div class="panel bloque">
         <ol class="pasos">
@@ -355,6 +367,8 @@
     trazos: [],          // todos los trazos de la partida
     borrador: null,      // mi línea sin entregar
     entregada: -1,       // ronda ya entregada
+    solo: null,
+    soloReloj: null,
     subs: []
   };
 
@@ -531,6 +545,97 @@
     verError(m || ""); pintar();
   }
 
+
+  /* ========================================================
+     Modo solo: bot en el mismo teléfono
+     ======================================================== */
+
+  // rel: cuánto se le va en proporción al número. fijo: su temblor de base.
+  var NIVELES_BOT = {
+    facil:   { nombre: "Bot fácil",   rel: 0.16, fijo: 0.70, espera: [3000, 7000] },
+    normal:  { nombre: "Bot normal",  rel: 0.09, fijo: 0.35, espera: [3000, 8000] },
+    dificil: { nombre: "Bot difícil", rel: 0.04, fijo: 0.15, espera: [2500, 6000] }
+  };
+
+  function pararSolo() {
+    if (S.soloReloj) { clearTimeout(S.soloReloj); S.soloReloj = null; }
+  }
+
+  /** Tres aleatorios sumados: da una campana, no un error plano. */
+  function temblor() {
+    return ((Math.random() + Math.random() + Math.random()) / 1.5 - 1);
+  }
+
+  function trazoBot(ronda) {
+    var N = NIVELES_BOT[S.solo.nivel];
+    var obj = objetivoDe(ronda);
+    var desvio = obj * N.rel + N.fijo;
+    var largo = Math.max(0.3, obj + temblor() * desvio);
+
+    var L = Math.min(largo * UNIDAD, VB - 80);
+    var ang = Math.random() * Math.PI * 2;
+    var dx = Math.cos(ang) * L / 2, dy = Math.sin(ang) * L / 2;
+    var cx = VB / 2 + (Math.random() * 2 - 1) * Math.max(0, VB / 2 - 40 - Math.abs(dx));
+    var cy = VB / 2 + (Math.random() * 2 - 1) * Math.max(0, VB / 2 - 40 - Math.abs(dy));
+
+    return {
+      ronda: ronda, pid: "BOT",
+      x1: Math.round(cx - dx), y1: Math.round(cy - dy),
+      x2: Math.round(cx + dx), y2: Math.round(cy + dy),
+      entregadoEn: Date.now()
+    };
+  }
+
+  function programarBot(ronda) {
+    pararSolo();
+    var e = NIVELES_BOT[S.solo.nivel].espera;
+    S.soloReloj = setTimeout(function () {
+      S.soloReloj = null;
+      if (!S.solo || !S.mesa || S.mesa.estado !== "jugando" || S.mesa.ronda !== ronda) return;
+      if (S.trazos.some(function (t) { return t.ronda === ronda && t.pid === "BOT"; })) return;
+      S.trazos.push(trazoBot(ronda));
+      pintar();
+    }, e[0] + Math.random() * (e[1] - e[0]));
+  }
+
+  function iniciarSolo(nivel) {
+    limpiarSubs(); pararSolo();
+    var nombre = nombreEscrito() || "Tú";
+    S.nombre = nombre; escribir("ojo.nombre", nombre);
+    verError("");
+    S.code = null;
+    S.solo = { nivel: nivel };
+    S.jugadores = [
+      { pid: MI_ID, nombre: nombre },
+      { pid: "BOT", nombre: NIVELES_BOT[nivel].nombre }
+    ];
+    S.trazos = []; S.borrador = null; S.entregada = -1;
+    S.mesa = {
+      estado: "calibrar", hostId: MI_ID, orden: [MI_ID, "BOT"],
+      numeros: numerosDePartida(), ronda: 0
+    };
+    pintar();
+  }
+
+  function rondaSolo(n) {
+    S.mesa.ronda = n;
+    S.mesa.estado = "jugando";
+    S.borrador = null; S.entregada = -1;
+    pintar();
+    programarBot(n);
+  }
+
+  function soloSalir() {
+    pararSolo();
+    S.solo = null; S.mesa = null; S.code = null;
+    S.jugadores = []; S.trazos = []; S.borrador = null; S.entregada = -1;
+    pintar();
+  }
+
+  $("btn-solo-facil").addEventListener("click", function () { iniciarSolo("facil"); });
+  $("btn-solo-normal").addEventListener("click", function () { iniciarSolo("normal"); });
+  $("btn-solo-dificil").addEventListener("click", function () { iniciarSolo("dificil"); });
+
   /* ========================================================
      Control de la partida
      ======================================================== */
@@ -547,6 +652,7 @@
 
   $("btn-arrancar").addEventListener("click", function () {
     this.disabled = true;
+    if (S.solo) { rondaSolo(1); return; }
     S.db.doc("reglas/" + S.code).update({ estado: "jugando", ronda: 1 })
       .catch(function (e) { $("cal-nota").textContent = textoError(e); $("btn-arrancar").disabled = false; });
   });
@@ -554,6 +660,11 @@
   $("btn-siguiente").addEventListener("click", function () {
     this.disabled = true;
     var sig = S.mesa.ronda + 1;
+    if (S.solo) {
+      if (sig > RONDAS) { pararSolo(); S.mesa.estado = "fin"; pintar(); }
+      else rondaSolo(sig);
+      return;
+    }
     var p = sig > RONDAS
       ? S.db.doc("reglas/" + S.code).update({ estado: "fin" })
       : S.db.doc("reglas/" + S.code).update({ ronda: sig });
@@ -561,6 +672,7 @@
   });
 
   $("btn-revancha").addEventListener("click", function () {
+    if (S.solo) { iniciarSolo(S.solo.nivel); return; }
     var borrar = S.trazos.map(function (t) {
       return S.db.doc("reglas/" + S.code + "/trazos/r" + t.ronda + "__" + t.pid).delete();
     });
@@ -575,6 +687,7 @@
   $("btn-salir-lobby").addEventListener("click", salir);
   $("btn-salir-fin").addEventListener("click", salir);
   function salir() {
+    if (S.solo) { soloSalir(); return; }
     var ref = S.code ? S.db.doc("reglas/" + S.code + "/jugadores/" + MI_ID) : null;
     alInicio(""); if (ref) ref.delete().catch(function () {});
   }
@@ -651,6 +764,16 @@
     var ronda = S.mesa.ronda, t = S.borrador;
     this.disabled = true;
     S.entregada = ronda;
+    if (S.solo) {
+      S.trazos.push({
+        ronda: ronda, pid: MI_ID,
+        x1: Math.round(t.x1), y1: Math.round(t.y1),
+        x2: Math.round(t.x2), y2: Math.round(t.y2),
+        entregadoEn: Date.now()
+      });
+      pintar();
+      return;
+    }
     S.db.doc("reglas/" + S.code + "/trazos/r" + ronda + "__" + MI_ID).set({
       ronda: ronda, pid: MI_ID,
       x1: Math.round(t.x1), y1: Math.round(t.y1),
@@ -818,7 +941,7 @@
      ======================================================== */
 
   function pintar() {
-    var enMesa = !!(S.code && S.mesa);
+    var enMesa = !!((S.code || S.solo) && S.mesa);
     var est = enMesa ? S.mesa.estado : "inicio";
 
     $("p-inicio").hidden = enMesa;
@@ -939,3 +1062,4 @@
 
 })();
 </script>
+
